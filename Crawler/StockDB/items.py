@@ -8,7 +8,34 @@
 import scrapy
 
 
-class StockdbItem(scrapy.Item):
+class Stock(scrapy.Item):
     # define the fields for your item here like:
     # name = scrapy.Field()
-    pass
+
+
+    '''Summary Page'''
+    name_full = scrapy.Field()
+    name_full_md5 = scrapy.Field()
+    name_short = scrapy.Field()
+    name_short_md5 = scrapy.Field()
+    price_close = scrapy.Field()
+    price_open = scrapy.Field()
+    bid = scrapy.Field()
+    ask = scrapy.Field()
+    range_day = scrapy.Field()
+    range_52w = scrapy.Field()
+    volume = scrapy.Field()
+    volume_avg = scrapy.Field()
+    market_cap = scrapy.Field()
+    beta = scrapy.Field()
+    PE_ratio = scrapy.Field()
+    EPS = scrapy.Field()
+    earnings_date = scrapy.Field()
+    dividend_yield = scrapy.Field()
+    ex_dividend_date = scrapy.Field()
+    target_est_1Y = scrapy.Field()
+
+    '''Statistics'''
+    
+
+    '''Analysis Page'''
