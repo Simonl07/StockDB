@@ -6,7 +6,7 @@
 # See: http://doc.scrapy.org/en/latest/topics/item-pipeline.html
 import requests
 
-class StockdbPipeline(object):
+class Stock(object):
 
 
     # This funtion process the Stock data and compile a request to data base.
