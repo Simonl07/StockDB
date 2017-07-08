@@ -2,6 +2,7 @@
 import scrapy
 import hashlib
 import re
+import requests
 from StockDB import *
 
 
@@ -27,4 +28,10 @@ class Spider(scrapy.Spider):
 
 
     def parse(self, response):
-        print(response.xpath('//*[@id="quote-header-info"]/div[2]/div[1]/div/h1/text()').extract_first() ,response.xpath('//*[@id="quote-header-info"]/div[3]/div[1]/div/span[1]/text()').extract_first())
+        headers = {'charset': 'UTF-8', 'content-type': 'form-data'}
+        name = response.xpath('//*[@id="quote-header-info"]/div[2]/div[1]/div/h1/text()').extract_first()
+        oname = re.search('.+?(?=\()', name).group()
+        print(oname)
+        abbrev = re.search('(?<=\().+?(?=\))', name).group()
+        print(abbrev)
+        r = requests.post("http://127.0.0.1", data={u'name': oname.encode('utf-8'), u'abbrev' : abbrev.encode('utf-8')}, headers=headers)
