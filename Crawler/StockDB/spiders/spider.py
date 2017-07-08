@@ -28,7 +28,7 @@ class Spider(scrapy.Spider):
 
 
     def parse(self, response):
-        headers = {'charset': 'UTF-8', 'content-type': 'form-data'}
+        headers = {'charset': 'UTF-8', 'Content-Type': 'text/plain'}
         name = response.xpath('//*[@id="quote-header-info"]/div[2]/div[1]/div/h1/text()').extract_first()
         oname = re.search('.+?(?=\()', name).group()
         print(oname)
