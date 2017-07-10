@@ -54,4 +54,6 @@ class Spider(scrapy.Spider):
         item['target_est_1Y'] = response.xpath('//*[@id="quote-summary"]/div[2]/table/tbody/tr[8]/td[2]/span/text()').extract_first()
 
 
+        
+
         yield item
