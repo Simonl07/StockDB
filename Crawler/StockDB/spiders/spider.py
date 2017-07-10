@@ -2,8 +2,8 @@
 import scrapy
 import hashlib
 import re
-import requests
 from StockDB import *
+from StockDB.items import Stock
 
 
 class Spider(scrapy.Spider):
@@ -28,10 +28,30 @@ class Spider(scrapy.Spider):
 
 
     def parse(self, response):
-        headers = {'charset': 'UTF-8', 'Content-Type': 'text/plain'}
-        name = response.xpath('//*[@id="quote-header-info"]/div[2]/div[1]/div/h1/text()').extract_first()
-        oname = re.search('.+?(?=\()', name).group()
-        print(oname)
-        abbrev = re.search('(?<=\().+?(?=\))', name).group()
-        print(abbrev)
-        r = requests.post("http://127.0.0.1", data={u'name': oname.encode('utf-8'), u'abbrev' : abbrev.encode('utf-8')}, headers=headers)
+        item = Stock()
+
+        item['name_full'] = re.search('.+?(?=\()', response.xpath('//*[@id="quote-header-info"]/div[2]/div[1]/div/h1/text()').extract_first()).group()
+        item['name_short'] = re.search('(?<=\().+?(?=\))', response.xpath('//*[@id="quote-header-info"]/div[2]/div[1]/div/h1/text()').extract_first()).group()
+        item['price_close'] = response.xpath('//*[@id="quote-summary"]/div[1]/table/tbody/tr[1]/td[2]/span/text()').extract_first()
+        item['price_open'] = response.xpath('//*[@id="quote-summary"]/div[1]/table/tbody/tr[2]/td[2]/span/text()').extract_first()
+        item['bid'] = response.xpath('//*[@id="quote-summary"]/div[1]/table/tbody/tr[3]/td[2]/span/text()').extract_first()
+        item['ask'] = response.xpath('//*[@id="quote-summary"]/div[1]/table/tbody/tr[4]/td[2]/span/text()').extract_first()
+        item['range_day'] = response.xpath('//*[@id="quote-summary"]/div[1]/table/tbody/tr[5]/td[2]/text()').extract_first()
+        item['range_day_low'] = re.search('[\d.]+?(?=\s)', item['range_day']).group()
+        item['range_day_high'] = re.search('(?<=\s)[\d.]+', item['range_day']).group()
+        item['range_52w'] = response.xpath('//*[@id="quote-summary"]/div[1]/table/tbody/tr[6]/td[2]/text()').extract_first()
+        item['range_52w_low'] = re.search('[\d.]+?(?=\s)', item['range_52w']).group()
+        item['range_52w_high'] = re.search('(?<=\s)[\d.]+', item['range_52w']).group()
+        item['volume'] = response.xpath('//*[@id="quote-summary"]/div[1]/table/tbody/tr[7]/td[2]/span/text()').extract_first()
+        item['volume_avg'] = response.xpath('//*[@id="quote-summary"]/div[1]/table/tbody/tr[8]/td[2]/span/text()').extract_first()
+        item['market_cap'] = response.xpath('//*[@id="quote-summary"]/div[2]/table/tbody/tr[1]/td[2]/span/text()').extract_first()
+        item['beta'] = response.xpath('//*[@id="quote-summary"]/div[2]/table/tbody/tr[2]/td[2]/span/text()').extract_first()
+        item['pe_ratio'] = response.xpath('//*[@id="quote-summary"]/div[2]/table/tbody/tr[3]/td[2]/span/text()').extract_first()
+        item['eps'] = response.xpath('//*[@id="quote-summary"]/div[2]/table/tbody/tr[4]/td[2]/span/text()').extract_first()
+        item['earnings_date'] = response.xpath('//*[@id="quote-summary"]/div[2]/table/tbody/tr[5]/td[2]/span/text()').extract_first()
+        item['dividend_yield'] = response.xpath('//*[@id="quote-summary"]/div[2]/table/tbody/tr[6]/td[2]/text()').extract_first()
+        item['ex_dividend_date'] = response.xpath('//*[@id="quote-summary"]/div[2]/table/tbody/tr[7]/td[2]/span/text()').extract_first()
+        item['target_est_1Y'] = response.xpath('//*[@id="quote-summary"]/div[2]/table/tbody/tr[8]/td[2]/span/text()').extract_first()
+
+
+        yield item

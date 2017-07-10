@@ -9,6 +9,7 @@ from scrapy import signals
 import random
 import time
 import base64
+import requests
 from scrapy.contrib.downloadermiddleware.httpproxy import HttpProxyMiddleware
 from scrapy.downloadermiddlewares.useragent import UserAgentMiddleware
 

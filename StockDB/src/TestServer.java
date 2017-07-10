@@ -1,5 +1,8 @@
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -10,6 +13,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.servlet.ServletHandler;
+import org.json.JSONObject;
 
 public class TestServer
 {
@@ -51,13 +55,28 @@ public class TestServer
 		}
 		
 		
+		private Map<String, String> getHeadersInfo(HttpServletRequest request) {
+
+	        Map<String, String> map = new HashMap<String, String>();
+
+	        Enumeration headerNames = request.getHeaderNames();
+	        while (headerNames.hasMoreElements()) {
+	            String key = (String) headerNames.nextElement();
+	            String value = request.getHeader(key);
+	            map.put(key, value);
+	        }
+	        
+
+	        return map;
+	    }
+		
 		private Logger log = LogManager.getLogger();
 		protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
 		{
 			request.setCharacterEncoding("UTF-8");
 			response.setContentType("text/html");
 			response.setStatus(HttpServletResponse.SC_OK);
-			
+			getHeadersInfo(request);
 			
 			
 			//log.info("MessageServlet ID " + this.hashCode() + " handling POST request.");
@@ -66,11 +85,20 @@ public class TestServer
 			BufferedReader reader = request.getReader();
 			
 			String line = "";
+			String content = "";
 			while((line = reader.readLine()) != null)
 			{
-				System.out.println(line);
+				content += line;
 			}
 			
+			
+			JSONObject json = new JSONObject(content);
+			
+			for(String key: json.keySet())
+			{
+				System.out.println(key + ": " + json.get(key));
+			}
+			System.out.println();
 		}
 
 	}
