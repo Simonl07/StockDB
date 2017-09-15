@@ -20,7 +20,7 @@ class Spider(scrapy.Spider):
 
     name = 'spider'
     allowed_domains = ['https://finance.yahoo.com']
-    
+
     start_urls = url_generator()
 
 
@@ -57,6 +57,7 @@ class Spider(scrapy.Spider):
             item['dividend_yield'] = str(round(float(str(re.search('(?<=\().*(?=\%)', dividend_String).group())) / 100, 4))
         item['ex_dividend_date'] = response.xpath('//*[@id="quote-summary"]/div[2]/table/tbody/tr[7]/td[2]/span/text()').extract_first()
         item['target_est_1Y'] = response.xpath('//*[@id="quote-summary"]/div[2]/table/tbody/tr[8]/td[2]/span/text()').extract_first()
+
 
 
 
