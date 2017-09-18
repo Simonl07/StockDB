@@ -73,5 +73,18 @@ def formatDate(date):
     if "-" in date:
 
 
-def convertValue(in):
-    """your code here"""
+"""your code here"""
+
+def convertValue(capital):
+    int value; 
+    if (capital.index(len(capital)-1) == "B"):
+        value = int(capital.index(0,len(capital)-1))*1000000000;
+    else 
+        value = int(capital.index(0,len(capital)-1))*100000;
+    return value;
+        
+      
+
+      
+    
+    
