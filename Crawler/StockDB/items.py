@@ -32,6 +32,8 @@ class Stock(scrapy.Item):
     pe_ratio = scrapy.Field()
     eps = scrapy.Field()
     earnings_date = scrapy.Field()
+    earnings_date_begin = scrapy.Field()
+    earnings_date_end = scrapy.Field()
     dividend = scrapy.Field()
     dividend_yield = scrapy.Field()
     ex_dividend_date = scrapy.Field()

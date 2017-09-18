@@ -135,6 +135,7 @@ public class TestServer
 				s.setFloat(11, Long.parseLong(json.getString("volume")));
 				s.setFloat(11, Long.parseLong(json.getString("market_cap")));
 				s.setFloat(11, Float.parseFloat(json.getString("range_52w_low")));
+				
 			} catch (SQLException e)
 			{
 				e.printStackTrace();

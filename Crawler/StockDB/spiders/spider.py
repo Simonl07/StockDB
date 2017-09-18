@@ -70,19 +70,19 @@ def formatDate(date):
     if date == "N/A":
         return "1900-00-00", "1900-00-00"
 
-    if "-" in date:
-        return formatHelper(re.search('.*(?= -) ', date).group().strip()), formatHelper(re.search('(?>-).*', date).group()[1:].strip())
+    if '-' in date:
+        return formatHelper1(re.search('.*(?= -) ', date).group().strip()), formatHelper1(re.search('(?>-).*', date).group()[1:].strip())
 
-    return formatHelper(date), formatHelper(date)
+    return formatHelper1(date), formatHelper1(date)
 
 
-def formatHelper(date):
+def formatHelper1(date):
     year = re.search('\d{4}', date).group()
     day = re.search('\d+(?=,)', date).group()
     month = re.search('[a-zA-Z]+', date).group()
-    return formatHelper(year, month, day)
+    return formatHelper2(year, month, day)
 
-def formatHelper(year, month, day):
+def formatHelper2(year, month, day):
     months = {
     'Jan': '01',
     'Feb': '02',
@@ -100,5 +100,5 @@ def formatHelper(year, month, day):
 
     return year + "-" + months[month] + "-" + day
 
-def convertValue(in):
+def convertValue():
     """your code here"""
