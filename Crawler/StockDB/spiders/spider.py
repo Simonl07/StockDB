@@ -69,7 +69,6 @@ class Spider(scrapy.Spider):
 def formatDate(date):
     if date == "N/A":
         return "1900-00-00", "1900-00-00"
-
     if '-' in date:
         return formatHelper1(re.search('.*(?= -) ', date).group().strip()), formatHelper1(re.search('(?>-).*', date).group()[1:].strip())
 
@@ -100,5 +99,12 @@ def formatHelper2(year, month, day):
 
     return year + "-" + months[month] + "-" + day
 
-def convertValue():
-    """your code here"""
+
+
+def convertValue(capital):
+    int value;
+    if (capital.index(len(capital)-1) == "B"):
+        value = int(capital.index(0,len(capital)-1))*1000000000;
+    else
+        value = int(capital.index(0,len(capital)-1))*100000;
+    return value;
