@@ -21,7 +21,7 @@ class Spider(scrapy.Spider):
     name = 'spider'
     allowed_domains = ['https://finance.yahoo.com']
 
-    start_urls = url_generator()
+    start_urls = url_generator(['AAPL', 'GOOG', 'NVDA'])
 
 
 
