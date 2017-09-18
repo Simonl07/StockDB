@@ -48,7 +48,7 @@ class Spider(scrapy.Spider):
         item['pe_ratio'] = response.xpath('//*[@id="quote-summary"]/div[2]/table/tbody/tr[3]/td[2]/span/text()').extract_first()
         item['eps'] = response.xpath('//*[@id="quote-summary"]/div[2]/table/tbody/tr[4]/td[2]/span/text()').extract_first()
         item['earnings_date'] = response.xpath('//*[@id="quote-summary"]/div[2]/table/tbody/tr[5]/td[2]/span/text()').extract_first()
-        item['earnings_date_begin'] =
+        item['earnings_date_begin'], item['earnings_date_end'] = formatDate(item['earnings_date'])
         dividend_String = response.xpath('//*[@id="quote-summary"]/div[2]/table/tbody/tr[6]/td[2]/text()').extract_first()
         if 'N/A' in dividend_String:
             item['dividend'] = 'N/A'
@@ -71,7 +71,34 @@ def formatDate(date):
         return "1900-00-00", "1900-00-00"
 
     if "-" in date:
+        return formatHelper(re.search('.*(?= -) ', date).group().strip()), formatHelper(re.search('(?>-).*', date).group()[1:].strip())
 
+    return formatHelper(date), formatHelper(date)
+
+
+def formatHelper(date):
+    year = re.search('\d{4}', date).group()
+    day = re.search('\d+(?=,)', date).group()
+    month = re.search('[a-zA-Z]+', date).group()
+    return formatHelper(year, month, day)
+
+def formatHelper(year, month, day):
+    months = {
+    'Jan': '01',
+    'Feb': '02',
+    'Mar': '03',
+    'Apr': '04',
+    'May': '05',
+    'Jun': '06',
+    'Jul': '07',
+    'Aug': '08',
+    'Sep': '09',
+    'Oct': '10',
+    'Nov': '11',
+    'Dec': '12',
+    }
+
+    return year + "-" + months[month] + "-" + day
 
 def convertValue(in):
     """your code here"""
