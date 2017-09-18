@@ -48,6 +48,7 @@ class Spider(scrapy.Spider):
         item['pe_ratio'] = response.xpath('//*[@id="quote-summary"]/div[2]/table/tbody/tr[3]/td[2]/span/text()').extract_first()
         item['eps'] = response.xpath('//*[@id="quote-summary"]/div[2]/table/tbody/tr[4]/td[2]/span/text()').extract_first()
         item['earnings_date'] = response.xpath('//*[@id="quote-summary"]/div[2]/table/tbody/tr[5]/td[2]/span/text()').extract_first()
+        item['earnings_date_begin'] =
         dividend_String = response.xpath('//*[@id="quote-summary"]/div[2]/table/tbody/tr[6]/td[2]/text()').extract_first()
         if 'N/A' in dividend_String:
             item['dividend'] = 'N/A'
@@ -63,3 +64,14 @@ class Spider(scrapy.Spider):
 
 
         yield item
+
+
+def formatDate(date):
+    if date == "N/A":
+        return "1900-00-00", "1900-00-00"
+
+    if "-" in date:
+
+
+def convertValue(in):
+    """your code here"""

@@ -106,9 +106,9 @@ public class TestServer
 			
 			JSONObject json = new JSONObject(content);
 			
+			Map<String, Object> map = json.toMap();
 			
-			
-			
+			System.out.println(map);
 			
 			
 
@@ -122,7 +122,7 @@ public class TestServer
 				s.setString(1, getID(json.getString("name_short")));
 				s.setString(2,  json.getString("name_full"));
 				s.setString(3,  json.getString("name_short"));
-				s.setFloat(4,  Float.parseFloat(json.getString("name_close")));
+				s.setFloat(4,  Float.parseFloat(json.getString("price_close")));
 				s.setFloat(5, Float.parseFloat(json.getString("price_open")));
 				s.setString(6, json.getString("range_day"));
 				s.setFloat(7, Float.parseFloat(json.getString("range_day_high")));
@@ -148,7 +148,7 @@ public class TestServer
 	
 	
 	private static String getID(String name) throws SQLException{
-		String sql = "SELECT * FROM id_name WHERE name = ?";
+		String sql = "SELECT * FROM id_name WHERE name_short = ?";
 		PreparedStatement s = connection.prepareStatement(sql);
 		s.setString(1, name);
 		List<List<String>> result = executeQuery(connection, s);
