@@ -137,7 +137,6 @@ public class TestServer
 				s.setFloat(16, Float.parseFloat(json.getString("pe_ratio")));
 				s.setFloat(17, Float.parseFloat(json.getString("eps")));
 				s.setString(18, json.getString("earnings_date"));
-				
 				s.setDate(19, Date.valueOf((json.getString("earnings_date_begin"))));
 				s.setDate(20, Date.valueOf((json.getString("earnings_date_end"))));
 				s.setFloat(21, Float.parseFloat(json.getString("dividend")));

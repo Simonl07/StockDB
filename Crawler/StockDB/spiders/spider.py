@@ -40,7 +40,7 @@ class Spider(scrapy.Spider):
         item = Stock()
 
         name_full = response.xpath('//*[@id="quote-header-info"]/div[2]/div[1]/div/h1/text()').extract_first()
-        print("NAME FULLLLLL: ",name_full)
+
         item['name_full'] = re.search('.+?(?=\()', name_full).group()
         item['name_short'] = re.search('(?<=\().+?(?=\))', response.xpath('//*[@id="quote-header-info"]/div[2]/div[1]/div/h1/text()').extract_first()).group()
         item['price_close'] = response.xpath('//*[@id="quote-summary"]/div[1]/table/tbody/tr[1]/td[2]/span/text()').extract_first()
@@ -60,7 +60,10 @@ class Spider(scrapy.Spider):
             beta = -1
         item['beta'] = str(beta)
         item['pe_ratio'] = response.xpath('//*[@id="quote-summary"]/div[2]/table/tbody/tr[3]/td[2]/span/text()').extract_first().replace(",", "")
-        item['eps'] = response.xpath('//*[@id="quote-summary"]/div[2]/table/tbody/tr[4]/td[2]/span/text()').extract_first()
+        eps = response.xpath('//*[@id="quote-summary"]/div[2]/table/tbody/tr[4]/td[2]/span/text()').extract_first()
+        if eps == "N/A":
+            eps = "-1"
+        item['eps'] = eps
         first = response.xpath('//*[@id="quote-summary"]/div[2]/table/tbody/tr[5]/td[2]/span/text()').extract_first()
         second = response.xpath('//*[@id="quote-summary"]/div[2]/table/tbody/tr[5]/td[2]/span[2]/text()').extract_first()
 
@@ -88,8 +91,10 @@ class Spider(scrapy.Spider):
         if ex_div_date == "N/A":
             ex_div_date = "1900-01-01"
         item['ex_dividend_date'] = ex_div_date
-        item['target_est_1Y'] = response.xpath('//*[@id="quote-summary"]/div[2]/table/tbody/tr[8]/td[2]/span/text()').extract_first().replace(",", "")
-
+        target_est_1Y = response.xpath('//*[@id="quote-summary"]/div[2]/table/tbody/tr[8]/td[2]/span/text()').extract_first().replace(",", "")
+        if target_est_1Y == "N/A":
+            target_est_1Y = "-1"
+        item['target_est_1Y'] = target_est_1Y
 
 
 
