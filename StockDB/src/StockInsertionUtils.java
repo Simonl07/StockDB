@@ -90,30 +90,8 @@ public class StockInsertionUtils
 			s.setFloat(24, Float.parseFloat(json.getString("target_est_1Y")));
 			
 			
-			MessageDigest md = MessageDigest.getInstance("MD5");
-			Iterator<String> keys= json.keys();
-			String total = "";
-			while (keys.hasNext()) 
-			{
-			        String keyValue = (String)keys.next();
-			        String valueString = json.getString(keyValue);
-			        total += valueString;
-			}
+			String finalHash = MD5(json);
 			
-			md.update(total.getBytes());
-			byte messageDigest[] = md.digest();
-
-            StringBuffer hexString = new StringBuffer();
-            for (int i=0;i<messageDigest.length;i++) {
-                String hex=Integer.toHexString(0xFF & messageDigest[i]);
-                if(hex.length()==1)
-                    hexString.append('0');
-
-                hexString.append(hex);
-            }
-		    String finalHash = hexString.toString();
-		    
-			System.out.println(total);
 			System.out.println(finalHash);
 			System.out.println(s);
 			
@@ -121,7 +99,7 @@ public class StockInsertionUtils
 			
 			
 			s.execute();
-		} catch (SQLException | NoSuchAlgorithmException e)
+		} catch (SQLException e)
 		{
 			e.printStackTrace();
 		}
@@ -171,4 +149,85 @@ public class StockInsertionUtils
 			return output;
 		}
 	}
+	
+	
+	
+	public static void updateStock(Connection connection, JSONObject json){
+		String nameShort = json.getString("name_short");
+		String stockHash = MD5(json);
+		if(checkUpdate(connection, nameShort, stockHash)){
+			real_time_insert(connection, json);
+		}
+	}
+	
+	public static boolean checkUpdate(Connection connection, String name, String hash){
+		String sql = "SELECT * FROM stock.real_time WHERE name_short = ? and stock_hash = ?";
+		List<List<String>> results = null;
+		try
+		{
+			PreparedStatement statement = connection.prepareStatement(sql);
+			statement.setString(1, name);
+			statement.setString(2, hash);
+			results = executeQuery(connection, statement);
+		} catch (SQLException e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return results.size() == 0;
+	}
+	
+	private static String MD5(String input){
+		MessageDigest md = null;
+		try
+		{
+			md = MessageDigest.getInstance("MD5");
+		} catch (NoSuchAlgorithmException e){}
+		
+		md.update(input.getBytes());
+		byte messageDigest[] = md.digest();
+
+        StringBuffer hexString = new StringBuffer();
+        for (int i=0;i<messageDigest.length;i++) {
+            String hex=Integer.toHexString(0xFF & messageDigest[i]);
+            if(hex.length()==1)
+                hexString.append('0');
+
+            hexString.append(hex);
+        }
+	    return hexString.toString();
+	}
+	
+	public static String MD5(JSONObject json){
+		
+		Iterator<String> keys= json.keys();
+		String total = "";
+		while (keys.hasNext()) 
+		{
+		        String keyValue = (String)keys.next();
+		        String valueString = json.getString(keyValue);
+		        total += valueString;
+		}
+		MessageDigest md = null;
+		try
+		{
+			md = MessageDigest.getInstance("MD5");
+		} catch (NoSuchAlgorithmException e){}
+		
+		md.update(total.getBytes());
+		byte messageDigest[] = md.digest();
+
+        StringBuffer hexString = new StringBuffer();
+        for (int i=0;i<messageDigest.length;i++) {
+            String hex=Integer.toHexString(0xFF & messageDigest[i]);
+            if(hex.length()==1)
+                hexString.append('0');
+
+            hexString.append(hex);
+        }
+	    return hexString.toString();
+	}
+	
+	
 }
