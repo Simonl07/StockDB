@@ -31,7 +31,7 @@ class Spider(scrapy.Spider):
 
     start_urls = url_generator(stockList)
 
-
+    #start_urls = ['https://finance.yahoo.com/quote/?p=NVDA']
 
 
 
