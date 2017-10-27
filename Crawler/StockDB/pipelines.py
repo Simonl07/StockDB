@@ -13,8 +13,8 @@ class Stock(object):
     def process_item(self, item, spider):
         headers = {'charset': 'UTF-8', 'Content-Type': 'text/plain', 'Content-Encoding': 'utf-8', 'Accept-Encoding': 'utf-8'}
         payload = {}
-        print("DDDDDDDDDDDDDDD")
+        #print(item)
         for k in item.keys():
             payload[k] = item[k]
 
-        r = requests.post('http://127.0.0.1/', headers=headers, json=payload)
+        r = requests.post('http://127.0.0.1', headers=headers, json=payload)

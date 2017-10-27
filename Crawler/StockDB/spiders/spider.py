@@ -93,7 +93,6 @@ class Spider(scrapy.Spider):
             target_est_1Y = "-1"
         item['target_est_1Y'] = target_est_1Y
         #test
-        print(item)
         yield item
 
 
