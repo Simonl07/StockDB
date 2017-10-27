@@ -150,7 +150,27 @@ public class StockInsertionUtils
 		}
 	}
 	
-	
+	public static JSONObject getStockList(Connection connection){
+		String sql = "SELECT * FROM id_name;";
+		List<List<String>> result = null;
+		
+		try
+		{
+			PreparedStatement statement = connection.prepareStatement(sql);
+			result = executeQuery(connection, statement);
+		} catch (SQLException e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		JSONObject temp = new JSONObject();
+		for(List<String> row: result){
+			temp.put(row.get(0), row.get(1));
+		}
+		
+		System.out.println(temp.toString());
+		return temp;
+	}
 	
 	public static void updateStock(Connection connection, JSONObject json){
 		String nameShort = json.getString("name_short");

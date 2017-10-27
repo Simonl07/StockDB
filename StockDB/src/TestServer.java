@@ -22,6 +22,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.servlet.ServletHandler;
+import org.eclipse.jetty.servlet.ServletHolder;
 import org.json.JSONObject;
 
 public class TestServer
@@ -36,6 +37,7 @@ public class TestServer
 
 		ServletHandler handler = new ServletHandler();
 		handler.addServletWithMapping(PostServlet.class, "/");
+		handler.addServletWithMapping(new ServletHolder(new ListServlet(connection)), "/list");
 
 		server.setHandler(handler);
 

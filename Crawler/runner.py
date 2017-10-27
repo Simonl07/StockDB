@@ -1,7 +1,6 @@
 import requests
-import StockDB
-from StockDB import spiders
-from StockDB.spiders.spider import Spider
+from StockDB import *
+from StockDB.spiders.spider import spider
 
 
 r = requests.get('http://127.0.0.1/list')
