@@ -4,45 +4,38 @@ import hashlib
 import re
 import csv
 from StockDB import *
+import StatsUtils
+from StatsUtils import *
 from StockDB.items import Stock
 
 
 class Spider(scrapy.Spider):
-
-    handle_httpstatus_list = [200]
-
-
-    def url_generator(stockIDs):
-        YAHOO_BASE_URL = 'https://finance.yahoo.com/quote/'
-        lst = []
-        for s in stockIDs:
-            lst.append(YAHOO_BASE_URL + s + "?p=" + s)
-        return lst
+    handle_httpstatus_list = [200, 404, ]
 
     name = 'spider'
     allowed_domains = ['https://finance.yahoo.com']
     stockList = []
-
-
-    with open('List.csv') as csvfile:
-        readCSV = csv.reader(csvfile, delimiter=',')
-        for row in readCSV:
-            stockList += row
-
     start_urls = url_generator(stockList)
 
-    #start_urls = ['https://finance.yahoo.com/quote/?p=NVDA']
-
-
-
-
+    #start_urls = ['https://finance.yahoo.com/quote/?p=AAPL']
     def parse(self, response):
+
+        stockName = re.search('(?<=\=).+?$', response.url).group()
+        recordStatus(stockName, response.status)
+
         item = Stock()
 
-        name_full = response.xpath('//*[@id="quote-header-info"]/div[2]/div[1]/div/h1/text()').extract_first()
+        name_full = response.xpath('//*[@id="quote-header-info"]/div[2]/div[1]/div[1]/h1/text()').extract_first()
 
-        item['name_full'] = re.search('.+?(?=\()', name_full).group()
-        item['name_short'] = re.search('(?<=\().+?(?=\))', response.xpath('//*[@id="quote-header-info"]/div[2]/div[1]/div/h1/text()').extract_first()).group()
+        if '-' in name_full:
+            item['name_full'] = re.search('(?<=- ).+?$', name_full).group()
+            item['name_short'] = re.search('.+?(?= \-)', name_full).group()
+        else:
+            item['name_full'] = re.search('.+?(?=\()', name_full).group()
+            item['name_short'] = re.search('(?<=\().+?(?=\))', name_full).group()
+
+
+
         item['price_close'] = response.xpath('//*[@id="quote-summary"]/div[1]/table/tbody/tr[1]/td[2]/span/text()').extract_first()
         item['price_open'] = response.xpath('//*[@id="quote-summary"]/div[1]/table/tbody/tr[2]/td[2]/span/text()').extract_first()
         item['range_day'] = response.xpath('//*[@id="quote-summary"]/div[1]/table/tbody/tr[5]/td[2]/text()').extract_first()
@@ -51,7 +44,11 @@ class Spider(scrapy.Spider):
         item['range_52w'] = response.xpath('//*[@id="quote-summary"]/div[1]/table/tbody/tr[6]/td[2]/text()').extract_first()
         item['range_52w_low'] = re.search('[\d.]+?(?=\s)', item['range_52w']).group()
         item['range_52w_high'] = re.search('(?<=\s)[\d.]+', item['range_52w']).group()
-        item['volume'] = response.xpath('//*[@id="quote-summary"]/div[1]/table/tbody/tr[7]/td[2]/span/text()').extract_first().replace(",", "")
+        volumn = response.xpath('//*[@id="quote-summary"]/div[1]/table/tbody/tr[7]/td[2]/span/text()').extract_first().replace(",", "")
+        if volumn == "N/A":
+            item["volumn"] = "-1"
+        item["volume"] = volumn
+
         item['volume_avg'] = response.xpath('//*[@id="quote-summary"]/div[1]/table/tbody/tr[8]/td[2]/span/text()').extract_first().replace(",", "")
         market_cap = response.xpath('//*[@id="quote-summary"]/div[2]/table/tbody/tr[1]/td[2]/span/text()').extract_first()
         item['market_cap'] = str(convertValue(market_cap))
@@ -96,9 +93,7 @@ class Spider(scrapy.Spider):
             target_est_1Y = "-1"
         item['target_est_1Y'] = target_est_1Y
         #test
-
-
-
+        print(item)
         yield item
 
 
