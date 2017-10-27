@@ -16,4 +16,4 @@ process = CrawlerProcess()
 process.crawl(Spider)
 process.start()
 
-displayStats()
+displayStats(stock_lst)
