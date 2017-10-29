@@ -9,11 +9,12 @@ from StatsUtils import *
 
 r = requests.get('http://127.0.0.1/list')
 stock_lst = list(r.json().values())
-Spider.start_urls = url_generator(stock_lst[:3])
+targets = stock_lst[:30]
+Spider.start_urls = url_generator(targets)
 
 process = CrawlerProcess()
 
 process.crawl(Spider)
 process.start()
 
-displayStats(stock_lst)
+displayStats(targets)
