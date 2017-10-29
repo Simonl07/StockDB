@@ -23,8 +23,9 @@ class Spider(scrapy.Spider):
         stockName = re.search('(?<=\=).+?$', response.url).group()
         recordStatus(stockName, response.status)
 
-        if 'lookup' in response.url:
+        if 'lookup' in response.url or response.status == 404:
             reportInvalid(stockName)
+            return
 
         item = Stock()
 
@@ -35,12 +36,15 @@ class Spider(scrapy.Spider):
         item['price_close'] = response.xpath('//*[@id="quote-summary"]/div[1]/table/tbody/tr[1]/td[2]/span/text()').extract_first()
         item['price_open'] = response.xpath('//*[@id="quote-summary"]/div[1]/table/tbody/tr[2]/td[2]/span/text()').extract_first()
         item['range_day'] = response.xpath('//*[@id="quote-summary"]/div[1]/table/tbody/tr[5]/td[2]/text()').extract_first()
-        print(item['range_day'])
+        print(item['range_day'], stockName)
+        if(item['range_day'] == None or 'N/A' in item['range_day']):
+            dropStock(stockName)
+            return
         item['range_day_low'] = re.search('[\d.]+?(?=\s)', item['range_day']).group()
         item['range_day_high'] = re.search('(?<=\s)[\d.]+', item['range_day']).group()
         item['range_52w'] = response.xpath('//*[@id="quote-summary"]/div[1]/table/tbody/tr[6]/td[2]/text()').extract_first()
-        if(item['range_52w'] == None):
-            add_None(stockName)
+        if(item['range_52w'] == None or 'N/A' in item['range_52w']):
+            dropStock(stockName)
             return
         item['range_52w_low'] = re.search('[\d.]+?(?=\s)', item['range_52w']).group()
         item['range_52w_high'] = re.search('(?<=\s)[\d.]+', item['range_52w']).group()
@@ -73,7 +77,7 @@ class Spider(scrapy.Spider):
 
         item['earnings_date'] = final
         if "%" in item['earnings_date']:
-            add_None(stockName)
+            dropStock(stockName)
             return
         item['earnings_date_begin'], item['earnings_date_end'] = formatDate(item['earnings_date'])
         dividend_String = response.xpath('//*[@id="quote-summary"]/div[2]/table/tbody/tr[6]/td[2]/text()').extract_first()
@@ -90,7 +94,7 @@ class Spider(scrapy.Spider):
         #test
         for key in item.keys():
             if item[key] == None:
-                add_None(stockName)
+                dropStock(stockName)
                 return
 
 
