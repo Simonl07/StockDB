@@ -15,6 +15,7 @@ class Stock(scrapy.Item):
 
 
     '''Summary Page'''
+    name_string = scrapy.Field()
     name_full = scrapy.Field()
     name_short = scrapy.Field()
     price_close = scrapy.Field()

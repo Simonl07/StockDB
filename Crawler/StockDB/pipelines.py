@@ -18,3 +18,5 @@ class Stock(object):
             payload[k] = item[k]
 
         r = requests.post('http://127.0.0.1', headers=headers, json=payload)
+
+    
