@@ -5,6 +5,7 @@
   <version>0.0.1-SNAPSHOT</version>
   <build>
     <sourceDirectory>src</sourceDirectory>
+    <testSourceDirectory>test</testSourceDirectory>
     <resources>
       <resource>
         <directory>src</directory>
@@ -38,7 +39,7 @@
   		<groupId>junit</groupId>
   		<artifactId>junit</artifactId>
   		<version>4.12</version>
-  		<scope>test</scope>
+  		<scope>test/tests</scope>
 	</dependency> 
 	<dependency>
     	<groupId>org.apache.logging.log4j</groupId>
