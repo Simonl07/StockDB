@@ -38,6 +38,7 @@ public class TestServer
 		ServletHandler handler = new ServletHandler();
 		handler.addServletWithMapping(PostServlet.class, "/");
 		handler.addServletWithMapping(new ServletHolder(new ListServlet(connection)), "/list");
+		handler.addServletWithMapping(new ServletHolder(new DeleteServlet(connection)), "/delete");
 
 		server.setHandler(handler);
 
