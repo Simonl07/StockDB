@@ -205,6 +205,24 @@ public class StockInsertionUtils
 
 		return results.size() == 0;
 	}
+
+	public static void removeStock(Connection connection, String name)
+	{
+		String sql = "DELETE FROM id_name WHERE name_short = ?;";
+		
+		try
+		{
+			PreparedStatement statement = connection.prepareStatement(sql);
+			statement.setString(1, name);
+			statement.execute();
+		} catch (SQLException e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+	}
+
 	
 	public static String MD5(String input){
 		MessageDigest md = null;
