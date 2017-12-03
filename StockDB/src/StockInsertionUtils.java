@@ -16,13 +16,16 @@ import org.json.JSONObject;
 
 public class StockInsertionUtils
 {
-	public static void cumulative_insert(Connection connection, JSONObject json){
+	
+	
+	public static void parse(Connection connection, StockPriceIndex priceIndex, JSONObject json){
 		String sql = "INSERT INTO cumulative VALUES(null, ?, now(), ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
 		PreparedStatement s;
 		try
 		{
 			s = connection.prepareStatement(sql);
 			s.setInt(1, Integer.parseInt(getID(connection, json.getString("name_short"))));
+			System.out.println(json.getString("name_short"));
 			s.setString(2,  json.getString("name_full"));
 			s.setString(3,  json.getString("name_short"));
 			s.setFloat(4,  Float.parseFloat(json.getString("price_close")));
@@ -47,7 +50,9 @@ public class StockInsertionUtils
 			s.setDate(23, Date.valueOf(json.getString("ex_dividend_date")));
 			s.setFloat(24, Float.parseFloat(json.getString("target_est_1Y")));
 			
-			System.out.println(s);
+			
+			
+			
 			s.execute();
 		} catch (SQLException e)
 		{
@@ -198,7 +203,7 @@ public class StockInsertionUtils
 		return results.size() == 0;
 	}
 	
-	private static String MD5(String input){
+	public static String MD5(String input){
 		MessageDigest md = null;
 		try
 		{

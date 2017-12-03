@@ -18,8 +18,9 @@ def recordStatus(name, status):
 def displayStats(stock_lst):
     print("There are ", len([name for name in name_to_status.keys() if name_to_status[name] == 200]), " HTTP200 request")
     print("There are ", len(drop_stocks), " dropped stocks")
-    print("There are ", len(invalid_stock), " invalid stock")
     print(drop_stocks)
+    print("There are ", len(invalid_stock), " invalid stock")
+    print(invalid_stock)
     print("Overall success rate: ", (len(stock_lst) - len(drop_stocks) - len(invalid_stock))/ len(stock_lst))
 
 
