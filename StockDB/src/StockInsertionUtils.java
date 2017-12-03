@@ -18,17 +18,19 @@ import org.json.JSONObject;
 
 public class StockInsertionUtils
 {
-	public static void cumulative_insert(Connection connection, JSONObject json)
-	{
+	
+	
+	public static void parse(Connection connection, StockPriceIndex priceIndex, JSONObject json){
 		String sql = "INSERT INTO cumulative VALUES(null, ?, now(), ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
 		PreparedStatement s;
 		try
 		{
 			s = connection.prepareStatement(sql);
 			s.setInt(1, Integer.parseInt(getID(connection, json.getString("name_short"))));
-			s.setString(2, json.getString("name_full"));
-			s.setString(3, json.getString("name_short"));
-			s.setFloat(4, Float.parseFloat(json.getString("price_close")));
+			System.out.println(json.getString("name_short"));
+			s.setString(2,  json.getString("name_full"));
+			s.setString(3,  json.getString("name_short"));
+			s.setFloat(4,  Float.parseFloat(json.getString("price_close")));
 			s.setFloat(5, Float.parseFloat(json.getString("price_open")));
 			s.setString(6, json.getString("range_day"));
 			s.setFloat(7, Float.parseFloat(json.getString("range_day_high")));
@@ -49,8 +51,8 @@ public class StockInsertionUtils
 			s.setFloat(22, Float.parseFloat(json.getString("dividend_yield")));
 			s.setDate(23, Date.valueOf(json.getString("ex_dividend_date")));
 			s.setFloat(24, Float.parseFloat(json.getString("target_est_1Y")));
-
-			System.out.println(s);
+			
+			
 			s.execute();
 		} catch (SQLException e)
 		{
@@ -203,26 +205,8 @@ public class StockInsertionUtils
 
 		return results.size() == 0;
 	}
-
-	public static void removeStock(Connection connection, String name)
-	{
-		String sql = "DELETE FROM id_name WHERE name_short = ?;";
-		
-		try
-		{
-			PreparedStatement statement = connection.prepareStatement(sql);
-			statement.setString(1, name);
-			statement.execute();
-		} catch (SQLException e)
-		{
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
-	}
-
-	private static String MD5(String input)
-	{
+	
+	public static String MD5(String input){
 		MessageDigest md = null;
 		try
 		{

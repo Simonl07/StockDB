@@ -36,7 +36,7 @@ public class TestServer
 		Server server = new Server(80);
 
 		ServletHandler handler = new ServletHandler();
-		handler.addServletWithMapping(PostServlet.class, "/");
+		handler.addServletWithMapping(new ServletHolder(new PostServlet()), "/");
 		handler.addServletWithMapping(new ServletHolder(new ListServlet(connection)), "/list");
 		handler.addServletWithMapping(new ServletHolder(new DeleteServlet(connection)), "/delete");
 
@@ -60,6 +60,11 @@ public class TestServer
 		/**
 		 * 
 		 */
+		private StockPriceIndex priceIndex;
+		
+		public PostServlet(){
+			priceIndex = new StockPriceIndex();
+		}
 		private static final long serialVersionUID = 1L;
 
 		protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
@@ -98,8 +103,7 @@ public class TestServer
 
 			JSONObject json = getJSON(request);
 			
-			StockInsertionUtils.cumulative_insert(connection, json);
-			StockInsertionUtils.real_time_insert(connection, json);
+			StockInsertionUtils.parse(connection, priceIndex, json);
 		}
 
 		private static JSONObject getJSON(HttpServletRequest request)
