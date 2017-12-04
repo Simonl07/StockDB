@@ -15,6 +15,7 @@ class Stock(scrapy.Item):
 
 
     '''Summary Page'''
+    name_string = scrapy.Field()
     name_full = scrapy.Field()
     name_short = scrapy.Field()
     price_close = scrapy.Field()
@@ -34,6 +35,7 @@ class Stock(scrapy.Item):
     earnings_date = scrapy.Field()
     earnings_date_begin = scrapy.Field()
     earnings_date_end = scrapy.Field()
+    dividend_String = scrapy.Field()
     dividend = scrapy.Field()
     dividend_yield = scrapy.Field()
     ex_dividend_date = scrapy.Field()
