@@ -3,10 +3,10 @@ import scrapy
 import hashlib
 import re
 import csv
-from crawler import *
+from StockDB import *
 import StatsUtils
 from StatsUtils import *
-from crawler.items import Stock
+from StockDB.items import Stock
 
 
 class Spider1(scrapy.Spider):

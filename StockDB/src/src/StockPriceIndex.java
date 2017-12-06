@@ -1,4 +1,5 @@
 package src;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -19,5 +20,11 @@ public class StockPriceIndex
 			map.put(name_short, temp);
 		}
 	}
+	
+	public Collection<Stock> getStocks(){
+		return map.values();
+	}
+	
+	
 	
 }

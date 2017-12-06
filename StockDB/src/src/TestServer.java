@@ -2,6 +2,7 @@ package src;
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.Date;
 import java.sql.PreparedStatement;
@@ -38,8 +39,8 @@ public class TestServer
 
 		ServletHandler handler = new ServletHandler();
 		handler.addServletWithMapping(new ServletHolder(new PostServlet()), "/");
+		handler.addServletWithMapping(new ServletHolder(new PriceUpdate()), "/live");
 		handler.addServletWithMapping(new ServletHolder(new ListServlet(connection)), "/list");
-		handler.addServletWithMapping(new ServletHolder(new DeleteServlet(connection)), "/delete");
 
 		server.setHandler(handler);
 
@@ -56,16 +57,13 @@ public class TestServer
 
 	}
 
+	
+	
 	public static class PostServlet extends HttpServlet
 	{
 		/**
 		 * 
 		 */
-		private StockPriceIndex priceIndex;
-		
-		public PostServlet(){
-			priceIndex = new StockPriceIndex();
-		}
 		private static final long serialVersionUID = 1L;
 
 		protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
@@ -104,31 +102,77 @@ public class TestServer
 
 			JSONObject json = getJSON(request);
 			
-			StockInsertionUtils.parse(connection, priceIndex, json);
+			StockInsertionUtils.parse(connection, json);
 		}
 
-		private static JSONObject getJSON(HttpServletRequest request)
+		
+
+	}
+	
+	public static class PriceUpdate extends HttpServlet
+	{
+		private StockPriceIndex priceIndex;
+		
+		public PriceUpdate(){
+			priceIndex = new StockPriceIndex();
+		}
+		
+		protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
 		{
-			BufferedReader reader;
-			String content = "";
-			try
-			{
-				reader = request.getReader();
-				String line = "";
-				content = "";
-				while ((line = reader.readLine()) != null)
-				{
-					content += line;
-				}
-			} catch (IOException e)
-			{
-				e.printStackTrace();
-			}
-
+			response.setContentType("text/html");
+			response.setStatus(HttpServletResponse.SC_OK);
 			
-			return new JSONObject(content);
-
+			PrintWriter writer = response.getWriter();
+			
+			writer.write("<html><body>");
+			for(Stock s: priceIndex.getStocks()){
+				writer.write("<p> <Strong>" + s.getNAME_SHORT() + ":</Strong> <br />"
+						+ "&nbsp;&nbsp;&nbsp;&nbsp; Price: " + s.getPrice() 
+						+ "&nbsp;&nbsp;&nbsp;&nbsp; Volume: " + s.getVolume() + "</p>");
+			}
+			writer.write("</html></body>");
 		}
+		
+		protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
+		{
+			request.setCharacterEncoding("UTF-8");
+			response.setContentType("text/html");
+			response.setStatus(HttpServletResponse.SC_OK);
+
+			JSONObject json = getJSON(request);
+			
+			String name_full = json.getString("name_full");
+			String name_short = json.getString("name_short");
+			Double price = Double.parseDouble(json.getString("price"));
+			Double volume = Double.parseDouble(json.getString("volume"));
+			
+			priceIndex.put(name_full, name_short, price, volume);
+		}
+		
+		
+	}
+	
+	
+	private static JSONObject getJSON(HttpServletRequest request)
+	{
+		BufferedReader reader;
+		String content = "";
+		try
+		{
+			reader = request.getReader();
+			String line = "";
+			content = "";
+			while ((line = reader.readLine()) != null)
+			{
+				content += line;
+			}
+		} catch (IOException e)
+		{
+			e.printStackTrace();
+		}
+
+		
+		return new JSONObject(content);
 
 	}
 

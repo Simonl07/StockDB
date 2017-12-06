@@ -1,5 +1,6 @@
 package src;
 
+
 public class Stock
 {
 	private final String NAME_FULL;
@@ -27,12 +28,23 @@ public class Stock
 	{
 		return price;
 	}
-
-
 	public Double getVolume()
 	{
 		return volume;
 	}
+
+
+	public String getNAME_FULL()
+	{
+		return NAME_FULL;
+	}
+
+
+	public String getNAME_SHORT()
+	{
+		return NAME_SHORT;
+	}
+	
 	
 	
 	
