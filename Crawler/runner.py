@@ -1,9 +1,9 @@
 import requests
-import StockDB
+import crawler
 import scrapy
 from scrapy.crawler import CrawlerProcess
-from StockDB import spiders
-from StockDB.spiders.spider import *
+from crawler import spiders
+from crawler.spiders.spider import *
 from StatsUtils import *
 
 

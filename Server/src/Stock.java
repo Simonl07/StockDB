@@ -26,12 +26,23 @@ public class Stock
 	{
 		return price;
 	}
-
-
 	public Double getVolume()
 	{
 		return volume;
 	}
+
+
+	public String getNAME_FULL()
+	{
+		return NAME_FULL;
+	}
+
+
+	public String getNAME_SHORT()
+	{
+		return NAME_SHORT;
+	}
+	
 	
 	
 	

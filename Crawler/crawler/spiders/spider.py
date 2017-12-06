@@ -3,10 +3,10 @@ import scrapy
 import hashlib
 import re
 import csv
-from StockDB import *
+from crawler import *
 import StatsUtils
 from StatsUtils import *
-from StockDB.items import Stock
+from crawler.items import Stock
 
 
 class Spider1(scrapy.Spider):
@@ -15,6 +15,23 @@ class Spider1(scrapy.Spider):
     name = 'spider'
     allowed_domains = ['https://finance.yahoo.com']
     stockList = []
+
+    custom_settings = {
+       'StockDB.pipelines.Clean_name': 287,
+       'StockDB.pipelines.Clean_range_day': 288,
+       'StockDB.pipelines.Clean_range_52w': 289,
+       'StockDB.pipelines.Clean_market_cap': 290,
+       'StockDB.pipelines.Clean_earnings_date': 291,
+       'StockDB.pipelines.Clean_dividend': 292,
+       'StockDB.pipelines.Clean_ex_dividend_date': 293,
+       'StockDB.pipelines.Clean_target_est_1Y': 294,
+       'StockDB.pipelines.Clean_eps': 295,
+       'StockDB.pipelines.Clean_pe_ratio': 296,
+       'StockDB.pipelines.Clean_volume': 297,
+       'StockDB.pipelines.Clean_volume_avg': 298,
+       'StockDB.pipelines.Clean_beta': 299,
+       'StockDB.pipelines.RequestDB': 300,
+    }
     start_urls = url_generator(stockList)
 
     start_urls = ['https://finance.yahoo.com/quote/?p=AAPL']
