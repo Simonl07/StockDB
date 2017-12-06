@@ -1,2 +1,2 @@
-before_script: cd StockDB
+before_script: cd stock_server
 language: java
