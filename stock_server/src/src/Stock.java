@@ -1,17 +1,23 @@
 package src;
 
+import java.util.HashMap;
+import java.util.Map;
 
 public class Stock
 {
 	private final String NAME_FULL;
 	private final String NAME_SHORT;
 	private Double price;
-	private Double volume;
+	private Long volume;
+	private Map<Long, Double> historical_price;
+	private Map<Long, Long> historical_volume;
 	
-	
-	public Stock(String name_short, String name_full){
+	public Stock(String name_full, String name_short){
 		this.NAME_SHORT = name_short;
 		this.NAME_FULL = name_full;
+		this.historical_price = new HashMap<>();
+		this.historical_volume = new HashMap<>();
+		
 	}
 	
 	
@@ -19,20 +25,21 @@ public class Stock
 		return StockInsertionUtils.MD5(NAME_SHORT + price + volume).equals(md5);
 	}
 	
-	public void update(Double price, Double volume){
+	public void update(Double price, Long volume){
 		this.price = price;
 		this.volume = volume;
+		historical_price.put(System.currentTimeMillis(), price);
+		historical_volume.put(System.currentTimeMillis(), volume);
 	}
 
 	public Double getPrice()
 	{
 		return price;
 	}
-	public Double getVolume()
+	public Long getVolume()
 	{
 		return volume;
 	}
-
 
 	public String getNAME_FULL()
 	{

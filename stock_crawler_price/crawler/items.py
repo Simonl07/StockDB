@@ -8,7 +8,11 @@
 import scrapy
 
 
-class StockCrawlerPriceItem(scrapy.Item):
+class Price(scrapy.Item):
     # define the fields for your item here like:
     # name = scrapy.Field()
-    pass
+    name_string = scrapy.Field()
+    name_full = scrapy.Field()
+    name_short = scrapy.Field()
+    price = scrapy.Field()
+    volume = scrapy.Field()

@@ -11,7 +11,7 @@ public class StockPriceIndex
 		map = new HashMap<String, Stock>();
 	}
 	
-	public void put(String name_full, String name_short, Double price, Double volume){
+	public void put(String name_full, String name_short, Double price, Long volume){
 		if(map.containsKey(name_short)){
 			map.get(name_short).update(price, volume);
 		}else{

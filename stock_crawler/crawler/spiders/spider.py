@@ -15,7 +15,6 @@ class Spider1(scrapy.Spider):
 
     name = 'spider'
     allowed_domains = ['https://finance.yahoo.com']
-    stockList = []
 
     custom_settings = {
        'crawler.pipelines.Clean_name': 287,
@@ -33,9 +32,8 @@ class Spider1(scrapy.Spider):
        'crawler.pipelines.Clean_beta': 299,
        'crawler.pipelines.RequestDB': 300,
     }
-    start_urls = url_generator(stockList)
+    #start_urls = ['https://finance.yahoo.com/quote/?p=AAPL']
 
-    start_urls = ['https://finance.yahoo.com/quote/?p=AAPL']
     def parse(self, response):
 
         stockName = re.search('(?<=\=).+?$', response.url).group()
@@ -46,9 +44,6 @@ class Spider1(scrapy.Spider):
             return
 
         item = Stock()
-
-
-
         item['name_string'] = response.xpath('//*[@id="quote-header-info"]/div[2]/div[1]/div[1]/h1/text()').extract_first()
         item['price_close'] = response.xpath('//*[@id="quote-summary"]/div[1]/table/tbody/tr[1]/td[2]/span/text()').extract_first()
         item['price_open'] = response.xpath('//*[@id="quote-summary"]/div[1]/table/tbody/tr[2]/td[2]/span/text()').extract_first()
