@@ -2,8 +2,11 @@ package src;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.Iterator;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -32,6 +35,56 @@ public class Utils
 		
 		return new JSONObject(content);
 
+	}
+	public static String MD5(String input){
+		MessageDigest md = null;
+		try
+		{
+			md = MessageDigest.getInstance("MD5");
+		} catch (NoSuchAlgorithmException e){}
+		
+		md.update(input.getBytes());
+		byte messageDigest[] = md.digest();
+
+        StringBuffer hexString = new StringBuffer();
+        for (int i=0;i<messageDigest.length;i++) {
+            String hex=Integer.toHexString(0xFF & messageDigest[i]);
+            if(hex.length()==1)
+                hexString.append('0');
+
+            hexString.append(hex);
+        }
+	    return hexString.toString();
+	}
+	
+	public static String MD5(JSONObject json){
+		
+		Iterator<String> keys= json.keys();
+		String total = "";
+		while (keys.hasNext()) 
+		{
+		        String keyValue = (String)keys.next();
+		        String valueString = json.getString(keyValue);
+		        total += valueString;
+		}
+		MessageDigest md = null;
+		try
+		{
+			md = MessageDigest.getInstance("MD5");
+		} catch (NoSuchAlgorithmException e){}
+		
+		md.update(total.getBytes());
+		byte messageDigest[] = md.digest();
+
+        StringBuffer hexString = new StringBuffer();
+        for (int i=0;i<messageDigest.length;i++) {
+            String hex=Integer.toHexString(0xFF & messageDigest[i]);
+            if(hex.length()==1)
+                hexString.append('0');
+
+            hexString.append(hex);
+        }
+	    return hexString.toString();
 	}
 
 	/**

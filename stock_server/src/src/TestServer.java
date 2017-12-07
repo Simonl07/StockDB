@@ -38,9 +38,10 @@ public class TestServer
 		Server server = new Server(80);
 
 		ServletHandler handler = new ServletHandler();
+		TaskStatusController controller = new TaskStatusController();
 		handler.addServletWithMapping(new ServletHolder(new PostServlet(connection)), "/");
 		handler.addServletWithMapping(new ServletHolder(new PriceUpdate(connection)), "/live");
-		handler.addServletWithMapping(new ServletHolder(new ListServlet(connection)), "/list");
+		handler.addServletWithMapping(new ServletHolder(new TaskAssignmentServlet(connection, controller)), "/list");
 
 		server.setHandler(handler);
 

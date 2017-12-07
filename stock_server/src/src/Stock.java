@@ -11,6 +11,8 @@ public class Stock
 	private Long volume;
 	private Map<Long, Double> historical_price;
 	private Map<Long, Long> historical_volume;
+	private Long last_update;
+	private CrawlTask lastCrawl;
 	
 	public Stock(String name_full, String name_short){
 		this.NAME_SHORT = name_short;
@@ -22,7 +24,7 @@ public class Stock
 	
 	
 	public boolean is_different(String md5){
-		return StockInsertionUtils.MD5(NAME_SHORT + price + volume).equals(md5);
+		return Utils.MD5(NAME_SHORT + price + volume).equals(md5);
 	}
 	
 	public void update(Double price, Long volume){

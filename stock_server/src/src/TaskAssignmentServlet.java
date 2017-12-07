@@ -10,12 +10,14 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.json.JSONObject;
 
-public class ListServlet extends HttpServlet
+public class TaskAssignmentServlet extends HttpServlet
 {
-	private static Connection connection;
+	private Connection connection;
+	private TaskStatusController controller;
 	
-	public ListServlet(Connection connection){
+	public TaskAssignmentServlet(Connection connection, TaskStatusController controller){
 		this.connection = connection;
+		this.controller = controller;
 	}
 	
 	
@@ -24,12 +26,8 @@ public class ListServlet extends HttpServlet
 		response.setContentType("application/json");
 		response.setStatus(HttpServletResponse.SC_OK);
 
-		// log.info("MessageServlet ID " + this.hashCode() + " handling GET
-		// request.");
+		JSONObject responsePackage = controller.assign(StockInsertionUtils.getStockList(connection));
 		
-		JSONObject json = StockInsertionUtils.getStockList(connection);
-		PrintWriter writer = response.getWriter();
-		writer.write(json.toString());
-		
+		response.getWriter().write(responsePackage.toString(4));
 	}
 }
