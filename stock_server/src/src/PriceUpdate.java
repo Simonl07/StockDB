@@ -33,7 +33,7 @@ public class PriceUpdate extends HttpServlet
 		for (Stock s: priceIndex.getStocks())
 		{
 			writer.write("<p> <Strong>(" + s.getNAME_SHORT() + ") " + s.getNAME_FULL() + ":</Strong> <br />" + "&nbsp;&nbsp;&nbsp;&nbsp; Price: " + s.getPrice() + "&nbsp;&nbsp;&nbsp;&nbsp; Volume: "
-					+ s.getVolume().toString() + "</p>");
+					+ s.getVolume().toString() + "&nbsp;&nbsp;&nbsp;&nbsp; Last updated " + (System.currentTimeMillis() - s.getLast_update())/1000.0 + " seconds ago by " + s.getLastCrawl() + "</p>");
 		}
 		writer.write("</html></body>");
 	}
@@ -50,8 +50,9 @@ public class PriceUpdate extends HttpServlet
 		String name_short = json.getString("name_short");
 		Double price = Double.parseDouble(json.getString("price"));
 		Long volume = Long.parseLong(json.getString("volume"));
-
-		priceIndex.put(name_full, name_short, price, volume);
+		
+		String id = json.getString("crawl_task_id");
+		priceIndex.put(name_full, name_short, price, volume, id);
 	}
 
 }

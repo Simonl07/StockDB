@@ -14,6 +14,7 @@ class Spider1(scrapy.Spider):
     handle_httpstatus_list = [200, 404]
 
     name = 'spider'
+    crawl_id = ""
     allowed_domains = ['https://finance.yahoo.com']
 
     custom_settings = {
@@ -40,7 +41,13 @@ class Spider1(scrapy.Spider):
         recordStatus(stockName, response.status)
 
         if 'lookup' in response.url or response.status == 404:
-            reportInvalid(stockName)
+            stock_name = re.search('(?<=\=).+$', response.url).group()
+            url = 'http://127.0.0.1/update'
+            url += '?id=' + PriceSpider.crawl_id
+            url += '&type=invalid'
+            url += '&stock='+ stock_name
+            headers = {'charset': 'UTF-8', 'Content-Type': 'text/plain', 'Content-Encoding': 'utf-8', 'Accept-Encoding': 'utf-8'}
+            r = requests.post(url, headers=headers)
             return
 
         item = Stock()

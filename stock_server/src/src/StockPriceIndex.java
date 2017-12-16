@@ -11,12 +11,12 @@ public class StockPriceIndex
 		map = new HashMap<String, Stock>();
 	}
 	
-	public void put(String name_full, String name_short, Double price, Long volume){
+	public void put(String name_full, String name_short, Double price, Long volume, String crawlTaskID){
 		if(map.containsKey(name_short)){
-			map.get(name_short).update(price, volume);
+			map.get(name_short).update(price, volume, crawlTaskID);
 		}else{
 			Stock temp = new Stock(name_full, name_short);
-			temp.update(price, volume);
+			temp.update(price, volume, crawlTaskID);
 			map.put(name_short, temp);
 		}
 	}

@@ -42,6 +42,7 @@ public class TestServer
 		handler.addServletWithMapping(new ServletHolder(new PostServlet(connection)), "/");
 		handler.addServletWithMapping(new ServletHolder(new PriceUpdate(connection)), "/live");
 		handler.addServletWithMapping(new ServletHolder(new TaskAssignmentServlet(connection, controller)), "/list");
+		handler.addServletWithMapping(new ServletHolder(new StatusUpdateServlet(connection, controller)), "/update");
 
 		server.setHandler(handler);
 

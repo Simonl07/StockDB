@@ -1,16 +1,23 @@
 import requests
 import crawler
 import scrapy
+import json
 from scrapy.crawler import CrawlerProcess
 from crawler import spiders
 from crawler.spiders.spider import *
 from StatsUtils import *
 
 
-r = requests.get('http://127.0.0.1/list')
-stock_lst = list(r.json().values())
+response = requests.get('http://127.0.0.1/list')
+jsonObject = json.loads(response.text)
 
-stock_lst = stock_lst[1:100]
+crawl_id = jsonObject['id']
+crawl_start_time = jsonObject['assignment_begin']
+stocks = jsonObject['stocks']
+Spider1.start_urls = url_generator(stocks)
+Spider1.crawl_id = crawl_id
+
+stock_lst = stocks
 
 Spider1.start_urls = url_generator(stock_lst)
 
@@ -32,8 +39,19 @@ process = CrawlerProcess({'ITEM_PIPELINES': {
    'crawler.pipelines.RequestDB': 300,
 }})
 
+url = 'http://127.0.0.1/update'
+url += '?id=' + Spider1.crawl_id
+url += '&type=update'
+url += '&status=1'
+headers = {'charset': 'UTF-8', 'Content-Type': 'text/plain', 'Content-Encoding': 'utf-8', 'Accept-Encoding': 'utf-8'}
+r = requests.post(url, headers=headers)
+
 process.crawl(Spider1)
 process.start()
 
-displayStats(stock_lst)
-#updateServer()
+url = 'http://127.0.0.1/update'
+url += '?id=' + PriceSpider.crawl_id
+url += '&type=update'
+url += '&status=2'
+headers = {'charset': 'UTF-8', 'Content-Type': 'text/plain', 'Content-Encoding': 'utf-8', 'Accept-Encoding': 'utf-8'}
+r = requests.post(url, headers=headers)

@@ -3,6 +3,7 @@ package src;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,7 +17,9 @@ public class CrawlTask
 	private final int SIZE;
 	private final List<String> STOCK_LIST;
 
+	private int crawled_count;
 	private long end_time;
+	private float success_rate;
 	private int status;
 	private List<String> invalid_stocks;
 
@@ -30,12 +33,31 @@ public class CrawlTask
 		this.end_time = -1;
 		this.ID = Utils.MD5(this.TIMESTAMP + this.SIZE + this.STOCK_LIST.toString() + this.status);
 		this.invalid_stocks = new ArrayList<String>();
+		this.success_rate = 1;
+		this.crawled_count = 0;
+	}
+
+	public int getCrawled_count()
+	{
+		return this.crawled_count;
+	}
+
+	public void setCrawled_count(int crawled_count)
+	{
+		this.crawled_count = crawled_count;
 	}
 
 	public void reportInvalid(Connection connection, String stock)
 	{
 		this.invalid_stocks.add(stock);
+		this.success_rate = ((float)this.SIZE - this.invalid_stocks.size())/(float)this.SIZE;
+		System.out.println("Success rate decreased to " + this.success_rate);
 		removeStock(connection, stock);
+	}
+
+	public float getSuccess_rate()
+	{
+		return success_rate;
 	}
 
 	public String getID()
@@ -74,15 +96,33 @@ public class CrawlTask
 		return json;
 	}
 
+	public long getTIMESTAMP()
+	{
+		return TIMESTAMP;
+	}
+	
+	public int getInvalidCount(){
+		return invalid_stocks.size();
+	}
+
+	public int getSIZE()
+	{
+		return SIZE;
+	}
+
 	public PreparedStatement genSQLArchive(Connection connection)
 	{
-		String sql = "INSERT INTO records.crawltasks VALUES";
+		String sql = "INSERT INTO records.crawltasks VALUES(?, ?, ?, ?, ?, ?);";
 		PreparedStatement statement = null;
 		try
 		{
 			statement = connection.prepareStatement(sql);
-			// TODO
-
+			statement.setString(1, this.ID);
+			statement.setTimestamp(2, new Timestamp(this.TIMESTAMP));
+			statement.setTimestamp(3, new Timestamp(System.currentTimeMillis()));
+			statement.setInt(4, this.SIZE);
+			statement.setInt(5, this.invalid_stocks.size());
+			statement.setFloat(6, this.success_rate);
 		} catch (SQLException e)
 		{
 			e.printStackTrace();
