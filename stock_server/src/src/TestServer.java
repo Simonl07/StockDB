@@ -35,7 +35,15 @@ public class TestServer
 	public static void main(String[] args) throws FileNotFoundException, SQLException, IOException
 	{
 		connection = new DatabaseConnector().getConnection();
-		Server server = new Server(80);
+		
+		final int PORT;
+		
+		if (args[0].equals("-l")){
+			PORT = 8080;
+		}else{
+			PORT = 80;
+		}
+		Server server = new Server(PORT);
 
 		ServletHandler handler = new ServletHandler();
 		TaskStatusController controller = new TaskStatusController();

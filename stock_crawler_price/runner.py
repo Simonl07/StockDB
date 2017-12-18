@@ -19,7 +19,7 @@ def url_generator(stockIDs):
     # stock_lst = stock_lst[1:30]
 
 
-response = requests.get('http://127.0.0.1/list')
+response = requests.get('http://127.0.0.1:/list')
 jsonObject = json.loads(response.text)
 
 crawl_id = jsonObject['id']
