@@ -39,6 +39,14 @@ public class TaskStatusController
 		crawlTaskMap.get(id).setCrawled_count(crawled_count);;
 	}
 	
+	public void crawlerUpdate(String task_id, String crawler_id, int amount){
+		crawlTaskMap.get(task_id).crawlerUpdate(crawler_id, amount);
+	}
+	
+	public void addCrawler(String task_id, String crawler_id){
+		crawlTaskMap.get(task_id).addCrawler(crawler_id);
+	}
+	
 	public PreparedStatement archive(Connection connection, String id){
 		PreparedStatement statement = crawlTaskMap.get(id).genSQLArchive(connection);
 		crawlTaskMap.remove(id);

@@ -13,16 +13,12 @@ from scrapy.exceptions import DropItem
 
 class Clean_name(object):
     def process_item(self, item, spider):
-        if '-' in item['name_string']:
-            item['name_full'] = re.search('(?<=- ).+?$', item['name_string']).group()
-            item['name_short'] = re.search('.+?(?= \-)', item['name_string']).group()
-        else:
-            item['name_full'] = re.search('.+?(?=\()', item['name_string']).group()
-            item['name_short'] = re.search('(?<=\().+?(?=\))', item['name_string']).group()
-        return item
+        print(item['name_full'], "  ", type(item['name_full']))
 
 class Clean_price(object):
     def process_item(self, item, spider):
+        print('PRICEEEEEEE:', item['price'])
+
         if "+" in item['price']:
             raise DropItem("Illegal format %s" % item)
 

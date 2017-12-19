@@ -36,7 +36,13 @@ public class StatusUpdateServlet extends HttpServlet
 					+  c.getInvalidCount() + ". <br />&nbsp;&nbsp;&nbsp;&nbsp; Assigned Size: " 
 					+ c.getSIZE() + ". <br />&nbsp;&nbsp;&nbsp;&nbsp; Progress: " 
 					+ df.format(((double)c.getCrawled_count()/c.getSIZE())*100) + "%. <br />&nbsp;&nbsp;&nbsp;&nbsp; Success rate: " 
-					+ df.format(c.getSuccess_rate()*100) + "%</p>");
+					+ df.format(c.getSuccess_rate()*100) + "%<br />");
+			
+			for(String s: c.getCRAWLER_MAP().keySet()){
+				writer.write("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;");
+				writer.write("<Strong>Crawler " + s + " </Strong> has processed " + c.getCRAWLER_MAP().get(s) + " stocks.  <br />");
+			}
+			writer.write("</p>");
 		}
 	}
 
@@ -59,8 +65,12 @@ public class StatusUpdateServlet extends HttpServlet
 			}
 		}
 		if(request.getParameter("type").equals("progress")){
-			System.out.println("Updating(progress): " + request.getParameter("id") + ": " + request.getParameter("value"));
-			controller.updateTaskProgress(request.getParameter("id"), Integer.parseInt(request.getParameter("value")));
+			System.out.println("Progress update: " + request.getParameter("task_id") + ": " + request.getParameter("value"));
+			controller.crawlerUpdate(request.getParameter("task_id"),request.getParameter("crawler_id"),  Integer.parseInt(request.getParameter("value")));
+		}
+		if(request.getParameter("type").equals("new_crawler")){
+			System.out.println("new crawler(" + request.getParameter("crawler_id") + ") for task " + request.getParameter("task_id") + " participated");
+			controller.addCrawler(request.getParameter("task_id"), request.getParameter("crawler_id"));
 		}
 	}
 	

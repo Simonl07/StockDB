@@ -19,6 +19,7 @@ NEWSPIDER_MODULE = 'crawler.spiders'
 USER_AGENT ='Mozilla/5.0 (Macintosh; Intel Mac OS X 10.11; rv:41.0) Gecko/20100101 Firefox/41.0'
 # Obey robots.txt rules
 ROBOTSTXT_OBEY = False
+SPLASH_URL = 'http://192.168.59.103:8050'
 
 # Configure maximum concurrent requests performed by Scrapy (default: 16)
 #CONCURRENT_REQUESTS = 32
@@ -28,7 +29,7 @@ ROBOTSTXT_OBEY = False
 # See also autothrottle settings and docs
 DOWNLOAD_DELAY = 0
 # The download delay setting will honor only one of:
-CONCURRENT_REQUESTS_PER_DOMAIN = 16
+CONCURRENT_REQUESTS_PER_DOMAIN = 20
 
 # Disable cookies (enabled by default)
 COOKIES_ENABLED = True
@@ -39,7 +40,6 @@ COOKIES_ENABLED = True
 # Override the default request headers:
 DEFAULT_REQUEST_HEADERS = {
    'Accept': 'text/html, */*; q=0.01',
-   'Accept-Language': 'zh-CN,zh;q=0.8',
    'Accept-Encoding': 'gzip, deflate, sdch',
    # 'Connection': 'keep-alive',
    # 'Referer': 'http://su.lianjia.com/xiaoqu/',
@@ -56,8 +56,9 @@ DEFAULT_REQUEST_HEADERS = {
 # See http://scrapy.readthedocs.org/en/latest/topics/downloader-middleware.html
 DOWNLOADER_MIDDLEWARES = {
    #'StockDB.middlewares.Middlewares_agent': 200,
-   'scrapy.downloadermiddlewares.httpcompression.HttpCompressionMiddleware': 250
+    'scrapy.downloadermiddlewares.httpcompression.HttpCompressionMiddleware': 810,
 }
+
 
 # Enable or disable extensions
 # See http://scrapy.readthedocs.org/en/latest/topics/extensions.html

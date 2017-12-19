@@ -30,6 +30,9 @@ public class PriceUpdate extends HttpServlet
 		PrintWriter writer = response.getWriter();
 
 		writer.write("<html><body>");
+		writer.write("<h2> Live Stock Price Index: </h2>");
+		writer.write("<h4> Size: " + priceIndex.getStocks().size() + "</h4>");
+		
 		for (Stock s: priceIndex.getStocks())
 		{
 			writer.write("<p> <Strong>(" + s.getNAME_SHORT() + ") " + s.getNAME_FULL() + ":</Strong> <br />" + "&nbsp;&nbsp;&nbsp;&nbsp; Price: " + s.getPrice() + "&nbsp;&nbsp;&nbsp;&nbsp; Volume: "

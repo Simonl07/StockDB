@@ -5,7 +5,9 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -16,6 +18,7 @@ public class CrawlTask
 	private final long TIMESTAMP;
 	private final int SIZE;
 	private final List<String> STOCK_LIST;
+	private final Map<String, Integer> CRAWLER_MAP;
 
 	private int crawled_count;
 	private long end_time;
@@ -33,10 +36,25 @@ public class CrawlTask
 		this.end_time = -1;
 		this.ID = Utils.MD5(this.TIMESTAMP + this.SIZE + this.STOCK_LIST.toString() + this.status);
 		this.invalid_stocks = new ArrayList<String>();
+		this.CRAWLER_MAP = new HashMap<String, Integer>();
 		this.success_rate = 1;
 		this.crawled_count = 0;
 	}
 
+	public void addCrawler(String id){
+		CRAWLER_MAP.put(id, 0);
+	}
+	
+	public Map<String, Integer> getCRAWLER_MAP()
+	{
+		return CRAWLER_MAP;
+	}
+
+	public void crawlerUpdate(String id, int amount){
+		CRAWLER_MAP.put(id, amount);
+		crawled_count = CRAWLER_MAP.values().stream().reduce(0, (x, y)-> x + y);
+	}
+	
 	public int getCrawled_count()
 	{
 		return this.crawled_count;
