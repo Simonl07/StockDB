@@ -3,6 +3,7 @@ package src;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Connection;
+import java.text.DecimalFormat;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -15,6 +16,7 @@ public class PriceUpdate extends HttpServlet
 {
 	private StockPriceIndex priceIndex;
 	private Connection connection;
+	private static DecimalFormat df = new DecimalFormat("##.##");
 
 	public PriceUpdate(Connection connection)
 	{
@@ -30,8 +32,9 @@ public class PriceUpdate extends HttpServlet
 		PrintWriter writer = response.getWriter();
 
 		writer.write("<html><body>");
-		writer.write("<h2> Live Stock Price Index: </h2>");
-		writer.write("<h4> Size: " + priceIndex.getStocks().size() + "</h4>");
+		writer.write("<h1> Live Stock Price Index: </h1>");
+		writer.write("<h3> Current update rate: " + df.format(priceIndex.getUpdateRate()) + " stocks/s </h3>");
+		writer.write("<strong> Size: " + priceIndex.getStocks().size() + "</strong>");
 		
 		for (Stock s: priceIndex.getStocks())
 		{

@@ -29,6 +29,9 @@ public class StatusUpdateServlet extends HttpServlet
 	{
 		String[] status = {"Initialized", "Processing", "Completed"};
 		PrintWriter writer = response.getWriter();
+		
+		
+		
 		for(CrawlTask c: controller.getTasks()){
 			writer.write("<p> <Strong> Crawling Task: " + c.getID() + ":</Strong> <br />" + "&nbsp;&nbsp;&nbsp;&nbsp; Time elapsed: " 
 					+ (System.currentTimeMillis() - c.getTIMESTAMP())/1000 + " seconds. <br />&nbsp;&nbsp;&nbsp;&nbsp; Type: "
