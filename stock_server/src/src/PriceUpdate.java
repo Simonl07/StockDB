@@ -34,6 +34,7 @@ public class PriceUpdate extends HttpServlet
 		writer.write("<html><body>");
 		writer.write("<h1> Live Stock Price Index: </h1>");
 		writer.write("<h3> Current update rate: " + df.format(priceIndex.getUpdateRate()) + " stocks/s </h3>");
+		writer.write("<h3> Current average latency: " + df.format(priceIndex.getAverageLatency()) + " seconds </h3>");
 		writer.write("<strong> Size: " + priceIndex.getStocks().size() + "</strong>");
 		
 		for (Stock s: priceIndex.getStocks())

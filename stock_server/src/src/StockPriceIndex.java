@@ -51,8 +51,18 @@ public class StockPriceIndex
 		}else{
 			return (double) 0;
 		}
+	}
+	
+	
+	public Double getAverageLatency(){
+		long curr = System.currentTimeMillis();
+		int size = map.size();
+		double total = 0;
+		for(Stock s: map.values()){
+			total += (curr - s.getLast_update())/1000.0;
+		}
 		
-		
+		return total / size;
 	}
 	
 	

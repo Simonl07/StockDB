@@ -17,7 +17,7 @@ public class StatusUpdateServlet extends HttpServlet
 
 	private Connection connection;
 	private TaskStatusController controller;
-	private static DecimalFormat df = new DecimalFormat("##.##");
+	private static DecimalFormat df = new DecimalFormat("####.##");
 
 	public StatusUpdateServlet(Connection connection, TaskStatusController controller)
 	{
