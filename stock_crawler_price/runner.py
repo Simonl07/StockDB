@@ -25,7 +25,7 @@ def execute():
 
     PROCESS_SIZE = 6
 
-    response = requests.get('http://127.0.0.1:/list')
+    response = requests.get('http://127.0.0.1:/list?type=price')
     jsonObject = json.loads(response.text)
 
     crawl_id = jsonObject['id']
@@ -81,6 +81,9 @@ def execute():
     process.crawl(PriceSpider5)
     process.crawl(PriceSpider6)
     process.start()
+
+    print("TOTAL: ", PriceSpider1.TOTAL)
+    print("AVG: ", PriceSpider1.TOTAL/part)
 
     setStatusComplete(crawl_id)
 

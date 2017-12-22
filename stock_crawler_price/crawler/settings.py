@@ -19,7 +19,6 @@ NEWSPIDER_MODULE = 'crawler.spiders'
 USER_AGENT ='Mozilla/5.0 (Macintosh; Intel Mac OS X 10.11; rv:41.0) Gecko/20100101 Firefox/41.0'
 # Obey robots.txt rules
 ROBOTSTXT_OBEY = False
-SPLASH_URL = 'http://192.168.59.103:8050'
 
 # Configure maximum concurrent requests performed by Scrapy (default: 16)
 #CONCURRENT_REQUESTS = 32
@@ -29,11 +28,11 @@ SPLASH_URL = 'http://192.168.59.103:8050'
 # See also autothrottle settings and docs
 DOWNLOAD_DELAY = 0
 # The download delay setting will honor only one of:
-CONCURRENT_REQUESTS_PER_DOMAIN = 20
+CONCURRENT_REQUESTS_PER_DOMAIN = 40
 
 # Disable cookies (enabled by default)
 COOKIES_ENABLED = True
-
+LOG_LEVEL = 'ERROR'
 # Disable Telnet Console (enabled by default)
 #TELNETCONSOLE_ENABLED = False
 
@@ -41,7 +40,7 @@ COOKIES_ENABLED = True
 DEFAULT_REQUEST_HEADERS = {
    'Accept': 'text/html, */*; q=0.01',
    'Accept-Encoding': 'gzip, deflate, sdch',
-   # 'Connection': 'keep-alive',
+   'Connection': 'keep-alive',
    # 'Referer': 'http://su.lianjia.com/xiaoqu/',
    # 'Upgrade-Insecure-Requests':1,
 }

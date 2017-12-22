@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import scrapy
 import re
+import random
 import datetime
 import requests
 import time
@@ -8,14 +9,17 @@ from crawler import *
 from bs4 import BeautifulSoup
 from crawler.items import Price
 from scrapy.selector import Selector
-from scrapy_splash import SplashRequest
 from json import loads
+
+REPORT_RATE = 0.01
+
 
 class PriceSpider1(scrapy.Spider):
     crawl_id = ""
     crawler_id = ""
     name = "price_spider"
     allowed_domains = ['https://finance.yahoo.com']
+    TOTAL = 0
 
     def parse(self, response):
         if 'lookup' in response.url or response.status == 404:
@@ -30,7 +34,7 @@ class PriceSpider1(scrapy.Spider):
 
         self.crawler.stats.inc_value('spiders_crawled')
 
-        if datetime.datetime.now().time().microsecond > 950000:
+        if random.random() < 0.02:
             url = 'http://127.0.0.1/update'
             url += '?task_id=' + self.crawl_id
             url += '&crawler_id=' + str(self.crawler_id)
@@ -39,17 +43,20 @@ class PriceSpider1(scrapy.Spider):
             headers = {'charset': 'UTF-8', 'Content-Type': 'text/plain', 'Content-Encoding': 'utf-8', 'Accept-Encoding': 'utf-8'}
             r = requests.post(url, headers=headers)
 
+        s = time.time()
         soup = BeautifulSoup(response.text)
         script = soup.find("script",text=re.compile("root.App.main")).text
         data = loads(re.search("root.App.main\s+=\s+(\{.*\})", script).group(1))
         stores = data["context"]["dispatcher"]["stores"]
-
+        e = time.time()
+        PriceSpider1.TOTAL = PriceSpider1.TOTAL + (e - s)
 
         item = Price()
 
 
         item['name_short'] = stores['QuoteSummaryStore']['symbol']
-        item['name_full'] = stores['QuoteSummaryStore']['price']['longName']
+        item['name_full_long'] = stores['QuoteSummaryStore']['price']['longName']
+        item['name_full_short'] = stores['QuoteSummaryStore']['price']['shortName']
         item['price'] = str(stores['QuoteSummaryStore']['financialData']['currentPrice']['raw'])
         item['volume'] = str(stores['QuoteSummaryStore']['summaryDetail']['volume']['raw'])
 
@@ -74,7 +81,7 @@ class PriceSpider2(scrapy.Spider):
 
         self.crawler.stats.inc_value('spiders_crawled')
 
-        if datetime.datetime.now().time().microsecond > 950000:
+        if random.random() < 0.02:
             url = 'http://127.0.0.1/update'
             url += '?task_id=' + self.crawl_id
             url += '&crawler_id=' + str(self.crawler_id)
@@ -93,7 +100,8 @@ class PriceSpider2(scrapy.Spider):
 
 
         item['name_short'] = stores['QuoteSummaryStore']['symbol']
-        item['name_full'] = stores['QuoteSummaryStore']['price']['longName']
+        item['name_full_long'] = stores['QuoteSummaryStore']['price']['longName']
+        item['name_full_short'] = stores['QuoteSummaryStore']['price']['shortName']
         item['price'] = str(stores['QuoteSummaryStore']['financialData']['currentPrice']['raw'])
         item['volume'] = str(stores['QuoteSummaryStore']['summaryDetail']['volume']['raw'])
 
@@ -118,7 +126,7 @@ class PriceSpider3(scrapy.Spider):
 
         self.crawler.stats.inc_value('spiders_crawled')
 
-        if datetime.datetime.now().time().microsecond > 950000:
+        if random.random() < 0.02:
             url = 'http://127.0.0.1/update'
             url += '?task_id=' + self.crawl_id
             url += '&crawler_id=' + str(self.crawler_id)
@@ -137,7 +145,8 @@ class PriceSpider3(scrapy.Spider):
 
 
         item['name_short'] = stores['QuoteSummaryStore']['symbol']
-        item['name_full'] = stores['QuoteSummaryStore']['price']['longName']
+        item['name_full_long'] = stores['QuoteSummaryStore']['price']['longName']
+        item['name_full_short'] = stores['QuoteSummaryStore']['price']['shortName']
         item['price'] = str(stores['QuoteSummaryStore']['financialData']['currentPrice']['raw'])
         item['volume'] = str(stores['QuoteSummaryStore']['summaryDetail']['volume']['raw'])
 
@@ -162,7 +171,7 @@ class PriceSpider4(scrapy.Spider):
 
         self.crawler.stats.inc_value('spiders_crawled')
 
-        if datetime.datetime.now().time().microsecond > 950000:
+        if random.random() < 0.02:
             url = 'http://127.0.0.1/update'
             url += '?task_id=' + self.crawl_id
             url += '&crawler_id=' + str(self.crawler_id)
@@ -170,6 +179,7 @@ class PriceSpider4(scrapy.Spider):
             url += '&value='+ str(self.crawler.stats.get_value('spiders_crawled'))
             headers = {'charset': 'UTF-8', 'Content-Type': 'text/plain', 'Content-Encoding': 'utf-8', 'Accept-Encoding': 'utf-8'}
             r = requests.post(url, headers=headers)
+
 
         soup = BeautifulSoup(response.text)
         script = soup.find("script",text=re.compile("root.App.main")).text
@@ -181,7 +191,8 @@ class PriceSpider4(scrapy.Spider):
 
 
         item['name_short'] = stores['QuoteSummaryStore']['symbol']
-        item['name_full'] = stores['QuoteSummaryStore']['price']['longName']
+        item['name_full_long'] = stores['QuoteSummaryStore']['price']['longName']
+        item['name_full_short'] = stores['QuoteSummaryStore']['price']['shortName']
         item['price'] = str(stores['QuoteSummaryStore']['financialData']['currentPrice']['raw'])
         item['volume'] = str(stores['QuoteSummaryStore']['summaryDetail']['volume']['raw'])
 
@@ -206,7 +217,7 @@ class PriceSpider5(scrapy.Spider):
 
         self.crawler.stats.inc_value('spiders_crawled')
 
-        if datetime.datetime.now().time().microsecond > 950000:
+        if random.random() < 0.02:
             url = 'http://127.0.0.1/update'
             url += '?task_id=' + self.crawl_id
             url += '&crawler_id=' + str(self.crawler_id)
@@ -225,7 +236,8 @@ class PriceSpider5(scrapy.Spider):
 
 
         item['name_short'] = stores['QuoteSummaryStore']['symbol']
-        item['name_full'] = stores['QuoteSummaryStore']['price']['longName']
+        item['name_full_long'] = stores['QuoteSummaryStore']['price']['longName']
+        item['name_full_short'] = stores['QuoteSummaryStore']['price']['shortName']
         item['price'] = str(stores['QuoteSummaryStore']['financialData']['currentPrice']['raw'])
         item['volume'] = str(stores['QuoteSummaryStore']['summaryDetail']['volume']['raw'])
 
@@ -251,7 +263,7 @@ class PriceSpider6(scrapy.Spider):
 
         self.crawler.stats.inc_value('spiders_crawled')
 
-        if datetime.datetime.now().time().microsecond > 950000:
+        if random.random() < 0.02:
             url = 'http://127.0.0.1/update'
             url += '?task_id=' + self.crawl_id
             url += '&crawler_id=' + str(self.crawler_id)
@@ -270,7 +282,8 @@ class PriceSpider6(scrapy.Spider):
 
 
         item['name_short'] = stores['QuoteSummaryStore']['symbol']
-        item['name_full'] = stores['QuoteSummaryStore']['price']['longName']
+        item['name_full_long'] = stores['QuoteSummaryStore']['price']['longName']
+        item['name_full_short'] = stores['QuoteSummaryStore']['price']['shortName']
         item['price'] = str(stores['QuoteSummaryStore']['financialData']['currentPrice']['raw'])
         item['volume'] = str(stores['QuoteSummaryStore']['summaryDetail']['volume']['raw'])
 

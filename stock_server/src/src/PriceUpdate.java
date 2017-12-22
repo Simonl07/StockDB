@@ -49,6 +49,7 @@ public class PriceUpdate extends HttpServlet
 
 		JSONObject json = Utils.getJSON(request);
 
+		System.out.println(json.get("name_full") + " " +json.get("name_short"));
 		String name_full = json.getString("name_full");
 		String name_short = json.getString("name_short");
 		Double price = Double.parseDouble(json.getString("price"));

@@ -19,6 +19,7 @@ public class CrawlTask
 	private final int SIZE;
 	private final List<String> STOCK_LIST;
 	private final Map<String, Integer> CRAWLER_MAP;
+	private final String TYPE;
 
 	private int crawled_count;
 	private long end_time;
@@ -26,9 +27,9 @@ public class CrawlTask
 	private int status;
 	private List<String> invalid_stocks;
 
-	public CrawlTask(List<String> stock_list)
+	public CrawlTask(List<String> stock_list, String type)
 	{
-
+		this.TYPE = type;
 		this.TIMESTAMP = System.currentTimeMillis();
 		this.SIZE = stock_list.size();
 		this.STOCK_LIST = stock_list;
@@ -39,6 +40,11 @@ public class CrawlTask
 		this.CRAWLER_MAP = new HashMap<String, Integer>();
 		this.success_rate = 1;
 		this.crawled_count = 0;
+	}
+
+	public String getTYPE()
+	{
+		return TYPE;
 	}
 
 	public void addCrawler(String id){

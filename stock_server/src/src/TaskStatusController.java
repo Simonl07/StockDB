@@ -17,8 +17,8 @@ public class TaskStatusController
 		this.crawlTaskMap = new HashMap<String, CrawlTask>();
 	}
 	
-	public JSONObject assign(List<String> stocks){
-		CrawlTask temp = new CrawlTask(stocks);
+	public JSONObject assign(List<String> stocks, String type){
+		CrawlTask temp = new CrawlTask(stocks, type);
 		crawlTaskMap.put(temp.getID(), temp);
 		return temp.genJSONPackage();
 	}

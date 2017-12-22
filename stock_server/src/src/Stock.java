@@ -7,16 +7,6 @@ public class Stock
 {
 	private final String NAME_FULL;
 	private final String NAME_SHORT;
-	public Long getLast_update()
-	{
-		return last_update;
-	}
-	public String getLastCrawl()
-	{
-		return lastCrawl;
-	}
-
-
 	private Double price;
 	private Long volume;
 	private Map<Long, Double> historical_price;
@@ -63,6 +53,15 @@ public class Stock
 		return NAME_SHORT;
 	}
 	
+	public Long getLast_update()
+	{
+		return last_update;
+	}
+
+	public String getLastCrawl()
+	{
+		return lastCrawl;
+	}
 	
 	
 	

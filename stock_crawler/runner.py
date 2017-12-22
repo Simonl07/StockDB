@@ -8,7 +8,7 @@ from crawler.spiders.spider import *
 from StatsUtils import *
 
 
-response = requests.get('http://127.0.0.1/list')
+response = requests.get('http://127.0.0.1/list?type=summary')
 jsonObject = json.loads(response.text)
 
 crawl_id = jsonObject['id']

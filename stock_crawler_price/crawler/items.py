@@ -11,7 +11,8 @@ import scrapy
 class Price(scrapy.Item):
     # define the fields for your item here like:
     # name = scrapy.Field()
-    name_string = scrapy.Field()
+    name_full_long = scrapy.Field()
+    name_full_short = scrapy.Field()
     name_full = scrapy.Field()
     name_short = scrapy.Field()
     price = scrapy.Field()

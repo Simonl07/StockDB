@@ -31,7 +31,8 @@ public class StatusUpdateServlet extends HttpServlet
 		PrintWriter writer = response.getWriter();
 		for(CrawlTask c: controller.getTasks()){
 			writer.write("<p> <Strong> Crawling Task: " + c.getID() + ":</Strong> <br />" + "&nbsp;&nbsp;&nbsp;&nbsp; Time elapsed: " 
-					+ (System.currentTimeMillis() - c.getTIMESTAMP())/1000 + " seconds. <br />&nbsp;&nbsp;&nbsp;&nbsp; Status: "
+					+ (System.currentTimeMillis() - c.getTIMESTAMP())/1000 + " seconds. <br />&nbsp;&nbsp;&nbsp;&nbsp; Type: "
+							+ c.getTYPE() + "<br />&nbsp;&nbsp;&nbsp;&nbsp; Status: "
 					+ status[c.getStatus()]  + ". <br />&nbsp;&nbsp;&nbsp;&nbsp; Invalid Stocks: "
 					+  c.getInvalidCount() + ". <br />&nbsp;&nbsp;&nbsp;&nbsp; Assigned Size: " 
 					+ c.getSIZE() + ". <br />&nbsp;&nbsp;&nbsp;&nbsp; Progress: " 
@@ -40,7 +41,7 @@ public class StatusUpdateServlet extends HttpServlet
 			
 			for(String s: c.getCRAWLER_MAP().keySet()){
 				writer.write("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;");
-				writer.write("<Strong>Crawler " + s + " </Strong> has processed " + c.getCRAWLER_MAP().get(s) + " stocks.  <br />");
+				writer.write("<Strong>Crawler " + s + " </Strong> has processed <Strong>" + c.getCRAWLER_MAP().get(s) + "</Strong> stocks.  <br />");
 			}
 			writer.write("</p>");
 		}

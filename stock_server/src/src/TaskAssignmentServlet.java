@@ -26,7 +26,7 @@ public class TaskAssignmentServlet extends HttpServlet
 		response.setContentType("application/json");
 		response.setStatus(HttpServletResponse.SC_OK);
 
-		JSONObject responsePackage = controller.assign(StockInsertionUtils.getStockList(connection));
+		JSONObject responsePackage = controller.assign(StockInsertionUtils.getStockList(connection), request.getParameter("type"));
 		
 		response.getWriter().write(responsePackage.toString(4));
 	}
