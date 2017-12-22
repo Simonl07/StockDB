@@ -14,6 +14,7 @@ from json import loads
 REPORT_RATE = 0.01
 
 
+
 class PriceSpider1(scrapy.Spider):
     crawl_id = ""
     crawler_id = ""
@@ -24,7 +25,7 @@ class PriceSpider1(scrapy.Spider):
     def parse(self, response):
         if 'lookup' in response.url or response.status == 404:
             stock_name = re.search('(?<=\=).+$', response.url).group()
-            url = 'http://127.0.0.1/update'
+            url = self.HOST + '/update'
             url += '?id=' + self.crawl_id
             url += '&type=invalid'
             url += '&stock='+ stock_name
@@ -35,7 +36,7 @@ class PriceSpider1(scrapy.Spider):
         self.crawler.stats.inc_value('spiders_crawled')
 
         if random.random() < 0.02:
-            url = 'http://127.0.0.1/update'
+            url = self.HOST + '/update'
             url += '?task_id=' + self.crawl_id
             url += '&crawler_id=' + str(self.crawler_id)
             url += '&type=progress'
@@ -71,7 +72,7 @@ class PriceSpider2(scrapy.Spider):
     def parse(self, response):
         if 'lookup' in response.url or response.status == 404:
             stock_name = re.search('(?<=\=).+$', response.url).group()
-            url = 'http://127.0.0.1/update'
+            url = self.HOST + '/update'
             url += '?id=' + self.crawl_id
             url += '&type=invalid'
             url += '&stock='+ stock_name
@@ -82,7 +83,7 @@ class PriceSpider2(scrapy.Spider):
         self.crawler.stats.inc_value('spiders_crawled')
 
         if random.random() < 0.02:
-            url = 'http://127.0.0.1/update'
+            url = self.HOST + '/update'
             url += '?task_id=' + self.crawl_id
             url += '&crawler_id=' + str(self.crawler_id)
             url += '&type=progress'
@@ -116,7 +117,7 @@ class PriceSpider3(scrapy.Spider):
     def parse(self, response):
         if 'lookup' in response.url or response.status == 404:
             stock_name = re.search('(?<=\=).+$', response.url).group()
-            url = 'http://127.0.0.1/update'
+            url = self.HOST + '/update'
             url += '?id=' + self.crawl_id
             url += '&type=invalid'
             url += '&stock='+ stock_name
@@ -127,7 +128,7 @@ class PriceSpider3(scrapy.Spider):
         self.crawler.stats.inc_value('spiders_crawled')
 
         if random.random() < 0.02:
-            url = 'http://127.0.0.1/update'
+            url = self.HOST + '/update'
             url += '?task_id=' + self.crawl_id
             url += '&crawler_id=' + str(self.crawler_id)
             url += '&type=progress'
@@ -161,7 +162,7 @@ class PriceSpider4(scrapy.Spider):
     def parse(self, response):
         if 'lookup' in response.url or response.status == 404:
             stock_name = re.search('(?<=\=).+$', response.url).group()
-            url = 'http://127.0.0.1/update'
+            url = self.HOST + '/update'
             url += '?id=' + self.crawl_id
             url += '&type=invalid'
             url += '&stock='+ stock_name
@@ -172,7 +173,7 @@ class PriceSpider4(scrapy.Spider):
         self.crawler.stats.inc_value('spiders_crawled')
 
         if random.random() < 0.02:
-            url = 'http://127.0.0.1/update'
+            url = self.HOST + '/update'
             url += '?task_id=' + self.crawl_id
             url += '&crawler_id=' + str(self.crawler_id)
             url += '&type=progress'
@@ -207,7 +208,7 @@ class PriceSpider5(scrapy.Spider):
     def parse(self, response):
         if 'lookup' in response.url or response.status == 404:
             stock_name = re.search('(?<=\=).+$', response.url).group()
-            url = 'http://127.0.0.1/update'
+            url = self.HOST + '/update'
             url += '?id=' + self.crawl_id
             url += '&type=invalid'
             url += '&stock='+ stock_name
@@ -218,7 +219,7 @@ class PriceSpider5(scrapy.Spider):
         self.crawler.stats.inc_value('spiders_crawled')
 
         if random.random() < 0.02:
-            url = 'http://127.0.0.1/update'
+            url = self.HOST + '/update'
             url += '?task_id=' + self.crawl_id
             url += '&crawler_id=' + str(self.crawler_id)
             url += '&type=progress'
@@ -253,7 +254,7 @@ class PriceSpider6(scrapy.Spider):
     def parse(self, response):
         if 'lookup' in response.url or response.status == 404:
             stock_name = re.search('(?<=\=).+$', response.url).group()
-            url = 'http://127.0.0.1/update'
+            url = self.HOST + '/update'
             url += '?id=' + self.crawl_id
             url += '&type=invalid'
             url += '&stock='+ stock_name
@@ -264,7 +265,7 @@ class PriceSpider6(scrapy.Spider):
         self.crawler.stats.inc_value('spiders_crawled')
 
         if random.random() < 0.02:
-            url = 'http://127.0.0.1/update'
+            url = self.HOST + '/update'
             url += '?task_id=' + self.crawl_id
             url += '&crawler_id=' + str(self.crawler_id)
             url += '&type=progress'

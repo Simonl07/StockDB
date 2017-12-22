@@ -12,7 +12,6 @@ from scrapy.exceptions import DropItem
 
 s = requests.Session()
 
-
 class Clean_name(object):
     def process_item(self, item, spider):
         if item['name_full_long'] is None and item['name_full_short'] is not None:
@@ -56,4 +55,4 @@ class RequestDB(object):
             payload[k] = item[k]
 
 
-        s.post('http://127.0.0.1/live', headers=headers, json=payload)
+        s.post(spider.HOST + '/live', headers=headers, json=payload)
