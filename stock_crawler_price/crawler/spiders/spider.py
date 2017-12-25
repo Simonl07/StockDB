@@ -55,11 +55,15 @@ class PriceSpider1(scrapy.Spider):
         item = Price()
 
 
-        item['name_short'] = stores['QuoteSummaryStore']['symbol']
-        item['name_full_long'] = stores['QuoteSummaryStore']['price']['longName']
-        item['name_full_short'] = stores['QuoteSummaryStore']['price']['shortName']
-        item['price'] = str(stores['QuoteSummaryStore']['financialData']['currentPrice']['raw'])
-        item['volume'] = str(stores['QuoteSummaryStore']['summaryDetail']['volume']['raw'])
+
+        try:
+            item['name_short'] = stores['QuoteSummaryStore']['symbol']
+            item['name_full_long'] = stores['QuoteSummaryStore']['price']['longName']
+            item['name_full_short'] = stores['QuoteSummaryStore']['price']['shortName']
+            item['price'] = str(stores['QuoteSummaryStore']['financialData']['currentPrice']['raw'])
+            item['volume'] = str(stores['QuoteSummaryStore']['summaryDetail']['volume']['raw'])
+        except:
+            return
 
         yield item
 
@@ -100,11 +104,14 @@ class PriceSpider2(scrapy.Spider):
         item = Price()
 
 
-        item['name_short'] = stores['QuoteSummaryStore']['symbol']
-        item['name_full_long'] = stores['QuoteSummaryStore']['price']['longName']
-        item['name_full_short'] = stores['QuoteSummaryStore']['price']['shortName']
-        item['price'] = str(stores['QuoteSummaryStore']['financialData']['currentPrice']['raw'])
-        item['volume'] = str(stores['QuoteSummaryStore']['summaryDetail']['volume']['raw'])
+        try:
+            item['name_short'] = stores['QuoteSummaryStore']['symbol']
+            item['name_full_long'] = stores['QuoteSummaryStore']['price']['longName']
+            item['name_full_short'] = stores['QuoteSummaryStore']['price']['shortName']
+            item['price'] = str(stores['QuoteSummaryStore']['financialData']['currentPrice']['raw'])
+            item['volume'] = str(stores['QuoteSummaryStore']['summaryDetail']['volume']['raw'])
+        except:
+            return
 
         yield item
 
@@ -145,11 +152,14 @@ class PriceSpider3(scrapy.Spider):
         item = Price()
 
 
-        item['name_short'] = stores['QuoteSummaryStore']['symbol']
-        item['name_full_long'] = stores['QuoteSummaryStore']['price']['longName']
-        item['name_full_short'] = stores['QuoteSummaryStore']['price']['shortName']
-        item['price'] = str(stores['QuoteSummaryStore']['financialData']['currentPrice']['raw'])
-        item['volume'] = str(stores['QuoteSummaryStore']['summaryDetail']['volume']['raw'])
+        try:
+            item['name_short'] = stores['QuoteSummaryStore']['symbol']
+            item['name_full_long'] = stores['QuoteSummaryStore']['price']['longName']
+            item['name_full_short'] = stores['QuoteSummaryStore']['price']['shortName']
+            item['price'] = str(stores['QuoteSummaryStore']['financialData']['currentPrice']['raw'])
+            item['volume'] = str(stores['QuoteSummaryStore']['summaryDetail']['volume']['raw'])
+        except:
+            return
 
         yield item
 
@@ -191,11 +201,14 @@ class PriceSpider4(scrapy.Spider):
         item = Price()
 
 
-        item['name_short'] = stores['QuoteSummaryStore']['symbol']
-        item['name_full_long'] = stores['QuoteSummaryStore']['price']['longName']
-        item['name_full_short'] = stores['QuoteSummaryStore']['price']['shortName']
-        item['price'] = str(stores['QuoteSummaryStore']['financialData']['currentPrice']['raw'])
-        item['volume'] = str(stores['QuoteSummaryStore']['summaryDetail']['volume']['raw'])
+        try:
+            item['name_short'] = stores['QuoteSummaryStore']['symbol']
+            item['name_full_long'] = stores['QuoteSummaryStore']['price']['longName']
+            item['name_full_short'] = stores['QuoteSummaryStore']['price']['shortName']
+            item['price'] = str(stores['QuoteSummaryStore']['financialData']['currentPrice']['raw'])
+            item['volume'] = str(stores['QuoteSummaryStore']['summaryDetail']['volume']['raw'])
+        except:
+            return
 
         yield item
 
@@ -236,11 +249,14 @@ class PriceSpider5(scrapy.Spider):
         item = Price()
 
 
-        item['name_short'] = stores['QuoteSummaryStore']['symbol']
-        item['name_full_long'] = stores['QuoteSummaryStore']['price']['longName']
-        item['name_full_short'] = stores['QuoteSummaryStore']['price']['shortName']
-        item['price'] = str(stores['QuoteSummaryStore']['financialData']['currentPrice']['raw'])
-        item['volume'] = str(stores['QuoteSummaryStore']['summaryDetail']['volume']['raw'])
+        try:
+            item['name_short'] = stores['QuoteSummaryStore']['symbol']
+            item['name_full_long'] = stores['QuoteSummaryStore']['price']['longName']
+            item['name_full_short'] = stores['QuoteSummaryStore']['price']['shortName']
+            item['price'] = str(stores['QuoteSummaryStore']['financialData']['currentPrice']['raw'])
+            item['volume'] = str(stores['QuoteSummaryStore']['summaryDetail']['volume']['raw'])
+        except:
+            return
 
         yield item
 
@@ -282,10 +298,13 @@ class PriceSpider6(scrapy.Spider):
         item = Price()
 
 
-        item['name_short'] = stores['QuoteSummaryStore']['symbol']
-        item['name_full_long'] = stores['QuoteSummaryStore']['price']['longName']
-        item['name_full_short'] = stores['QuoteSummaryStore']['price']['shortName']
-        item['price'] = str(stores['QuoteSummaryStore']['financialData']['currentPrice']['raw'])
-        item['volume'] = str(stores['QuoteSummaryStore']['summaryDetail']['volume']['raw'])
+        try:
+            item['name_short'] = stores['QuoteSummaryStore']['symbol']
+            item['name_full_long'] = stores['QuoteSummaryStore']['price']['longName']
+            item['name_full_short'] = stores['QuoteSummaryStore']['price']['shortName']
+            item['price'] = str(stores['QuoteSummaryStore']['financialData']['currentPrice']['raw'])
+            item['volume'] = str(stores['QuoteSummaryStore']['summaryDetail']['volume']['raw'])
+        except:
+            return
 
         yield item

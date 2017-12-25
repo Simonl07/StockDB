@@ -1,4 +1,4 @@
-package src;
+ package src;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -136,7 +136,7 @@ public class CrawlTask
 
 	public PreparedStatement genSQLArchive(Connection connection)
 	{
-		String sql = "INSERT INTO records.crawltasks VALUES(?, ?, ?, ?, ?, ?);";
+		String sql = "INSERT INTO records.crawltasks VALUES(?, ?, ?, ?, ?, ?, ?, ?);";
 		PreparedStatement statement = null;
 		try
 		{
@@ -145,8 +145,10 @@ public class CrawlTask
 			statement.setTimestamp(2, new Timestamp(this.TIMESTAMP));
 			statement.setTimestamp(3, new Timestamp(System.currentTimeMillis()));
 			statement.setInt(4, this.SIZE);
-			statement.setInt(5, this.invalid_stocks.size());
-			statement.setFloat(6, this.success_rate);
+			statement.setInt(5, this.crawled_count);
+			statement.setFloat(6, (float)this.crawled_count/(float)this.SIZE);
+			statement.setInt(7, this.invalid_stocks.size());
+			statement.setFloat(8, this.success_rate);
 		} catch (SQLException e)
 		{
 			e.printStackTrace();

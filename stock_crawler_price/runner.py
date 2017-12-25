@@ -22,7 +22,7 @@ def url_generator(stockIDs):
     # stock_lst = stock_lst[1:30]
 
 
-def execute():
+def execute(HOST):
 
     PROCESS_SIZE = 6
 
@@ -40,40 +40,39 @@ def execute():
     PriceSpider1.start_urls = url_generator(stocks[:part])
     PriceSpider1.crawl_id = crawl_id
     PriceSpider1.crawler_id = int('0x' + hashlib.md5(str.encode(crawl_id + "PriceSpider1")).hexdigest(), 16)
-    reportCrawler(crawl_id, PriceSpider1.crawler_id)
+    reportCrawler(HOST, crawl_id, PriceSpider1.crawler_id)
 
     PriceSpider2.HOST = HOST
     PriceSpider2.start_urls = url_generator(stocks[part:part * 2])
     PriceSpider2.crawl_id = crawl_id
     PriceSpider2.crawler_id = int('0x' + hashlib.md5(str.encode(crawl_id + "PriceSpider2")).hexdigest(), 16)
-    reportCrawler(crawl_id, PriceSpider2.crawler_id)
+    reportCrawler(HOST, crawl_id, PriceSpider2.crawler_id)
 
     PriceSpider3.HOST = HOST
     PriceSpider3.start_urls = url_generator(stocks[part * 2: part * 3])
     PriceSpider3.crawl_id = crawl_id
     PriceSpider3.crawler_id = int('0x' + hashlib.md5(str.encode(crawl_id + "PriceSpider3")).hexdigest(), 16)
-    reportCrawler(crawl_id, PriceSpider3.crawler_id)
+    reportCrawler(HOST, crawl_id, PriceSpider3.crawler_id)
 
     PriceSpider4.HOST = HOST
     PriceSpider4.start_urls = url_generator(stocks[part * 3:part * 4])
     PriceSpider4.crawl_id = crawl_id
     PriceSpider4.crawler_id = int('0x' + hashlib.md5(str.encode(crawl_id + "PriceSpider4")).hexdigest(), 16)
-    reportCrawler(crawl_id, PriceSpider4.crawler_id)
+    reportCrawler(HOST, crawl_id, PriceSpider4.crawler_id)
 
     PriceSpider5.HOST = HOST
     PriceSpider5.start_urls = url_generator(stocks[part * 4:part * 5])
     PriceSpider5.crawl_id = crawl_id
     PriceSpider5.crawler_id = int('0x' + hashlib.md5(str.encode(crawl_id + "PriceSpider5")).hexdigest(), 16)
-    reportCrawler(crawl_id, PriceSpider5.crawler_id)
+    reportCrawler(HOST, crawl_id, PriceSpider5.crawler_id)
 
     PriceSpider6.HOST = HOST
     PriceSpider6.start_urls = url_generator(stocks[part * 5:])
     PriceSpider6.crawl_id = crawl_id
     PriceSpider6.crawler_id = int('0x' + hashlib.md5(str.encode(crawl_id + "PriceSpider6")).hexdigest(), 16)
-    reportCrawler(crawl_id, PriceSpider6.crawler_id)
+    reportCrawler(HOST, crawl_id, PriceSpider6.crawler_id)
 
-
-    setStatusBegin(crawl_id)
+    setStatusBegin(HOST, crawl_id)
 
     process = CrawlerProcess({'ITEM_PIPELINES': {
        'crawler.pipelines.Clean_name': 297,
@@ -93,10 +92,10 @@ def execute():
     print("TOTAL: ", PriceSpider1.TOTAL)
     print("AVG: ", PriceSpider1.TOTAL/part)
 
-    setStatusComplete(crawl_id)
+    setStatusComplete(HOST, crawl_id)
 
 
-def setStatusBegin(crawl_id):
+def setStatusBegin(HOST, crawl_id):
     url = HOST + '/update'
     url += '?id=' + crawl_id
     url += '&type=update'
@@ -104,7 +103,7 @@ def setStatusBegin(crawl_id):
     headers = {'charset': 'UTF-8', 'Content-Type': 'text/plain', 'Content-Encoding': 'utf-8', 'Accept-Encoding': 'utf-8'}
     r = requests.post(url, headers=headers)
 
-def setStatusComplete(crawl_id):
+def setStatusComplete(HOST, crawl_id):
     url = HOST + '/update'
     url += '?id=' + crawl_id
     url += '&type=update'
@@ -112,7 +111,7 @@ def setStatusComplete(crawl_id):
     headers = {'charset': 'UTF-8', 'Content-Type': 'text/plain', 'Content-Encoding': 'utf-8', 'Accept-Encoding': 'utf-8'}
     r = requests.post(url, headers=headers)
 
-def reportCrawler(crawl_id, crawler_id):
+def reportCrawler(HOST, crawl_id, crawler_id):
     url = HOST + '/update'
     url += '?id=' + crawl_id
     url += '&type=new_crawler'
@@ -121,5 +120,5 @@ def reportCrawler(crawl_id, crawler_id):
     headers = {'charset': 'UTF-8', 'Content-Type': 'text/plain', 'Content-Encoding': 'utf-8', 'Accept-Encoding': 'utf-8'}
     r = requests.post(url, headers=headers)
 
-HOST = 'http://' + sys.argv[1]
-execute()
+HOST = "http://" + sys.argv[1]
+execute(HOST)

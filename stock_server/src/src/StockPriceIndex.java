@@ -34,19 +34,20 @@ public class StockPriceIndex
 
 	
 	public Double getUpdateRate(){
-		
+		System.out.println(updateHistory);
 		Iterator<Long> it = updateHistory.iterator();
 		long curr = System.currentTimeMillis();
 		
 		int cnt = 0; 
-		
-		if(it.hasNext()){
-			Long temp = (Long) it.next();
+		Long temp;
+		if(it.hasNext() && (curr - (temp = (Long)it.next())) < 5000){
 			cnt++;
 			while(it.hasNext() && (curr - temp) < 5000){
+				System.out.println(temp);
 				temp = (Long) it.next();
 				cnt++;
 			}
+			
 			return cnt/5.0;
 		}else{
 			return (double) 0;
