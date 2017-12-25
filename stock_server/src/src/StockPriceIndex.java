@@ -62,7 +62,7 @@ public class StockPriceIndex
 			total += (curr - s.getLast_update())/1000.0;
 		}
 		
-		return total / size;
+		return size == 0? 0: total / size;
 	}
 	
 	
