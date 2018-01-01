@@ -2,8 +2,8 @@
 
 ### Resonsibilities:
 * Insert crawler data into database
-* Serve fresh crawl task list to crawler
-* Serve API data to user request
+* Serve fresh task list to crawler
+* Serve API data to user requests and data pipelines.
 
 ### Install:
 * run ```mvn install``` for installation
@@ -35,7 +35,7 @@ export PATH="$HOME/miniconda/bin:$PATH"
 conda env create -f environment.yml -n stock-crawler
 activate stock-crawler
 ```
-> if experience problems with ```activate stock-crawler```, try ```. activate stock-crawler``` or ```source activate stock-crawler```
+> Try ```. activate stock-crawler``` or ```source activate stock-crawler``` if you experience problems with ```activate stock-crawler```
 
 
 **For routine crawl:**
