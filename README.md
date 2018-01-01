@@ -1,7 +1,7 @@
 # Backend Server [![Build Status](https://travis-ci.org/Simonl07/stock-db.svg?branch=master)](https://travis-ci.org/Simonl07/stock-db)
 
 ### Resonsibilities:
-* Inserting crawler data into database
+* Insert crawler data into database
 * Serve fresh crawl task list to crawler
 * Serve API data to user request
 
