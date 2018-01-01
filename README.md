@@ -43,8 +43,9 @@ activate stock-crawler
 ```
 python runner-master.py <host>
 ```
-> Replace <host> with stock server address in ###.###.###.### format, no schema/protocol such as <strong>http://</strong> needed
-> The routine crawl script will first wait for go message from server, and then routinely execute the single crawl command in a separate process. If main script exits before any single crawl routine complete, the process will still exist in system until single crawl process is complete. 
+> Replace <host> with stock server address in ###.###.###.### format, no schema/protocol such as <strong>http://</strong> needed.
+   
+> The routine crawl script will first wait for go message from server, and then routinely execute the single crawl command in a separate process. If main script exits before any single crawl routine complete, the process will still exist in system until single crawl process is complete.
   
 **For single crawl(ignore server go message):**
 ***
