@@ -20,7 +20,9 @@ public class StockPriceIndex
 
 	public void put(String name_full, String name_short, Double price, Long volume, String crawlTaskID)
 	{
-		updateHistory.addFirst(System.currentTimeMillis());
+		long currentTime = System.currentTimeMillis();
+		updateHistory.addFirst(currentTime);
+		clearHistory(currentTime);
 		if (map.containsKey(name_short))
 		{
 			map.get(name_short).update(price, volume, crawlTaskID);
@@ -33,6 +35,25 @@ public class StockPriceIndex
 	}
 
 	
+	private void clearHistory(long curr){
+		
+		int index = 0;
+		Iterator<Long> it  = updateHistory.iterator();
+		Long temp;
+		
+		if(it.hasNext() && (curr - (temp = (Long)it.next())) < 5000){
+			index++;
+			while(it.hasNext() && (curr - temp) < 5000){
+				temp = (Long) it.next();
+				index++;
+			}
+		}
+		
+		updateHistory.subList(index, updateHistory.size()).clear();
+		
+		
+	}
+	
 	public Double getUpdateRate(){
 		System.out.println(updateHistory);
 		Iterator<Long> it = updateHistory.iterator();
@@ -43,7 +64,6 @@ public class StockPriceIndex
 		if(it.hasNext() && (curr - (temp = (Long)it.next())) < 5000){
 			cnt++;
 			while(it.hasNext() && (curr - temp) < 5000){
-				System.out.println(temp);
 				temp = (Long) it.next();
 				cnt++;
 			}

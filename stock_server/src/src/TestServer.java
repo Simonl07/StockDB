@@ -51,8 +51,10 @@ public class TestServer
 		handler.addServletWithMapping(new ServletHolder(new PriceUpdate(connection)), "/live");
 		handler.addServletWithMapping(new ServletHolder(new TaskAssignmentServlet(connection, controller)), "/list");
 		handler.addServletWithMapping(new ServletHolder(new StatusUpdateServlet(connection, controller)), "/update");
+		handler.addServletWithMapping(new ServletHolder(new APIKeyDistributionServlet(connection)), APIKeyDistributionServlet.PATH);
 		handler.addServletWithMapping(TrafficLightServlet.class, "/go");
 			
+		
 		server.setHandler(handler);
 
 		try
