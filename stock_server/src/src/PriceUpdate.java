@@ -54,13 +54,13 @@ public class PriceUpdate extends HttpServlet
 		JSONObject json = Utils.getJSON(request);
 
 		System.out.println(json.get("name_full") + " " +json.get("name_short"));
-		String name_full = json.getString("name_full");
+		Integer stock_id = json.getInt("id");
 		String name_short = json.getString("name_short");
 		Double price = Double.parseDouble(json.getString("price"));
 		Long volume = Long.parseLong(json.getString("volume"));
 		
-		String id = json.getString("crawl_task_id");
-		priceIndex.updatePrice(, price, volume, id);
+		String crawl_id = json.getString("crawl_task_id");
+		priceIndex.updatePrice(stock_id, price, volume, crawl_id);
 	}
 
 }

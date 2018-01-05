@@ -11,9 +11,6 @@ public class Tester
 	{
 		
 		
-		SessionFactory sessionFactory = new Configuration().configure().buildSessionFactory();
-		
-		Server s = new Server();
 		
 	}
 
