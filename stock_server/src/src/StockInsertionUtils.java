@@ -69,7 +69,7 @@ public class StockInsertionUtils
 		String sql = "SELECT * FROM id_name WHERE name_short = ?";
 		PreparedStatement s = connection.prepareStatement(sql);
 		s.setString(1, name);
-		List<List<String>> result = executeQuery(connection, s);
+		List<List<String>> result = Utils.executeQuery(connection, s);
 		
 		assert result.get(0).size() == 1;
 		assert !result.get(0).get(0).equals("");
@@ -77,37 +77,7 @@ public class StockInsertionUtils
 		return result.get(0).get(0);
 	}
 	
-	/**
-	 * Utility method to execute a sql query, and parse the result into a java
-	 * 2D ArrayList that represents the output of the query.
-	 * 
-	 * !!Need testing. if testing success and stable, move to databaseConnector
-	 * class Executor class
-	 * 
-	 * @param sql: query to execute
-	 * @return A List of a list of Strings that represents each cell.
-	 * @throws SQLException
-	 */
-	public static List<List<String>> executeQuery(Connection connection, PreparedStatement sql) throws SQLException
-	{
-		try (ResultSet results = sql.executeQuery();)
-		{
-			ResultSetMetaData meta = results.getMetaData();
-			int size = meta.getColumnCount();
-			List<List<String>> output = new ArrayList<>();
-			while (results.next())
-			{
-				List<String> temp = new ArrayList<>();
-				for (int i = 1; i <= size; i++)
-				{
-					temp.add(results.getString(meta.getColumnName(i)));
-				}
-				output.add(temp);
-			}
-
-			return output;
-		}
-	}
+	
 	
 	public static JSONObject getStockListJSON(Connection connection){
 		String sql = "SELECT * FROM id_name;";
@@ -116,7 +86,7 @@ public class StockInsertionUtils
 		try
 		{
 			PreparedStatement statement = connection.prepareStatement(sql);
-			result = executeQuery(connection, statement);
+			result = Utils.executeQuery(connection, statement);
 		} catch (SQLException e)
 		{
 			// TODO Auto-generated catch block
@@ -138,7 +108,7 @@ public class StockInsertionUtils
 		try
 		{
 			PreparedStatement statement = connection.prepareStatement(sql);
-			result = executeQuery(connection, statement);
+			result = Utils.executeQuery(connection, statement);
 		} catch (SQLException e)
 		{
 			// TODO Auto-generated catch block
@@ -186,7 +156,7 @@ public class StockInsertionUtils
 			PreparedStatement statement = connection.prepareStatement(sql);
 			statement.setString(1, name);
 			statement.setString(2, hash);
-			results = executeQuery(connection, statement);
+			results = Utils.executeQuery(connection, statement);
 		} catch (SQLException e)
 		{
 			// TODO Auto-generated catch block

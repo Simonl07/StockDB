@@ -25,6 +25,8 @@ import org.apache.logging.log4j.Logger;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.servlet.ServletHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
+import org.hibernate.SessionFactory;
+import org.hibernate.cfg.Configuration;
 import org.json.JSONObject;
 
 public class TestServer
@@ -35,6 +37,7 @@ public class TestServer
 	public static void main(String[] args) throws FileNotFoundException, SQLException, IOException
 	{
 		connection = new DatabaseConnector().getConnection();
+		SessionFactory sessionFactory = new Configuration().configure().buildSessionFactory();
 		
 		final int PORT;
 		
@@ -47,11 +50,13 @@ public class TestServer
 
 		ServletHandler handler = new ServletHandler();
 		TaskStatusController controller = new TaskStatusController();
+		StockIndex index = new StockIndex();
 		handler.addServletWithMapping(new ServletHolder(new PostServlet(connection)), "/");
 		handler.addServletWithMapping(new ServletHolder(new PriceUpdate(connection)), "/live");
 		handler.addServletWithMapping(new ServletHolder(new TaskAssignmentServlet(connection, controller)), "/list");
 		handler.addServletWithMapping(new ServletHolder(new StatusUpdateServlet(connection, controller)), "/update");
 		handler.addServletWithMapping(new ServletHolder(new APIKeyDistributionServlet(connection)), APIKeyDistributionServlet.PATH);
+		handler.addServletWithMapping(new ServletHolder(new ProfileUpdate(sessionFactory, index)), ProfileUpdate.PATH);
 		handler.addServletWithMapping(TrafficLightServlet.class, "/go");
 			
 		

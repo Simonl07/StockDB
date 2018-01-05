@@ -14,13 +14,13 @@ import org.json.JSONObject;
 
 public class PriceUpdate extends HttpServlet
 {
-	private StockPriceIndex priceIndex;
+	private StockIndex priceIndex;
 	private Connection connection;
 	private static DecimalFormat df = new DecimalFormat("##.##");
 
 	public PriceUpdate(Connection connection)
 	{
-		priceIndex = new StockPriceIndex();
+		priceIndex = new StockIndex();
 		this.connection = connection;
 	}
 
@@ -35,12 +35,12 @@ public class PriceUpdate extends HttpServlet
 		writer.write("<h1> Live Stock Price Index: </h1>");
 		writer.write("<h3> Current update rate: " + df.format(priceIndex.getUpdateRate()) + " stocks/s </h3>");
 		writer.write("<h3> Current average latency: " + df.format(priceIndex.getAverageLatency()) + " seconds </h3>");
-		writer.write("<strong> Size: " + priceIndex.getStocks().size() + "</strong>");
+		writer.write("<strong> Size: " + priceIndex.getStockList().size() + "</strong>");
 		
-		for (Stock s: priceIndex.getStocks())
+		for (Stock s: priceIndex.getStockList())
 		{
-			writer.write("<p> <Strong>(" + s.getNAME_SHORT() + ") " + s.getNAME_FULL() + ":</Strong> <br />" + "&nbsp;&nbsp;&nbsp;&nbsp; Price: " + s.getPrice() + "&nbsp;&nbsp;&nbsp;&nbsp; Volume: "
-					+ s.getVolume().toString() + "&nbsp;&nbsp;&nbsp;&nbsp; Last updated " + (System.currentTimeMillis() - s.getLast_update())/1000.0 + " seconds ago by " + s.getLastCrawl() + "</p>");
+			writer.write("<p> <Strong>(" + s.getSYMBOL() + ") " + s.getNAME_FULL() + ":</Strong> <br />" + "&nbsp;&nbsp;&nbsp;&nbsp; Price: " + s.getLatest_price() + "&nbsp;&nbsp;&nbsp;&nbsp; Volume: "
+					+ s.getLatest_volume().toString() + "&nbsp;&nbsp;&nbsp;&nbsp; Last updated " + (System.currentTimeMillis() - s.getLast_update())/1000.0 + " seconds ago by " + s.getLastCrawl() + "</p>");
 		}
 		writer.write("</html></body>");
 	}
@@ -60,7 +60,7 @@ public class PriceUpdate extends HttpServlet
 		Long volume = Long.parseLong(json.getString("volume"));
 		
 		String id = json.getString("crawl_task_id");
-		priceIndex.put(name_full, name_short, price, volume, id);
+		priceIndex.updatePrice(, price, volume, id);
 	}
 
 }

@@ -5,8 +5,13 @@ import java.io.IOException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -85,6 +90,39 @@ public class Utils
             hexString.append(hex);
         }
 	    return hexString.toString();
+	}
+	
+	
+	/**
+	 * Utility method to execute a sql query, and parse the result into a java
+	 * 2D ArrayList that represents the output of the query.
+	 * 
+	 * !!Need testing. if testing success and stable, move to databaseConnector
+	 * class Executor class
+	 * 
+	 * @param sql: query to execute
+	 * @return A List of a list of Strings that represents each cell.
+	 * @throws SQLException
+	 */
+	public static List<List<String>> executeQuery(Connection connection, PreparedStatement sql) throws SQLException
+	{
+		try (ResultSet results = sql.executeQuery();)
+		{
+			ResultSetMetaData meta = results.getMetaData();
+			int size = meta.getColumnCount();
+			List<List<String>> output = new ArrayList<>();
+			while (results.next())
+			{
+				List<String> temp = new ArrayList<>();
+				for (int i = 1; i <= size; i++)
+				{
+					temp.add(results.getString(meta.getColumnName(i)));
+				}
+				output.add(temp);
+			}
+
+			return output;
+		}
 	}
 
 	/**
