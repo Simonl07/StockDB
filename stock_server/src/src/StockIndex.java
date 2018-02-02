@@ -27,11 +27,12 @@ public class StockIndex
 		{
 			index.get(stock_id).update(price, volume, crawlTaskID);
 		}
+		clearHistory(currentTime);
 	}
 
 	private void clearHistory(long curr)
 	{
-
+		
 		int index = 0;
 		Iterator<Long> it = updateHistory.iterator();
 		Long temp;
