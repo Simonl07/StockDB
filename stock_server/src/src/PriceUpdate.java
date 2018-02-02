@@ -32,7 +32,7 @@ public class PriceUpdate extends HttpServlet
 		PrintWriter writer = response.getWriter();
 
 		writer.write("<html><body>");
-		writer.write("<h1> Live Stock Price Index: </h1>");
+		writer.write("<h1> Stock Price Index: </h1>");
 		writer.write("<h3> Current update rate: " + df.format(priceIndex.getUpdateRate()) + " stocks/s </h3>");
 		writer.write("<h3> Current average latency: " + df.format(priceIndex.getAverageLatency()) + " seconds </h3>");
 		writer.write("<strong> Size: " + priceIndex.getStockList().size() + "</strong>");
@@ -54,13 +54,14 @@ public class PriceUpdate extends HttpServlet
 		JSONObject json = Utils.getJSON(request);
 
 		System.out.println(json.get("name_full") + " " +json.get("name_short"));
-		Integer stock_id = json.getInt("id");
+		//Integer stock_id = json.getInt("id");
+		String name_full = json.getString("name_full");
 		String name_short = json.getString("name_short");
 		Double price = Double.parseDouble(json.getString("price"));
 		Long volume = Long.parseLong(json.getString("volume"));
 		
 		String crawl_id = json.getString("crawl_task_id");
-		priceIndex.updatePrice(stock_id, price, volume, crawl_id);
+		priceIndex.updatePrice(name_full, name_short, price, volume, crawl_id);
 	}
 
 }

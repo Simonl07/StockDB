@@ -8,71 +8,102 @@ import java.util.Map;
 
 public class StockIndex
 {
-	private final Map<Integer, Stock> index = new HashMap<Integer, Stock>();
-	private LinkedList<Long> updateHistory = new LinkedList<Long>();
+	private final Map<String, Stock> index = new HashMap<String, Stock>();
+	private TimeLinkedList updateHistory = new TimeLinkedList();
 
+	
+	public class TimeLinkedList{
+		private TimeNode head;
+		private TimeNode tail;
+		
+		class TimeNode{
+			Long time;
+			TimeNode next;
+			
+			public TimeNode(Long time, TimeNode next){
+				this.time = time;
+				this.next = next;
+			}
+		}
+		public TimeLinkedList(){}
+		
+		public void insert(Long time){
+			TimeNode node = new TimeNode(time, this.head);
+			this.head = node;
+		}
+		
+		public void append(Long time){
+			TimeNode node = new TimeNode(time, null);
+			this.tail.next = node;
+			this.tail = node;
+		}
+		
+		public int sizeAfter(int secondsAgo){
+			TimeNode node = this.head;
+			int cnt = 0;
+			Long deadline = System.currentTimeMillis() - secondsAgo * 1000;
+			while(node != this.tail && node.time > deadline){
+				cnt++;
+				node = node.next;
+			}
+			return cnt;
+		}
+		
+		public void chopAfter(int secondsAgo){
+			TimeNode node = this.head;
+			Long deadline = System.currentTimeMillis() - secondsAgo * 1000;
+			while(node != this.tail && node.time > deadline){
+				node = node.next;
+			}
+			this.tail = node;
+		}
+		
+		public int size(){
+			TimeNode node = this.head;
+			int cnt = 0;
+			while(node != this.tail){
+				node = node.next;
+				cnt++;
+			}
+			return cnt;
+		}
+	}
+	
+	
+	
+	
 	public StockIndex()
 	{
 	}
 
-	public StockIndex(Map<Integer, Stock> input)
+	public StockIndex(Map<String, Stock> input)
 	{
 		index.putAll(input);
 	}
 
-	public void updatePrice(int stock_id, Double price, Long volume, String crawlTaskID)
+	public void updatePrice(String name_full, String name_short, Double price, Long volume, String crawlTaskID)
 	{
 		long currentTime = System.currentTimeMillis();
-		if (index.containsKey(stock_id))
+		if (index.containsKey(name_full))
 		{
-			index.get(stock_id).update(price, volume, crawlTaskID);
+			index.get(name_full).update(price, volume, crawlTaskID);
+		}else{
+			Stock temp = new Stock(name_full, name_short);
+			temp.update(price, volume, crawlTaskID);
+			index.put(name_full, temp);
 		}
-		clearHistory(currentTime);
+		updateHistory.insert(currentTime);
+		updateHistory.chopAfter(10);
 	}
 
-	private void clearHistory(long curr)
-	{
-		
-		int index = 0;
-		Iterator<Long> it = updateHistory.iterator();
-		Long temp;
-
-		if (it.hasNext() && (curr - (temp = (Long) it.next())) < 5000)
-		{
-			index++;
-			while (it.hasNext() && (curr - temp) < 5000)
-			{
-				temp = (Long) it.next();
-				index++;
-			}
-		}
-
-		updateHistory.subList(index, updateHistory.size()).clear();
-
-	}
 
 	public Double getUpdateRate()
 	{
-		System.out.println(updateHistory);
-		Iterator<Long> it = updateHistory.iterator();
-		long curr = System.currentTimeMillis();
-
-		int cnt = 0;
-		Long temp;
-		if (it.hasNext() && (curr - (temp = (Long) it.next())) < 5000)
-		{
-			cnt++;
-			while (it.hasNext() && (curr - temp) < 5000)
-			{
-				temp = (Long) it.next();
-				cnt++;
-			}
-
-			return cnt / 5.0;
-		} else
-		{
-			return (double) 0;
-		}
+		System.out.println(updateHistory.size());
+		int count = updateHistory.sizeAfter(10);
+		updateHistory.chopAfter(10);
+		return count/10.0;
+		
 	}
 
 	public Double getAverageLatency()
@@ -98,14 +129,14 @@ public class StockIndex
 		return index.values();
 	}
 
-	public Collection<Integer> getIdList()
+	public Collection<String> getIdList()
 	{
 		return index.keySet();
 	}
 
 	public void addStock(Stock stock)
 	{
-		index.put(stock.getId(), stock);
+		index.put(stock.getNAME_FULL(), stock);
 	}
 
 	public boolean hasId(int id)
