@@ -232,4 +232,4 @@ class RequestDB(object):
             payload[k] = item[k]
 
         print(payload)
-        r = requests.post('http://127.0.0.1', headers=headers, json=payload)
+        r = requests.post('http://127.0.0.1/summary', headers=headers, json=payload)

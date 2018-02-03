@@ -15,13 +15,11 @@ import org.json.JSONObject;
 public class PriceUpdate extends HttpServlet
 {
 	private StockIndex priceIndex;
-	private Connection connection;
 	private static DecimalFormat df = new DecimalFormat("##.##");
 
-	public PriceUpdate(Connection connection)
+	public PriceUpdate()
 	{
 		priceIndex = new StockIndex();
-		this.connection = connection;
 	}
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
