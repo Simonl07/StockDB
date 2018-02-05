@@ -39,37 +39,37 @@ def execute(HOST):
     PriceSpider1.HOST = HOST
     PriceSpider1.start_urls = url_generator(stocks[:part])
     PriceSpider1.crawl_id = crawl_id
-    PriceSpider1.crawler_id = int('0x' + hashlib.md5(str.encode(crawl_id + "PriceSpider1")).hexdigest(), 16)
+    PriceSpider1.crawler_id = int('0x' + hashlib.md5(str.encode(str(crawl_id + "PriceSpider1"))).hexdigest(), 16)
     reportCrawler(HOST, crawl_id, PriceSpider1.crawler_id)
 
     PriceSpider2.HOST = HOST
     PriceSpider2.start_urls = url_generator(stocks[part:part * 2])
     PriceSpider2.crawl_id = crawl_id
-    PriceSpider2.crawler_id = int('0x' + hashlib.md5(str.encode(crawl_id + "PriceSpider2")).hexdigest(), 16)
+    PriceSpider2.crawler_id = int('0x' + hashlib.md5(str.encode(str(crawl_id + "PriceSpider2"))).hexdigest(), 16)
     reportCrawler(HOST, crawl_id, PriceSpider2.crawler_id)
 
     PriceSpider3.HOST = HOST
     PriceSpider3.start_urls = url_generator(stocks[part * 2: part * 3])
     PriceSpider3.crawl_id = crawl_id
-    PriceSpider3.crawler_id = int('0x' + hashlib.md5(str.encode(crawl_id + "PriceSpider3")).hexdigest(), 16)
+    PriceSpider3.crawler_id = int('0x' + hashlib.md5(str.encode(str(crawl_id + "PriceSpider3"))).hexdigest(), 16)
     reportCrawler(HOST, crawl_id, PriceSpider3.crawler_id)
 
     PriceSpider4.HOST = HOST
     PriceSpider4.start_urls = url_generator(stocks[part * 3:part * 4])
     PriceSpider4.crawl_id = crawl_id
-    PriceSpider4.crawler_id = int('0x' + hashlib.md5(str.encode(crawl_id + "PriceSpider4")).hexdigest(), 16)
+    PriceSpider4.crawler_id = int('0x' + hashlib.md5(str.encode(str(crawl_id + "PriceSpider4"))).hexdigest(), 16)
     reportCrawler(HOST, crawl_id, PriceSpider4.crawler_id)
 
     PriceSpider5.HOST = HOST
     PriceSpider5.start_urls = url_generator(stocks[part * 4:part * 5])
     PriceSpider5.crawl_id = crawl_id
-    PriceSpider5.crawler_id = int('0x' + hashlib.md5(str.encode(crawl_id + "PriceSpider5")).hexdigest(), 16)
+    PriceSpider5.crawler_id = int('0x' + hashlib.md5(str.encode(str(crawl_id + "PriceSpider5"))).hexdigest(), 16)
     reportCrawler(HOST, crawl_id, PriceSpider5.crawler_id)
 
     PriceSpider6.HOST = HOST
     PriceSpider6.start_urls = url_generator(stocks[part * 5:])
     PriceSpider6.crawl_id = crawl_id
-    PriceSpider6.crawler_id = int('0x' + hashlib.md5(str.encode(crawl_id + "PriceSpider6")).hexdigest(), 16)
+    PriceSpider6.crawler_id = int('0x' + hashlib.md5(str.encode(str(crawl_id + "PriceSpider6"))).hexdigest(), 16)
     reportCrawler(HOST, crawl_id, PriceSpider6.crawler_id)
 
     setStatusBegin(HOST, crawl_id)
