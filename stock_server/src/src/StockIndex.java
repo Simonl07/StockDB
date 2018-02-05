@@ -11,7 +11,6 @@ public class StockIndex
 	private final Map<String, Stock> index = new HashMap<String, Stock>();
 	private TimeLinkedList updateHistory = new TimeLinkedList();
 
-	
 	public class TimeLinkedList{
 		private TimeNode head;
 		private TimeNode tail;
