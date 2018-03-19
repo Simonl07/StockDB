@@ -2,7 +2,6 @@ package src;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.text.DecimalFormat;
@@ -12,16 +11,19 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+
 public class StatusUpdateServlet extends HttpServlet
 {
 
-	private Connection connection;
+	private SessionFactory factory;
 	private TaskStatusController controller;
 	private static DecimalFormat df = new DecimalFormat("####.##");
 
-	public StatusUpdateServlet(Connection connection, TaskStatusController controller)
+	public StatusUpdateServlet(SessionFactory factory, TaskStatusController controller)
 	{
-		this.connection = connection;
+		this.factory = factory;
 		this.controller = controller;
 	}
 
@@ -55,15 +57,19 @@ public class StatusUpdateServlet extends HttpServlet
 		if(request.getParameter("type") == null){
 			return;
 		}
+		
+		Session hibernateSession = factory.openSession();
+		hibernateSession.beginTransaction();
+		
 		if(request.getParameter("type").equals("invalid")){
-			this.controller.reportInvalid(connection, request.getParameter("id"), request.getParameter("stock"));
+			this.controller.reportInvalid(hibernateSession, request.getParameter("id"), request.getParameter("stock"));
 			System.out.println("Invalid reported: " + request.getParameter("stock"));
 		}
 		if(request.getParameter("type").equals("update")){
 			System.out.println("Updating: " + request.getParameter("id"));
 			if(request.getParameter("status").equals("2"))
 			{
-				archiveCrawlTask(request.getParameter("id"));
+				archiveCrawlTask(hibernateSession, request.getParameter("id"));
 			}else{
 				this.controller.updateTask(request.getParameter("id"), Integer.parseInt(request.getParameter("status")));
 			}
@@ -76,19 +82,14 @@ public class StatusUpdateServlet extends HttpServlet
 			System.out.println("new crawler(" + request.getParameter("crawler_id") + ") for task " + request.getParameter("task_id") + " participated");
 			controller.addCrawler(request.getParameter("task_id"), request.getParameter("crawler_id"));
 		}
+		
+		hibernateSession.getTransaction().commit();
+		hibernateSession.close();
 	}
 	
 	
-	private void archiveCrawlTask(String id){
-		PreparedStatement statement = this.controller.archive(connection, id);
-		System.out.println("Archiving " + id +  "...");
-		System.out.println("\t" + statement);
-		try
-		{
-			statement.execute();
-		} catch (SQLException e)
-		{
-			e.printStackTrace();
-		}
+	private void archiveCrawlTask(Session hibernateSession, String id){
+		assert hibernateSession.getTransaction().isActive();
+		this.controller.archive(hibernateSession, id);
 	}
 }

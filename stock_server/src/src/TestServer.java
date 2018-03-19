@@ -52,7 +52,7 @@ public class TestServer
 		StockIndex index = new StockIndex();
 		//handler.addServletWithMapping(new ServletHolder(new PostServlet(connection)), "/summary");
 		handler.addServletWithMapping(new ServletHolder(new PriceUpdate()), "/");
-		//handler.addServletWithMapping(new ServletHolder(new TaskAssignmentServlet(connection, controller)), "/list");
+		handler.addServletWithMapping(new ServletHolder(new TaskAssignmentServlet(sessionFactory, controller)), TaskAssignmentServlet.PATH);
 		//handler.addServletWithMapping(new ServletHolder(new StatusUpdateServlet(connection, controller)), "/update");
 		//handler.addServletWithMapping(new ServletHolder(new APIKeyDistributionServlet(connection)), APIKeyDistributionServlet.PATH);
 		handler.addServletWithMapping(new ServletHolder(new ProfileUpdate(sessionFactory, index)), ProfileUpdate.PATH);

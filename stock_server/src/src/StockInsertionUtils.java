@@ -2,20 +2,16 @@ package src;
 
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.sql.Connection;
 import java.sql.Date;
 import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.hibernate.Session;
+import org.hibernate.query.Query;
 import org.json.JSONObject;
 
 public class StockInsertionUtils
@@ -101,25 +97,11 @@ public class StockInsertionUtils
 		return temp;
 	}
 	
-	public static List<String> getStockList(Connection connection){
-		String sql = "SELECT * FROM id_name;";
-		List<List<String>> result = null;
+	@SuppressWarnings("unchecked")
+	public static List<Symbol> getSymbolList(Session hibernateSession){
+		assert hibernateSession.getTransaction().isActive();
 		
-		try
-		{
-			PreparedStatement statement = connection.prepareStatement(sql);
-			result = Utils.executeQuery(connection, statement);
-		} catch (SQLException e)
-		{
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		List<String> temp = new ArrayList<String>();
-		for(List<String> row: result){
-			temp.add(row.get(1));
-		}
-		
-		return temp;
+		return hibernateSession.createQuery("from Symbol").list();
 	}
 	
 	

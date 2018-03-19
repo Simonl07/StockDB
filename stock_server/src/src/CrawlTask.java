@@ -3,7 +3,6 @@
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
-import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -12,6 +11,7 @@ import java.util.Map;
 import javax.persistence.ElementCollection;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 
 import org.hibernate.Session;
 import org.json.JSONArray;
@@ -25,8 +25,9 @@ public class CrawlTask
 	private final long TIMESTAMP;
 	private final int SIZE;
 	
-	@ElementCollection
-	private final List<String> STOCK_LIST;
+	@OneToMany
+	private final List<Symbol> SYMBOL_LIST;
+	
 	@ElementCollection
 	private final Map<String, Integer> CRAWLER_MAP;
 	private final String TYPE;
@@ -40,15 +41,15 @@ public class CrawlTask
 	
 	
 	
-	public CrawlTask(List<String> stock_list, String type)
+	public CrawlTask(List<Symbol> stock_list, String type)
 	{
 		this.TYPE = type;
 		this.TIMESTAMP = System.currentTimeMillis();
 		this.SIZE = stock_list.size();
-		this.STOCK_LIST = stock_list;
+		this.SYMBOL_LIST = stock_list;
 		this.status = 0;
 		this.end_time = -1;
-		this.ID = Utils.MD5(this.TIMESTAMP + this.SIZE + this.STOCK_LIST.toString() + this.status);
+		this.ID = Utils.MD5(this.TIMESTAMP + this.SIZE + this.SYMBOL_LIST.toString() + this.status);
 		this.invalid_stocks = new ArrayList<String>();
 		this.CRAWLER_MAP = new HashMap<String, Integer>();
 		this.success_rate = 1;
@@ -70,12 +71,12 @@ public class CrawlTask
 		crawled_count = CRAWLER_MAP.values().stream().reduce(0, (x, y)-> x + y);
 	}
 	
-	public void reportInvalid(Connection connection, String stock)
+	public void reportInvalid(Session hibernateSession, String stock)
 	{
 		this.invalid_stocks.add(stock);
 		this.success_rate = ((float)this.SIZE - this.invalid_stocks.size())/(float)this.SIZE;
 		System.out.println("Success rate decreased to " + this.success_rate);
-		removeStock(connection, stock);
+		removeStock(hibernateSession, stock);
 	}
 
 
@@ -84,9 +85,11 @@ public class CrawlTask
 	{
 		JSONObject json = new JSONObject();
 		JSONArray array = new JSONArray();
-		for (String stock: STOCK_LIST)
+		for (Symbol stock: SYMBOL_LIST)
 		{
-			array.put(stock);
+			JSONObject obj = new JSONObject();
+			obj.accumulate(Integer.toString(stock.getId()), stock.getSymbol());
+			array.put(obj);
 		}
 
 		json.put("id", this.ID);
@@ -103,18 +106,10 @@ public class CrawlTask
 		hibernateSession.save(this);
 	}
 
-	public static void removeStock(Connection connection, String name)
+	public static void removeStock(Session hibernateSession, String id)
 	{
-		String sql = "DELETE FROM id_name WHERE name_short = ?;";
-		try
-		{
-			PreparedStatement statement = connection.prepareStatement(sql);
-			statement.setString(1, name);
-			statement.execute();
-		} catch (SQLException e)
-		{
-			e.printStackTrace();
-		}
+		assert hibernateSession.getTransaction().isActive();
+		hibernateSession.remove(hibernateSession.get(Symbol.class, id));
 	}
 
 
@@ -211,6 +206,10 @@ public class CrawlTask
 	 */
 	public void setStatus(int status) {
 		this.status = status;
+	}
+	
+	public int getInvalidCount(){
+		return this.invalid_stocks.size();
 	}
 	
 	

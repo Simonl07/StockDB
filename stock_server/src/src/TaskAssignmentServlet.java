@@ -1,22 +1,24 @@
 package src;
 import java.io.IOException;
-import java.io.PrintWriter;
-import java.sql.Connection;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 import org.json.JSONObject;
 
+@SuppressWarnings("serial")
 public class TaskAssignmentServlet extends HttpServlet
 {
-	private Connection connection;
+	private SessionFactory factory;
 	private TaskStatusController controller;
+	public static final String PATH = "/task";
 	
-	public TaskAssignmentServlet(Connection connection, TaskStatusController controller){
-		this.connection = connection;
+	public TaskAssignmentServlet(SessionFactory factory, TaskStatusController controller){
+		this.factory = factory;
 		this.controller = controller;
 	}
 	
@@ -25,8 +27,15 @@ public class TaskAssignmentServlet extends HttpServlet
 	{
 		response.setContentType("application/json");
 		response.setStatus(HttpServletResponse.SC_OK);
-
-		JSONObject responsePackage = controller.assign(StockInsertionUtils.getStockList(connection), request.getParameter("type"));
+		Session hibernateSession = factory.openSession();
+		hibernateSession.beginTransaction();
+		
+		
+		JSONObject responsePackage = controller.assign(StockInsertionUtils.getSymbolList(hibernateSession), request.getParameter("type"));
+		
+		
+		hibernateSession.getTransaction().commit();
+		hibernateSession.close();
 		
 		response.getWriter().write(responsePackage.toString(4));
 	}

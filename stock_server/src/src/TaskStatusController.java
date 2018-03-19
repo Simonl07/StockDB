@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.hibernate.Session;
 import org.json.JSONObject;
 
 public class TaskStatusController
@@ -17,14 +18,14 @@ public class TaskStatusController
 		this.crawlTaskMap = new HashMap<String, CrawlTask>();
 	}
 	
-	public JSONObject assign(List<String> stocks, String type){
+	public JSONObject assign(List<Symbol> stocks, String type){
 		CrawlTask temp = new CrawlTask(stocks, type);
 		crawlTaskMap.put(temp.getID(), temp);
 		return temp.genJSONPackage();
 	}
 	
-	public void reportInvalid(Connection connection, String id, String stock){
-		crawlTaskMap.get(id).reportInvalid(connection, stock);
+	public void reportInvalid(Session session, String id, String stock){
+		crawlTaskMap.get(id).reportInvalid(session, stock);
 	}
 	
 	public Collection<CrawlTask> getTasks(){
@@ -47,10 +48,9 @@ public class TaskStatusController
 		crawlTaskMap.get(task_id).addCrawler(crawler_id);
 	}
 	
-	public PreparedStatement archive(Connection connection, String id){
-		PreparedStatement statement = crawlTaskMap.get(id).genSQLArchive(connection);
+	public void archive(Session hibernateSession, String id){
+		crawlTaskMap.get(id).archive(hibernateSession);
 		crawlTaskMap.remove(id);
-		return statement;
 	}
 	
 	public CrawlTask getCrawlTask(String id){
