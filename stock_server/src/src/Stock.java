@@ -26,8 +26,8 @@ public class Stock
 	private Map<Long, Double> historical_price = new HashMap<>();
 	@ElementCollection
 	private Map<Long, Long> historical_volume = new HashMap<>();
-	private Long lastUpdate;
-	private String lastCrawl;
+	private Long last_update;
+	private String last_updated_by;
 
 	// Profile
 	private String address1;
@@ -62,10 +62,10 @@ public class Stock
 	{
 		this.latest_price = price;
 		this.latest_volume = volume;
-		this.lastUpdate = System.currentTimeMillis();
-		this.lastCrawl = crawlTaskID;
-		historical_price.put(this.lastUpdate, price);
-		historical_volume.put(this.lastUpdate, volume);
+		this.last_update = System.currentTimeMillis();
+		this.last_updated_by = crawlTaskID;
+		historical_price.put(this.last_update, price);
+		historical_volume.put(this.last_update, volume);
 	}
 	
 	public String getNAME_FULL()
@@ -205,22 +205,22 @@ public class Stock
 
 	public Long getLast_update()
 	{
-		return lastUpdate;
+		return last_update;
 	}
 
 	public void setLast_update(Long last_update)
 	{
-		this.lastUpdate = last_update;
+		this.last_update = last_update;
 	}
 
 	public String getLastCrawl()
 	{
-		return lastCrawl;
+		return last_updated_by;
 	}
 
 	public void setLastCrawl(String lastCrawl)
 	{
-		this.lastCrawl = lastCrawl;
+		this.last_updated_by = lastCrawl;
 	}
 
 	public Map<Long, Double> getHistorical_price()

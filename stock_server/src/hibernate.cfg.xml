@@ -5,14 +5,14 @@
 <hibernate-configuration>
     <session-factory name="Hibernate">
         <property name="hibernate.connection.driver_class">com.mysql.jdbc.Driver</property>
-        <property name="hibernate.connection.password">ArNiswTwlmxih12k</property>
-        <property name="hibernate.connection.url">jdbc:mysql://goldnanodb.cx9varjsh2av.us-west-1.rds.amazonaws.com:3306/hibernate</property>
-        <property name="hibernate.connection.username">gold</property>
-        <property name="hibernate.connection.password">goldnano</property>
+        <property name="hibernate.connection.url">jdbc:mysql://goldnano.cx9varjsh2av.us-west-1.rds.amazonaws.com/hibernate</property>
+        <property name="hibernate.connection.username">root</property>
+        <property name="hibernate.connection.password">12345678</property>
         <property name="hibernate.dialect">org.hibernate.dialect.MySQL5Dialect</property>
         <property name="hibernate.hbm2ddl.auto">update</property>
         <property name="show_sql">true</property>
         
         <mapping class="src.Stock"/>
+        <mapping class="src.Symbol"/>
     </session-factory>
 </hibernate-configuration>

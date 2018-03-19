@@ -9,15 +9,25 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.persistence.ElementCollection;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+
+import org.hibernate.Session;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 public class CrawlTask
 {
+	@Id
+	@GeneratedValue
 	private final String ID;
 	private final long TIMESTAMP;
 	private final int SIZE;
+	
+	@ElementCollection
 	private final List<String> STOCK_LIST;
+	@ElementCollection
 	private final Map<String, Integer> CRAWLER_MAP;
 	private final String TYPE;
 
@@ -27,6 +37,9 @@ public class CrawlTask
 	private int status;
 	private List<String> invalid_stocks;
 
+	
+	
+	
 	public CrawlTask(List<String> stock_list, String type)
 	{
 		this.TYPE = type;
@@ -42,10 +55,6 @@ public class CrawlTask
 		this.crawled_count = 0;
 	}
 
-	public String getTYPE()
-	{
-		return TYPE;
-	}
 
 	public void addCrawler(String id){
 		CRAWLER_MAP.put(id, 0);
@@ -61,16 +70,6 @@ public class CrawlTask
 		crawled_count = CRAWLER_MAP.values().stream().reduce(0, (x, y)-> x + y);
 	}
 	
-	public int getCrawled_count()
-	{
-		return this.crawled_count;
-	}
-
-	public void setCrawled_count(int crawled_count)
-	{
-		this.crawled_count = crawled_count;
-	}
-
 	public void reportInvalid(Connection connection, String stock)
 	{
 		this.invalid_stocks.add(stock);
@@ -79,30 +78,7 @@ public class CrawlTask
 		removeStock(connection, stock);
 	}
 
-	public float getSuccess_rate()
-	{
-		return success_rate;
-	}
 
-	public String getID()
-	{
-		return ID;
-	}
-
-	public int getStatus()
-	{
-		return status;
-	}
-
-	public void setEnd_time(long end_time)
-	{
-		this.end_time = end_time;
-	}
-
-	public void updateStatus(int status)
-	{
-		this.status = status;
-	}
 
 	public JSONObject genJSONPackage()
 	{
@@ -120,46 +96,16 @@ public class CrawlTask
 		return json;
 	}
 
-	public long getTIMESTAMP()
-	{
-		return TIMESTAMP;
-	}
-	
-	public int getInvalidCount(){
-		return invalid_stocks.size();
-	}
 
-	public int getSIZE()
+	public void archive(Session hibernateSession)
 	{
-		return SIZE;
-	}
-
-	public PreparedStatement genSQLArchive(Connection connection)
-	{
-		String sql = "INSERT INTO records.crawltasks VALUES(?, ?, ?, ?, ?, ?, ?, ?);";
-		PreparedStatement statement = null;
-		try
-		{
-			statement = connection.prepareStatement(sql);
-			statement.setString(1, this.ID);
-			statement.setTimestamp(2, new Timestamp(this.TIMESTAMP));
-			statement.setTimestamp(3, new Timestamp(System.currentTimeMillis()));
-			statement.setInt(4, this.SIZE);
-			statement.setInt(5, this.crawled_count);
-			statement.setFloat(6, (float)this.crawled_count/(float)this.SIZE);
-			statement.setInt(7, this.invalid_stocks.size());
-			statement.setFloat(8, this.success_rate);
-		} catch (SQLException e)
-		{
-			e.printStackTrace();
-		}
-		return statement;
+		assert hibernateSession.getTransaction().isActive();
+		hibernateSession.save(this);
 	}
 
 	public static void removeStock(Connection connection, String name)
 	{
 		String sql = "DELETE FROM id_name WHERE name_short = ?;";
-
 		try
 		{
 			PreparedStatement statement = connection.prepareStatement(sql);
@@ -169,6 +115,103 @@ public class CrawlTask
 		{
 			e.printStackTrace();
 		}
-
 	}
+
+
+	/**
+	 * @return the iD
+	 */
+	public String getID() {
+		return ID;
+	}
+
+
+	/**
+	 * @return the tIMESTAMP
+	 */
+	public long getTIMESTAMP() {
+		return TIMESTAMP;
+	}
+
+
+	/**
+	 * @return the sIZE
+	 */
+	public int getSIZE() {
+		return SIZE;
+	}
+
+
+	/**
+	 * @return the tYPE
+	 */
+	public String getTYPE() {
+		return TYPE;
+	}
+
+
+	/**
+	 * @return the crawled_count
+	 */
+	public int getCrawled_count() {
+		return crawled_count;
+	}
+
+
+	/**
+	 * @return the end_time
+	 */
+	public long getEnd_time() {
+		return end_time;
+	}
+
+
+	/**
+	 * @return the success_rate
+	 */
+	public float getSuccess_rate() {
+		return success_rate;
+	}
+
+
+	/**
+	 * @return the status
+	 */
+	public int getStatus() {
+		return status;
+	}
+
+
+	/**
+	 * @param crawled_count the crawled_count to set
+	 */
+	public void setCrawled_count(int crawled_count) {
+		this.crawled_count = crawled_count;
+	}
+
+
+	/**
+	 * @param end_time the end_time to set
+	 */
+	public void setEnd_time(long end_time) {
+		this.end_time = end_time;
+	}
+
+
+	/**
+	 * @param success_rate the success_rate to set
+	 */
+	public void setSuccess_rate(float success_rate) {
+		this.success_rate = success_rate;
+	}
+
+
+	/**
+	 * @param status the status to set
+	 */
+	public void setStatus(int status) {
+		this.status = status;
+	}
+	
+	
 }

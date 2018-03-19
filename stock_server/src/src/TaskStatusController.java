@@ -32,7 +32,7 @@ public class TaskStatusController
 	}
 	
 	public void updateTask(String id, int status){
-		crawlTaskMap.get(id).updateStatus(status);
+		crawlTaskMap.get(id).setStatus(status);
 	}
 	
 	public void updateTaskProgress(String id, int crawled_count){
