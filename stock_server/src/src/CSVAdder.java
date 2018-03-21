@@ -14,7 +14,6 @@ public class CSVAdder
 
 	public static void main(String[] args) throws SQLException, IOException
 	{
-		Connection c = new DatabaseConnector().getConnection();
 		Scanner scan = new Scanner(new File("../List.csv"));
 		String full = scan.nextLine();
 		

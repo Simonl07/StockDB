@@ -1,7 +1,6 @@
 package src;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.sql.Connection;
 import java.sql.SQLException;
 
 import org.eclipse.jetty.server.Server;
