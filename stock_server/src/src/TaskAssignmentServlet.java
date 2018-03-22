@@ -31,7 +31,7 @@ public class TaskAssignmentServlet extends HttpServlet
 		hibernateSession.beginTransaction();
 		
 		JSONObject responsePackage;
-		if(request.getParameter("type") != null && request.getParameter("type") == "profile")
+		if(request.getParameter("type") != null && request.getParameter("type").equals("profile"))
 		{
 			responsePackage = controller.assign(StockInsertionUtils.getSymbolList(hibernateSession), request.getParameter("type"));
 		}else{
