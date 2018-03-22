@@ -111,7 +111,7 @@ def reportCrawler(HOST, crawl_id, crawler_id):
     url = HOST + '/update'
     url += '?id=' + str(crawl_id)
     url += '&type=new_crawler'
-    url += '&task_id=' + crawl_id
+    url += '&task_id=' + str(crawl_id)
     url += '&crawler_id=' + str(crawler_id)
     headers = {'charset': 'UTF-8', 'Content-Type': 'text/plain', 'Content-Encoding': 'utf-8', 'Accept-Encoding': 'utf-8'}
     r = requests.post(url, headers=headers)
