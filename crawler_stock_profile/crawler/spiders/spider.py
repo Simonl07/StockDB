@@ -16,7 +16,6 @@ from json import loads
 
 class ProfileSpider(scrapy.Spider):
     symbol2id = {}
-    handle_httpstatus_list = [404, 200, 301, 303]
     name = "profile"
     allowed_domains = ['https://finance.yahoo.com']
 
