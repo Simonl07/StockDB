@@ -119,7 +119,7 @@ public class PriceUpdator
 	}
 	
 	
-	private static List<Stock> getStocks_helper(Session hibernateSession){
+	public static List<Stock> getStocks_helper(Session hibernateSession){
 		assert hibernateSession.getTransaction().isActive();
 		
 		@SuppressWarnings("unchecked")

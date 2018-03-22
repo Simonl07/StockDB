@@ -29,7 +29,7 @@ public class TaskStatusController
 	
 	public JSONObject assign(Session hibernateSession, String type){
 		assert hibernateSession.getTransaction().isActive();
-		List<Stock> stocks = PriceUpdator.getStocks(hibernateSession);
+		List<Stock> stocks = PriceUpdator.getStocks_helper(hibernateSession);
 		List<String> symbols_string = new ArrayList<String>();
 		for(Stock s: stocks){
 			symbols_string.add(s.getSYMBOL());
