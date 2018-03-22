@@ -24,7 +24,7 @@ class ProfileSpider(scrapy.Spider):
         if 'lookup' in response.url:
             stock_name = re.search('(?<=\=).+$', response.url).group()
             url = self.HOST + '/update'
-            url += '?crawl_task_id=' + self.crawl_id
+            url += '?crawl_task_id=' + str(self.crawl_id)
             url += '&type=invalid'
             url += '&stock_id='+ str(self.symbol2id[stock_name])
             headers = {'charset': 'UTF-8', 'Content-Type': 'text/plain', 'Content-Encoding': 'utf-8', 'Accept-Encoding': 'utf-8'}

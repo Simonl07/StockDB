@@ -13,7 +13,7 @@ def url_generator(stockIDs):
     YAHOO_BASE_URL = 'https://finance.yahoo.com/quote/'
     lst = []
     for d in stockIDs:
-        lst.append(YAHOO_BASE_URL + d["symbol"] + "?p=" + d["symbol"])
+        lst.append(YAHOO_BASE_URL + d["symbol"])
     return lst
 
 def execute(HOST):
