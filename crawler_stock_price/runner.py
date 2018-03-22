@@ -44,28 +44,28 @@ def execute(HOST):
     PriceSpider1.start_urls = url_generator(stocks[:part])
     PriceSpider1.symbol2id = symbol2id
     PriceSpider1.crawl_id = crawl_id
-    PriceSpider1.crawler_id = int('0x' + hashlib.md5(str.encode(str(crawl_id + "PriceSpider1"))).hexdigest(), 16)
+    PriceSpider1.crawler_id = int('0x' + hashlib.md5(str.encode(str(str(crawl_id) + "PriceSpider1"))).hexdigest(), 16)
     reportCrawler(HOST, crawl_id, PriceSpider1.crawler_id)
 
     PriceSpider2.HOST = HOST
     PriceSpider2.start_urls = url_generator(stocks[part:part * 2])
     PriceSpider2.symbol2id = symbol2id
     PriceSpider2.crawl_id = crawl_id
-    PriceSpider2.crawler_id = int('0x' + hashlib.md5(str.encode(str(crawl_id + "PriceSpider2"))).hexdigest(), 16)
+    PriceSpider2.crawler_id = int('0x' + hashlib.md5(str.encode(str(str(crawl_id) + "PriceSpider2"))).hexdigest(), 16)
     reportCrawler(HOST, crawl_id, PriceSpider2.crawler_id)
 
     PriceSpider3.HOST = HOST
     PriceSpider3.start_urls = url_generator(stocks[part * 2: part * 3])
     PriceSpider3.symbol2id = symbol2id
     PriceSpider3.crawl_id = crawl_id
-    PriceSpider3.crawler_id = int('0x' + hashlib.md5(str.encode(str(crawl_id + "PriceSpider3"))).hexdigest(), 16)
+    PriceSpider3.crawler_id = int('0x' + hashlib.md5(str.encode(str(str(crawl_id) + "PriceSpider3"))).hexdigest(), 16)
     reportCrawler(HOST, crawl_id, PriceSpider3.crawler_id)
 
     PriceSpider4.HOST = HOST
     PriceSpider4.start_urls = url_generator(stocks[part * 3:part * 4])
     PriceSpider4.symbol2id = symbol2id
     PriceSpider4.crawl_id = crawl_id
-    PriceSpider4.crawler_id = int('0x' + hashlib.md5(str.encode(str(crawl_id + "PriceSpider4"))).hexdigest(), 16)
+    PriceSpider4.crawler_id = int('0x' + hashlib.md5(str.encode(str(str(crawl_id) + "PriceSpider4"))).hexdigest(), 16)
     reportCrawler(HOST, crawl_id, PriceSpider4.crawler_id)
 
 
