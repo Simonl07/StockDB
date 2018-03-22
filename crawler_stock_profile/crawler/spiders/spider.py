@@ -22,7 +22,7 @@ class ProfileSpider(scrapy.Spider):
 
     def parse(self, response):
 
-        if 'lookup' in response.url or response.status == 404:
+        if 'lookup' in response.url:
             stock_name = re.search('(?<=\=).+$', response.url).group()
             url = self.HOST + '/update'
             url += '?crawl_task_id=' + self.crawl_id
