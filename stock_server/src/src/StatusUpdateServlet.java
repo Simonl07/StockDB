@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 
+@SuppressWarnings("serial")
 public class StatusUpdateServlet extends HttpServlet
 {
 
@@ -60,7 +61,7 @@ public class StatusUpdateServlet extends HttpServlet
 		hibernateSession.beginTransaction();
 		
 		if(request.getParameter("type").equals("invalid")){
-			this.controller.reportInvalid(hibernateSession, request.getParameter("id"), request.getParameter("stock"));
+			this.controller.reportInvalid(hibernateSession, request.getParameter("crawl_task_id"), request.getParameter("stock_id"));
 			System.out.println("Invalid reported: " + request.getParameter("stock"));
 		}
 		if(request.getParameter("type").equals("update")){

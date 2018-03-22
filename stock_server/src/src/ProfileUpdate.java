@@ -1,7 +1,7 @@
 package src;
 
 import java.io.IOException;
-import java.text.DecimalFormat;
+import java.util.List;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -10,18 +10,17 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.query.Query;
 import org.json.JSONObject;
 
+@SuppressWarnings("serial")
 public class ProfileUpdate extends HttpServlet
 {
 	public static final String PATH = "/profile";
 	private SessionFactory factory;
-	private StockIndex index;
-	private static DecimalFormat df = new DecimalFormat("##.##");
 
-	public ProfileUpdate(SessionFactory factory, StockIndex index)
+	public ProfileUpdate(SessionFactory factory)
 	{
-		this.index = index;
 		this.factory = factory;
 	}
 
@@ -44,11 +43,21 @@ public class ProfileUpdate extends HttpServlet
 		String website = json.getString("website");
 		String description = json.getString("description");
 		int employee = json.getInt("employee");
+		int stock_id = json.getInt("stock_id");
 		
-		
+		Session session = factory.openSession();
+		session.beginTransaction();
 		
 		Stock stock;
-		stock = new Stock(name_full, symbol);
+		@SuppressWarnings("unchecked")
+		Query<Stock> query = session.createQuery("from Stock where SYMBOL = :symbol");
+		query.setParameter("symbol", symbol);
+		List<Stock> lst = query.list();
+		if(lst.size() == 1){
+			stock = lst.get(0);
+		}else{
+			stock = new Stock(name_full, symbol);
+		}
 		stock.setAddress1(address);
 		stock.setCity(city);
 		stock.setState(state);
@@ -60,13 +69,11 @@ public class ProfileUpdate extends HttpServlet
 		stock.setDescription(description);
 		stock.setEmployee(employee);
 		
-		Session session = factory.openSession();
-		session.beginTransaction();
+		
 		session.save(stock);
 		session.getTransaction().commit();
 		session.close();
 		
-		index.addStock(stock);
 	}
 	
 }

@@ -50,9 +50,9 @@ class RequestDB(object):
     # This funtion process the Stock data and compile a request to data base.
     def process_item(self, item, spider):
         headers = {'charset': 'UTF-8', 'Content-Type': 'text/plain', 'Connection': 'keep-alive', 'Content-Encoding': 'utf-8', 'Accept-Encoding': 'utf-8'}
-        payload = {'crawl_task_id': spider.crawl_id}
+        payload = {'crawl_task_id': spider.crawl_id, 'stock_id': spider.symbol2id[item['name_short']]}
         for k in item.keys():
             payload[k] = item[k]
 
-
-        s.post(spider.HOST + '/live', headers=headers, json=payload)
+        print(payload)
+        s.post(spider.HOST + '/', headers=headers, json=payload)

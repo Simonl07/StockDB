@@ -1,14 +1,13 @@
 package src;
 
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.Map;
+import java.time.LocalDateTime;
+import java.util.List;
 
-public class StockIndex
+import org.hibernate.Session;
+import org.hibernate.query.Query;
+
+public class PriceUpdator
 {
-	private final Map<String, Stock> index = new HashMap<String, Stock>();
 	private TimeLinkedList updateHistory = new TimeLinkedList();
 
 	public class TimeLinkedList{
@@ -71,26 +70,21 @@ public class StockIndex
 	
 	
 	
-	public StockIndex()
+	public PriceUpdator()
 	{
 	}
-
-	public StockIndex(Map<String, Stock> input)
+	
+	public void updatePrice(int id, Double price, Long volume, String crawlTaskID, Session hibernateSession)
 	{
-		index.putAll(input);
-	}
-
-	public void updatePrice(String name_full, String name_short, Double price, Long volume, String crawlTaskID)
-	{
+		assert hibernateSession.getTransaction().isActive();
 		long currentTime = System.currentTimeMillis();
-		if (index.containsKey(name_full))
-		{
-			index.get(name_full).update(price, volume, crawlTaskID);
-		}else{
-			Stock temp = new Stock(name_full, name_short);
-			temp.update(price, volume, crawlTaskID);
-			index.put(name_full, temp);
-		}
+		
+		Stock stock = (Stock)hibernateSession.get(Stock.class, id);
+		stock.setLatest_price(price);
+		stock.setLast_update(LocalDateTime.now());
+		stock.setLatest_volume(volume);
+		stock.setLastCrawl(crawlTaskID);
+		
 		updateHistory.insert(currentTime);
 		updateHistory.chopAfter(10);
 	}
@@ -107,44 +101,15 @@ public class StockIndex
 
 	public Double getAverageLatency()
 	{
-		long curr = System.currentTimeMillis();
-		int size = index.size();
-		double total = 0;
-		for (Stock s: index.values())
-		{
-			total += (curr - s.getLast_update()) / 1000.0;
-		}
-
-		return size == 0 ? 0 : total / size;
+		return 0.0;//TODO
+	}
+	
+	public List<Stock> getStocks(Session hibernateSession){
+		assert hibernateSession.getTransaction().isActive();
+		
+		@SuppressWarnings("unchecked")
+		Query<Stock> query = hibernateSession.createQuery("from Stock");
+		return query.list();
 	}
 
-	public Stock getStock(String id)
-	{
-		return index.get(id);
-	}
-
-	public Collection<Stock> getStockList()
-	{
-		return index.values();
-	}
-
-	public Collection<String> getIdList()
-	{
-		return index.keySet();
-	}
-
-	public void addStock(Stock stock)
-	{
-		index.put(stock.getNAME_FULL(), stock);
-	}
-
-	public boolean hasId(int id)
-	{
-		return index.containsKey(id);
-	}
-
-	public boolean hasStock(Stock stock)
-	{
-		return index.containsValue(stock);
-	}
 }

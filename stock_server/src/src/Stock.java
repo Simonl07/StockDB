@@ -1,5 +1,6 @@
 package src;
 
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -9,6 +10,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToOne;
 
 @Entity
 public class Stock
@@ -23,10 +25,10 @@ public class Stock
 	private Double latest_price;
 	private Long latest_volume;
 	@ElementCollection
-	private Map<Long, Double> historical_price = new HashMap<>();
+	private Map<LocalDateTime, Double> historical_price = new HashMap<>();
 	@ElementCollection
-	private Map<Long, Long> historical_volume = new HashMap<>();
-	private Long last_update;
+	private Map<LocalDateTime, Long> historical_volume = new HashMap<>();
+	private LocalDateTime last_update;
 	private String last_updated_by;
 
 	// Profile
@@ -39,30 +41,30 @@ public class Stock
 	private String sector;
 	private String industry;
 	private int employee;
-	@Column(length = 2048)
+	@Column(length = 4096)
 	private String description;
 
 	public Stock()
 	{
 	}
 
-	public Stock(String name_full, String name_short)
+	public Stock(String name_full, String symbol)
 	{
-		this.SYMBOL = name_short;
+		this.SYMBOL = symbol;
 		this.NAME_FULL = name_full;
 	}
 	
 	
 	public boolean is_price_changed(String md5)
 	{
-		return !Utils.MD5(getSYMBOL() + latest_price + latest_volume).equals(md5);
+		return !Utils.MD5(this.getSYMBOL() + latest_price + latest_volume).equals(md5);
 	}
 
 	public void update(Double price, Long volume, String crawlTaskID)
 	{
 		this.latest_price = price;
 		this.latest_volume = volume;
-		this.last_update = System.currentTimeMillis();
+		this.last_update = LocalDateTime.now();
 		this.last_updated_by = crawlTaskID;
 		historical_price.put(this.last_update, price);
 		historical_volume.put(this.last_update, volume);
@@ -191,6 +193,7 @@ public class Stock
 	public void setLatest_price(Double latest_price)
 	{
 		this.latest_price = latest_price;
+		this.historical_price.put(LocalDateTime.now(), latest_price);
 	}
 
 	public Long getLatest_volume()
@@ -203,12 +206,12 @@ public class Stock
 		this.latest_volume = latest_volume;
 	}
 
-	public Long getLast_update()
+	public LocalDateTime getLast_update()
 	{
 		return last_update;
 	}
 
-	public void setLast_update(Long last_update)
+	public void setLast_update(LocalDateTime last_update)
 	{
 		this.last_update = last_update;
 	}
@@ -223,12 +226,12 @@ public class Stock
 		this.last_updated_by = lastCrawl;
 	}
 
-	public Map<Long, Double> getHistorical_price()
+	public Map<LocalDateTime, Double> getHistorical_price()
 	{
 		return historical_price;
 	}
 
-	public Map<Long, Long> getHistorical_volume()
+	public Map<LocalDateTime, Long> getHistorical_volume()
 	{
 		return historical_volume;
 	}

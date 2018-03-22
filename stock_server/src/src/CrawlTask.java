@@ -1,14 +1,12 @@
  package src;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import javax.persistence.ElementCollection;
+import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
@@ -17,6 +15,7 @@ import org.hibernate.Session;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+@Entity
 public class CrawlTask
 {
 	@Id
@@ -36,6 +35,7 @@ public class CrawlTask
 	private long end_time;
 	private float success_rate;
 	private int status;
+	@ElementCollection
 	private List<String> invalid_stocks;
 
 	
@@ -88,7 +88,8 @@ public class CrawlTask
 		for (Symbol stock: SYMBOL_LIST)
 		{
 			JSONObject obj = new JSONObject();
-			obj.accumulate(Integer.toString(stock.getId()), stock.getSymbol());
+			obj.accumulate("id", stock.getId());
+			obj.accumulate("symbol", stock.getSymbol());
 			array.put(obj);
 		}
 

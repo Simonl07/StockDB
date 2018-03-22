@@ -37,7 +37,8 @@ public class Utils
 			e.printStackTrace();
 		}
 
-		
+		System.out.println(content);
+		System.out.flush();
 		return new JSONObject(content);
 
 	}

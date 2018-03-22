@@ -27,13 +27,13 @@ public class TestServer
 
 		ServletHandler handler = new ServletHandler();
 		TaskStatusController controller = new TaskStatusController();
-		StockIndex index = new StockIndex();
+		PriceUpdator index = new PriceUpdator();
 		//handler.addServletWithMapping(new ServletHolder(new PostServlet(connection)), "/summary");
-		handler.addServletWithMapping(new ServletHolder(new PriceUpdate()), "/");
+		handler.addServletWithMapping(new ServletHolder(new PriceUpdate(sessionFactory)), PriceUpdate.PATH);
 		handler.addServletWithMapping(new ServletHolder(new TaskAssignmentServlet(sessionFactory, controller)), TaskAssignmentServlet.PATH);
-		//handler.addServletWithMapping(new ServletHolder(new StatusUpdateServlet(connection, controller)), "/update");
+		handler.addServletWithMapping(new ServletHolder(new StatusUpdateServlet(sessionFactory, controller)), "/update");
 		//handler.addServletWithMapping(new ServletHolder(new APIKeyDistributionServlet(connection)), APIKeyDistributionServlet.PATH);
-		handler.addServletWithMapping(new ServletHolder(new ProfileUpdate(sessionFactory, index)), ProfileUpdate.PATH);
+		handler.addServletWithMapping(new ServletHolder(new ProfileUpdate(sessionFactory)), ProfileUpdate.PATH);
 		handler.addServletWithMapping(TrafficLightServlet.class, "/go");
 			
 		

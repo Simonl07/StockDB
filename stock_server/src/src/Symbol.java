@@ -12,6 +12,11 @@ public class Symbol {
 	@GeneratedValue(strategy = GenerationType.SEQUENCE)
 	private int id;
 	private String symbol;
+	
+	public Symbol(){
+		
+	}
+	
 	public Symbol(String symbol){
 		this.symbol = symbol;
 	}

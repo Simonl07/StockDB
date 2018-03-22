@@ -26,7 +26,7 @@ class RequestDB(object):
     # This funtion process the Stock data and compile a request to data base.
     def process_item(self, item, spider):
         headers = {'charset': 'UTF-8', 'Content-Type': 'text/plain', 'Connection': 'keep-alive', 'Content-Encoding': 'utf-8', 'Accept-Encoding': 'utf-8'}
-        payload = {}
+        payload = {'stock_id': spider.symbol2id[item['symbol']]}
         for k in item.keys():
             payload[k] = item[k]
 
