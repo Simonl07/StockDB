@@ -41,7 +41,7 @@ public class Stock
 	private String sector;
 	private String industry;
 	private int employee;
-	@Column(length = 4096)
+	@Column(length = 16384)
 	private String description;
 
 	public Stock()

@@ -36,7 +36,7 @@ public class CrawlTask
 	private float success_rate;
 	private int status;
 	@ElementCollection
-	private List<String> invalid_stocks;
+	private List<Integer> invalid_stocks;
 
 	
 	
@@ -50,7 +50,7 @@ public class CrawlTask
 		this.status = 0;
 		this.end_time = -1;
 		this.ID = Utils.MD5(this.TIMESTAMP + this.SIZE + this.SYMBOL_LIST.toString() + this.status);
-		this.invalid_stocks = new ArrayList<String>();
+		this.invalid_stocks = new ArrayList<Integer>();
 		this.CRAWLER_MAP = new HashMap<String, Integer>();
 		this.success_rate = 1;
 		this.crawled_count = 0;
@@ -71,7 +71,7 @@ public class CrawlTask
 		crawled_count = CRAWLER_MAP.values().stream().reduce(0, (x, y)-> x + y);
 	}
 	
-	public void reportInvalid(Session hibernateSession, String stock)
+	public void reportInvalid(Session hibernateSession, int stock)
 	{
 		this.invalid_stocks.add(stock);
 		this.success_rate = ((float)this.SIZE - this.invalid_stocks.size())/(float)this.SIZE;
@@ -107,7 +107,7 @@ public class CrawlTask
 		hibernateSession.save(this);
 	}
 
-	public static void removeStock(Session hibernateSession, String id)
+	public static void removeStock(Session hibernateSession, int id)
 	{
 		assert hibernateSession.getTransaction().isActive();
 		hibernateSession.remove(hibernateSession.get(Symbol.class, id));

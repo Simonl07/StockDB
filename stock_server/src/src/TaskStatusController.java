@@ -24,7 +24,7 @@ public class TaskStatusController
 		return temp.genJSONPackage();
 	}
 	
-	public void reportInvalid(Session session, String crawl_task_id, String stock_id){
+	public void reportInvalid(Session session, String crawl_task_id, int stock_id){
 		crawlTaskMap.get(crawl_task_id).reportInvalid(session, stock_id);
 	}
 	

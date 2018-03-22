@@ -19,7 +19,7 @@ def url_generator(stockIDs):
 def execute(HOST):
     ProfileSpider.HOST = HOST
 
-    response = requests.get(HOST + '/task?type=price')
+    response = requests.get(HOST + '/task?type=profile')
     jsonObject = json.loads(response.text)
 
     crawl_id = jsonObject['id']
@@ -30,6 +30,7 @@ def execute(HOST):
         symbol2id[d["symbol"]] =  d["id"]
 
     ProfileSpider.start_urls = url_generator(stocks)
+    ProfileSpider.crawl_id = crawl_id
     ProfileSpider.symbol2id = symbol2id
     process = CrawlerProcess({'ITEM_PIPELINES': {
        'crawler.pipelines.Clean_name': 297,

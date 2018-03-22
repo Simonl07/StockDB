@@ -16,10 +16,21 @@ from json import loads
 
 class ProfileSpider(scrapy.Spider):
     symbol2id = {}
+    handle_httpstatus_list = [404, 200, 301, 303]
     name = "profile"
     allowed_domains = ['https://finance.yahoo.com']
 
     def parse(self, response):
+
+        if 'lookup' in response.url or response.status == 404:
+            stock_name = re.search('(?<=\=).+$', response.url).group()
+            url = self.HOST + '/update'
+            url += '?crawl_task_id=' + self.crawl_id
+            url += '&type=invalid'
+            url += '&stock_id='+ str(self.symbol2id[stock_name])
+            headers = {'charset': 'UTF-8', 'Content-Type': 'text/plain', 'Content-Encoding': 'utf-8', 'Accept-Encoding': 'utf-8'}
+            r = requests.post(url, headers=headers)
+            return
 
         soup = BeautifulSoup(response.text)
         script = soup.find("script",text=re.compile("root.App.main")).text
