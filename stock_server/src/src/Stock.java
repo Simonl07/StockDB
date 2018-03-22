@@ -28,7 +28,7 @@ public class Stock
 	@ElementCollection
 	private Map<LocalDateTime, Long> historical_volume = new HashMap<>();
 	private LocalDateTime last_update;
-	private int last_updated_by;
+	private Integer last_updated_by;
 
 	// Profile
 	private String address1;
