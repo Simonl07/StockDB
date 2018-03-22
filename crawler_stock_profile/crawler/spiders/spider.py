@@ -17,7 +17,6 @@ from json import loads
 class ProfileSpider(scrapy.Spider):
     symbol2id = {}
     name = "profile"
-    allowed_domains = ['https://finance.yahoo.com']
 
     def parse(self, response):
 
