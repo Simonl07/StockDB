@@ -1,6 +1,7 @@
 package src;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.hibernate.Session;
@@ -9,7 +10,10 @@ import org.hibernate.query.Query;
 public class PriceUpdator
 {
 	private TimeLinkedList updateHistory = new TimeLinkedList();
-
+	private static List<Stock> cached_stocks = new ArrayList<Stock>();
+	private long last_cache;
+	
+	
 	public class TimeLinkedList{
 		private TimeNode head;
 		private TimeNode tail;
@@ -72,6 +76,7 @@ public class PriceUpdator
 	
 	public PriceUpdator()
 	{
+		this.last_cache = System.currentTimeMillis();
 	}
 	
 	public void updatePrice(int id, Double price, Long volume, String crawlTaskID, Session hibernateSession)
@@ -87,6 +92,11 @@ public class PriceUpdator
 		
 		updateHistory.insert(currentTime);
 		updateHistory.chopAfter(10);
+		
+		if(System.currentTimeMillis() - this.last_cache > 10000){
+			cached_stocks = PriceUpdator.getStocks_helper(hibernateSession);
+			this.last_cache = System.currentTimeMillis();
+		}
 	}
 
 
@@ -105,6 +115,11 @@ public class PriceUpdator
 	}
 	
 	public static List<Stock> getStocks(Session hibernateSession){
+		return cached_stocks;
+	}
+	
+	
+	private static List<Stock> getStocks_helper(Session hibernateSession){
 		assert hibernateSession.getTransaction().isActive();
 		
 		@SuppressWarnings("unchecked")
