@@ -30,8 +30,13 @@ public class TaskAssignmentServlet extends HttpServlet
 		Session hibernateSession = factory.openSession();
 		hibernateSession.beginTransaction();
 		
-		
-		JSONObject responsePackage = controller.assign(StockInsertionUtils.getSymbolList(hibernateSession), request.getParameter("type"));
+		JSONObject responsePackage;
+		if(request.getParameter("type") != null && request.getParameter("type") == "profile")
+		{
+			responsePackage = controller.assign(StockInsertionUtils.getSymbolList(hibernateSession), request.getParameter("type"));
+		}else{
+			responsePackage = controller.assign(hibernateSession, request.getParameter("type"));
+		}
 		
 		
 		hibernateSession.getTransaction().commit();

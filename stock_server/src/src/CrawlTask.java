@@ -9,7 +9,6 @@ import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
 
 import org.hibernate.Session;
 import org.json.JSONArray;
@@ -20,12 +19,12 @@ public class CrawlTask
 {
 	@Id
 	@GeneratedValue
-	private final String ID;
+	private long ID;
 	private final long TIMESTAMP;
 	private final int SIZE;
 	
-	@OneToMany
-	private final List<Symbol> SYMBOL_LIST;
+	@ElementCollection
+	private final List<String> SYMBOL_LIST;
 	
 	@ElementCollection
 	private final Map<String, Integer> CRAWLER_MAP;
@@ -41,7 +40,7 @@ public class CrawlTask
 	
 	
 	
-	public CrawlTask(List<Symbol> stock_list, String type)
+	public CrawlTask(List<String> stock_list, String type)
 	{
 		this.TYPE = type;
 		this.TIMESTAMP = System.currentTimeMillis();
@@ -49,7 +48,6 @@ public class CrawlTask
 		this.SYMBOL_LIST = stock_list;
 		this.status = 0;
 		this.end_time = -1;
-		this.ID = Utils.MD5(this.TIMESTAMP + this.SIZE + this.SYMBOL_LIST.toString() + this.status);
 		this.invalid_stocks = new ArrayList<Integer>();
 		this.CRAWLER_MAP = new HashMap<String, Integer>();
 		this.success_rate = 1;
@@ -81,15 +79,34 @@ public class CrawlTask
 
 
 
-	public JSONObject genJSONPackage()
+	public JSONObject genJSONPackageWithSymbols(List<Symbol> symbols)
 	{
 		JSONObject json = new JSONObject();
 		JSONArray array = new JSONArray();
-		for (Symbol stock: SYMBOL_LIST)
+		for (Symbol stock: symbols)
 		{
 			JSONObject obj = new JSONObject();
 			obj.accumulate("id", stock.getId());
 			obj.accumulate("symbol", stock.getSymbol());
+			array.put(obj);
+		}
+
+		json.put("id", this.ID);
+		json.put("assignment_begin", this.TIMESTAMP);
+		json.put("assignment_size", this.SIZE);
+		json.put("stocks", array);
+		return json;
+	}
+	
+	public JSONObject genJSONPackageWithStocks(List<Stock> stocks)
+	{
+		JSONObject json = new JSONObject();
+		JSONArray array = new JSONArray();
+		for (Stock stock: stocks)
+		{
+			JSONObject obj = new JSONObject();
+			obj.accumulate("id", stock.getId());
+			obj.accumulate("symbol", stock.getSYMBOL());
 			array.put(obj);
 		}
 
@@ -117,7 +134,7 @@ public class CrawlTask
 	/**
 	 * @return the iD
 	 */
-	public String getID() {
+	public long getID() {
 		return ID;
 	}
 

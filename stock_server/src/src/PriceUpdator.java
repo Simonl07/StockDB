@@ -104,7 +104,7 @@ public class PriceUpdator
 		return 0.0;//TODO
 	}
 	
-	public List<Stock> getStocks(Session hibernateSession){
+	public static List<Stock> getStocks(Session hibernateSession){
 		assert hibernateSession.getTransaction().isActive();
 		
 		@SuppressWarnings("unchecked")

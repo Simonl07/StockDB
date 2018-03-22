@@ -37,7 +37,7 @@ public class PriceUpdate extends HttpServlet
 		Session hibernateSession = factory.openSession();
 		hibernateSession.beginTransaction();
 		
-		List<Stock> stocks = updator.getStocks(hibernateSession);
+		List<Stock> stocks = PriceUpdator.getStocks(hibernateSession);
 		
 		hibernateSession.getTransaction().commit();
 		hibernateSession.close();
