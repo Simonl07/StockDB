@@ -73,7 +73,7 @@ public class PriceUpdate extends HttpServlet
 		Double price = Double.parseDouble(json.getString("price"));
 		Long volume = Long.parseLong(json.getString("volume"));
 		
-		String crawl_id = json.getString("crawl_task_id");
+		int crawl_id = json.getInt("crawl_task_id");
 		
 		Session hibernateSession = factory.openSession();
 		hibernateSession.beginTransaction();

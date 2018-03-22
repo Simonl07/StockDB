@@ -10,7 +10,6 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToOne;
 
 @Entity
 public class Stock
@@ -29,7 +28,7 @@ public class Stock
 	@ElementCollection
 	private Map<LocalDateTime, Long> historical_volume = new HashMap<>();
 	private LocalDateTime last_update;
-	private String last_updated_by;
+	private int last_updated_by;
 
 	// Profile
 	private String address1;
@@ -60,7 +59,7 @@ public class Stock
 		return !Utils.MD5(this.getSYMBOL() + latest_price + latest_volume).equals(md5);
 	}
 
-	public void update(Double price, Long volume, String crawlTaskID)
+	public void update(Double price, Long volume, int crawlTaskID)
 	{
 		this.latest_price = price;
 		this.latest_volume = volume;
@@ -216,12 +215,12 @@ public class Stock
 		this.last_update = last_update;
 	}
 
-	public String getLastCrawl()
+	public int getLastCrawl()
 	{
 		return last_updated_by;
 	}
 
-	public void setLastCrawl(String lastCrawl)
+	public void setLastCrawl(int lastCrawl)
 	{
 		this.last_updated_by = lastCrawl;
 	}

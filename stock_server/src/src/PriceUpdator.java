@@ -79,7 +79,7 @@ public class PriceUpdator
 		this.last_cache = System.currentTimeMillis();
 	}
 	
-	public void updatePrice(int id, Double price, Long volume, String crawlTaskID, Session hibernateSession)
+	public void updatePrice(int id, Double price, Long volume, int crawlTaskID, Session hibernateSession)
 	{
 		assert hibernateSession.getTransaction().isActive();
 		long currentTime = System.currentTimeMillis();
