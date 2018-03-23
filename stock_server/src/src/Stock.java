@@ -209,6 +209,7 @@ public class Stock
 	public void setLatest_volume(Long latest_volume)
 	{
 		this.latest_volume = latest_volume;
+		this.historical_volume.put(LocalDateTime.now(), latest_volume);
 	}
 
 	public LocalDateTime getLast_update()
