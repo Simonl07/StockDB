@@ -47,22 +47,55 @@ class Spider1(scrapy.Spider):
 
         item = Stock()
         item['symbol'] = stores['symbol']
-        summaryDetail = stores['summaryDetail']
-        if summaryDetail is None:
+
+        if 'summaryDetail' not in stores.keys():
             return
-        item['beta'] = summaryDetail['beta'].get('raw', '1970-01-01')
+        summaryDetail = stores['summaryDetail']
+
+        if 'beta' not in summaryDetail.keys():
+            item['beta'] = -1
+        else:
+            item['beta'] = summaryDetail['beta'].get('raw', -1)
+
         item['range_day_high'] = summaryDetail['dayHigh']['raw']
         item['range_day_low'] = summaryDetail['dayLow']['raw']
         item['range_52w_low'] = summaryDetail['fiftyTwoWeekLow']['raw']
         item['range_52w_high'] = summaryDetail['fiftyTwoWeekHigh']['raw']
-        item['volume'] = summaryDetail['volume']['raw']
-        item['volume_avg'] = summaryDetail['averageVolume']['raw']
-        item['market_cap'] = summaryDetail['marketCap']['raw']
-        item['beta'] = summaryDetail['beta']['raw']
-        item['pe_ratio'] = summaryDetail.get('trailingPE', -1)['raw']
-        item['dividend'] = summaryDetail['dividendRate'].get('raw', -1)
-        item['dividend_yield'] =  summaryDetail['dividendYield'].get('raw', -1)
-        item['ex_dividend_date'] = summaryDetail['exDividendDate'].get('fmt', '1970-01-01')
+
+        if 'volume' not in summaryDetail.keys():
+            item['volume'] = -1
+        else:
+            item['volume'] = summaryDetail['volume'].get('raw', -1)
+
+        if 'averageVolume' not in summaryDetail.keys():
+            item['volume_avg'] = -1
+        else:
+            item['volume_avg'] = summaryDetail['averageVolume'].get('raw', -1)
+
+        if 'marketCap' not in summaryDetail.keys():
+            item['marketCap'] = -1
+        else:
+            item['marketCap'] = summaryDetail['marketCap'].get('raw', -1)
+
+        if 'trailingPE' not in summaryDetail.keys():
+            item['pe_ratio'] = -1
+        else:
+            item['pe_ratio'] = summaryDetail['trailingPE'].get('raw', -1)
+
+        if 'dividendRate' not in summaryDetail.keys():
+            item['dividend'] = -1
+        else:
+            item['dividend'] = summaryDetail['dividendRate'].get('raw', -1)
+
+        if 'dividendYield' not in summaryDetail.keys():
+            item['dividend_yield'] = -1
+        else:
+            item['dividend_yield'] = summaryDetail['dividendYield'].get('raw', -1)
+
+        if 'exDividendDate' not in summaryDetail.keys():
+            item['ex_dividend_date'] = '1970-01-01'
+        else:
+            item['ex_dividend_date'] = summaryDetail['exDividendDate'].get('raw', '1970-01-01')
 
         item['name_short'] = stores['quoteType']['shortName']
         item['name_long'] = stores['quoteType']['longName']

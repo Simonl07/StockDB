@@ -13,6 +13,7 @@ import org.hibernate.SessionFactory;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+@SuppressWarnings("serial")
 public class ProfileAPI extends HttpServlet{
 	private SessionFactory factory;
 	public static final String PATH = "/api/profile";
