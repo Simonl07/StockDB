@@ -73,9 +73,9 @@ class Spider1(scrapy.Spider):
             item['volume_avg'] = summaryDetail['averageVolume'].get('raw', -1)
 
         if 'marketCap' not in summaryDetail.keys():
-            item['marketCap'] = -1
+            item['market_cap'] = -1
         else:
-            item['marketCap'] = summaryDetail['marketCap'].get('raw', -1)
+            item['market_cap'] = summaryDetail['marketCap'].get('raw', -1)
 
         if 'trailingPE' not in summaryDetail.keys():
             item['pe_ratio'] = -1
