@@ -27,9 +27,9 @@ class PriceSpider1(scrapy.Spider):
         if 'lookup' in response.url or response.status == 404:
             stock_name = re.search('(?<=\=).+$', response.url).group()
             url = self.HOST + '/update'
-            url += '?crawl_task_id=' + self.crawl_id
+            url += '?crawl_task_id=' + str(self.crawl_id)
             url += '&type=invalid'
-            url += '&stock_id='+ self.symbol2id[stock_name]
+            url += '&stock_id='+ str(self.symbol2id[stock_name])
             headers = {'charset': 'UTF-8', 'Content-Type': 'text/plain', 'Content-Encoding': 'utf-8', 'Accept-Encoding': 'utf-8'}
             r = requests.post(url, headers=headers)
             return
@@ -38,7 +38,7 @@ class PriceSpider1(scrapy.Spider):
 
         if random.random() < 0.02:
             url = self.HOST + '/update'
-            url += '?task_id=' + self.crawl_id
+            url += '?task_id=' + str(self.crawl_id)
             url += '&crawler_id=' + str(self.crawler_id)
             url += '&type=progress'
             url += '&value='+ str(self.crawler.stats.get_value('spiders_crawled'))
@@ -79,9 +79,9 @@ class PriceSpider2(scrapy.Spider):
         if 'lookup' in response.url or response.status == 404:
             stock_name = re.search('(?<=\=).+$', response.url).group()
             url = self.HOST + '/update'
-            url += '?crawl_task_id=' + self.crawl_id
+            url += '?crawl_task_id=' + str(self.crawl_id)
             url += '&type=invalid'
-            url += '&stock_id='+ self.symbol2id[stock_name]
+            url += '&stock_id='+ str(self.symbol2id[stock_name])
             headers = {'charset': 'UTF-8', 'Content-Type': 'text/plain', 'Content-Encoding': 'utf-8', 'Accept-Encoding': 'utf-8'}
             r = requests.post(url, headers=headers)
             return
@@ -90,7 +90,7 @@ class PriceSpider2(scrapy.Spider):
 
         if random.random() < 0.02:
             url = self.HOST + '/update'
-            url += '?task_id=' + self.crawl_id
+            url += '?task_id=' + str(self.crawl_id)
             url += '&crawler_id=' + str(self.crawler_id)
             url += '&type=progress'
             url += '&value='+ str(self.crawler.stats.get_value('spiders_crawled'))
@@ -128,9 +128,9 @@ class PriceSpider3(scrapy.Spider):
         if 'lookup' in response.url or response.status == 404:
             stock_name = re.search('(?<=\=).+$', response.url).group()
             url = self.HOST + '/update'
-            url += '?crawl_task_id=' + self.crawl_id
+            url += '?crawl_task_id=' + str(self.crawl_id)
             url += '&type=invalid'
-            url += '&stock_id='+ self.symbol2id[stock_name]
+            url += '&stock_id='+ str(self.symbol2id[stock_name])
             headers = {'charset': 'UTF-8', 'Content-Type': 'text/plain', 'Content-Encoding': 'utf-8', 'Accept-Encoding': 'utf-8'}
             r = requests.post(url, headers=headers)
             return
@@ -139,7 +139,7 @@ class PriceSpider3(scrapy.Spider):
 
         if random.random() < 0.02:
             url = self.HOST + '/update'
-            url += '?task_id=' + self.crawl_id
+            url += '?task_id=' + str(self.crawl_id)
             url += '&crawler_id=' + str(self.crawler_id)
             url += '&type=progress'
             url += '&value='+ str(self.crawler.stats.get_value('spiders_crawled'))
@@ -177,9 +177,9 @@ class PriceSpider4(scrapy.Spider):
         if 'lookup' in response.url or response.status == 404:
             stock_name = re.search('(?<=\=).+$', response.url).group()
             url = self.HOST + '/update'
-            url += '?crawl_task_id=' + self.crawl_id
+            url += '?crawl_task_id=' + str(self.crawl_id)
             url += '&type=invalid'
-            url += '&stock_id='+ self.symbol2id[stock_name]
+            url += '&stock_id='+ str(self.symbol2id[stock_name])
             headers = {'charset': 'UTF-8', 'Content-Type': 'text/plain', 'Content-Encoding': 'utf-8', 'Accept-Encoding': 'utf-8'}
             r = requests.post(url, headers=headers)
             return
@@ -188,7 +188,7 @@ class PriceSpider4(scrapy.Spider):
 
         if random.random() < 0.02:
             url = self.HOST + '/update'
-            url += '?task_id=' + self.crawl_id
+            url += '?task_id=' + str(self.crawl_id)
             url += '&crawler_id=' + str(self.crawler_id)
             url += '&type=progress'
             url += '&value='+ str(self.crawler.stats.get_value('spiders_crawled'))
