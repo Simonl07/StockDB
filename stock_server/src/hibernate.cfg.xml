@@ -16,6 +16,5 @@
         <mapping class="src.Stock"/>
         <mapping class="src.Symbol"/>
         <mapping class="src.CrawlTask"/>
-        <mapping class="src.Record"/>
     </session-factory>
 </hibernate-configuration>

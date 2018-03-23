@@ -12,6 +12,9 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.SequenceGenerator;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 @Entity
 @SequenceGenerator(name="stock_seq", sequenceName="stock_private_sequence")
 public class Stock
@@ -253,5 +256,48 @@ public class Stock
 	public int hashCode()
 	{
 		return this.id;
+	}
+	
+	
+	
+	public JSONObject toJSON(){
+		JSONObject json = new JSONObject();
+		
+		json.put("name_full", this.NAME_FULL);
+		json.put("symbol", this.SYMBOL);
+		json.put("latest_price", this.latest_price);
+		json.put("latest_volume", this.latest_volume);
+		json.put("last_update", this.last_update);
+		json.put("last_updated_by", this.last_updated_by);
+		
+		json.put("address1", this.address1);
+		json.put("zip", this.zip);
+		json.put("city", this.city);
+		json.put("state", this.state);
+		json.put("country", this.country);
+		json.put("website", this.website);
+		json.put("sector", this.sector);
+		json.put("industry", this.industry);
+		json.put("employee", this.employee);
+		json.put("description", this.description);
+		json.put("address1", this.address1);
+		
+		JSONArray price = new JSONArray();
+		for(LocalDateTime time: this.historical_price.keySet()){
+			JSONObject temp = new JSONObject();
+			temp.accumulate(time.toString(), historical_price.get(time));
+			price.put(temp);
+		}
+		json.put("price_data", price);
+		
+		JSONArray volume = new JSONArray();
+		for(LocalDateTime time: this.historical_volume.keySet()){
+			JSONObject temp = new JSONObject();
+			temp.accumulate(time.toString(), historical_volume.get(time));
+			volume.put(temp);
+		}
+		json.put("volume_data", volume);
+		
+		return json;
 	}
 }

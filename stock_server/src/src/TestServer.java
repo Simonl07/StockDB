@@ -46,6 +46,7 @@ public class TestServer
 		handler.addServletWithMapping(new ServletHolder(new StatusUpdateServlet(sessionFactory, controller)), "/update");
 		//handler.addServletWithMapping(new ServletHolder(new APIKeyDistributionServlet(connection)), APIKeyDistributionServlet.PATH);
 		handler.addServletWithMapping(new ServletHolder(new ProfileUpdate(sessionFactory)), ProfileUpdate.PATH);
+		handler.addServletWithMapping(new ServletHolder(new ProfileAPI(sessionFactory)), ProfileAPI.PATH);
 		handler.addServletWithMapping(TrafficLightServlet.class, "/go");
 			
 		
