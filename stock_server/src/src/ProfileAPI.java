@@ -65,6 +65,11 @@ public class ProfileAPI extends HttpServlet{
 			query += "employee<" + request.getParameter("employeeLT");
 			query += " and ";
 		}
+		if(request.getParameter("keyword") != null){
+			query += "description like %" + request.getParameter("keyword") + "%";
+			query += " and ";
+		}
+		
 		
 		query = query.substring(0, query.length() - 5);
 		System.out.println(query);
@@ -72,6 +77,7 @@ public class ProfileAPI extends HttpServlet{
 		Session session = factory.openSession();
 		session.beginTransaction();
 		
+		@SuppressWarnings("unchecked")
 		List<Stock> stocks = session.createQuery(query).list();
 		
 		long end = System.currentTimeMillis();
