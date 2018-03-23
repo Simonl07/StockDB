@@ -135,6 +135,7 @@ public class CrawlTask
 		assert hibernateSession.getTransaction().isActive();
 		this.setStatus(2);
 		this.setEnd_time(end_time);
+		hibernateSession.update(this);
 	}
 
 	public static void removeStock(Session hibernateSession, int id)

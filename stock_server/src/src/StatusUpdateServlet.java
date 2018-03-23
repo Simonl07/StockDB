@@ -73,15 +73,15 @@ public class StatusUpdateServlet extends HttpServlet
 			{
 				archiveCrawlTask(hibernateSession, Long.parseLong(request.getParameter("task_id")));
 			}else{
-				this.controller.updateTask(Long.parseLong(request.getParameter("task_id")), Integer.parseInt(request.getParameter("status")));
+				this.controller.updateTask(hibernateSession, Long.parseLong(request.getParameter("task_id")), Integer.parseInt(request.getParameter("status")));
 			}
 		}
 		if(request.getParameter("type").equals("progress")){
-			controller.crawlerUpdate(Long.parseLong(request.getParameter("task_id")),request.getParameter("crawler_id"),  Integer.parseInt(request.getParameter("value")));
+			controller.crawlerUpdate(hibernateSession, Long.parseLong(request.getParameter("task_id")),request.getParameter("crawler_id"),  Integer.parseInt(request.getParameter("value")));
 		}
 		if(request.getParameter("type").equals("new_crawler")){
 			System.out.println("new crawler(" + request.getParameter("crawler_id") + ") for task " + request.getParameter("task_id") + " participated");
-			controller.addCrawler(Long.parseLong(request.getParameter("task_id")), request.getParameter("crawler_id"));
+			controller.addCrawler(hibernateSession, Long.parseLong(request.getParameter("task_id")), request.getParameter("crawler_id"));
 		}
 		
 		hibernateSession.getTransaction().commit();

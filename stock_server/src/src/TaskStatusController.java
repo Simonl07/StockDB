@@ -55,33 +55,39 @@ public class TaskStatusController
 	}
 	
 	
-	public void reportInvalid(Session session, long crawl_task_id, int stock_id){
-		crawlTaskMap.get(crawl_task_id).reportInvalid(session, stock_id);
+	public void reportInvalid(Session session, long task_id, int stock_id){
+		crawlTaskMap.get(task_id).reportInvalid(session, stock_id);
+		session.update(crawlTaskMap.get(task_id));
 	}
 	
 	public Collection<CrawlTask> getTasks(){
 		return crawlTaskMap.values();
 	}
 	
-	public void updateTask(long id, int status){
-		crawlTaskMap.get(id).setStatus(status);
+	public void updateTask(Session hibernateSession, long task_id, int status){
+		crawlTaskMap.get(task_id).setStatus(status);
+		hibernateSession.update(crawlTaskMap.get(task_id));
 	}
 	
-	public void updateTaskProgress(long id, int crawled_count){
-		crawlTaskMap.get(id).setCrawled_count(crawled_count);;
+	public void updateTaskProgress(Session hibernateSession, long task_id, int crawled_count){
+		crawlTaskMap.get(task_id).setCrawled_count(crawled_count);
+		hibernateSession.update(crawlTaskMap.get(task_id));
 	}
 	
-	public void crawlerUpdate(long task_id, String crawler_id, int amount){
+	public void crawlerUpdate(Session hibernateSession, long task_id, String crawler_id, int amount){
 		crawlTaskMap.get(task_id).crawlerUpdate(crawler_id, amount);
+		hibernateSession.update(crawlTaskMap.get(task_id));
 	}
 	
-	public void addCrawler(long task_id, String crawler_id){
+	public void addCrawler(Session hibernateSession, long task_id, String crawler_id){
 		crawlTaskMap.get(task_id).addCrawler(crawler_id);
+		hibernateSession.update(crawlTaskMap.get(task_id));
 	}
 	
 	public void archive(Session hibernateSession, long id){
 		assert hibernateSession.getTransaction().isActive();
 		crawlTaskMap.get(id).archive(hibernateSession);
+		hibernateSession.update(crawlTaskMap.get(id));
 		crawlTaskMap.remove(id);
 	}
 	
