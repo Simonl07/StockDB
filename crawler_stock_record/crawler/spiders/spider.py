@@ -13,7 +13,7 @@ from json import loads
 REPORT_RATE = 0.01
 
 
-class marketCapSpider2(scrapy.Spider):
+class Spider1(scrapy.Spider):
     crawl_id = ""
     crawler_id = ""
     name = "price_spider"
