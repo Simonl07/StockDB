@@ -1,6 +1,3 @@
-
-# -*- coding: utf-8 -*-
-
 # Define your item pipelines here
 #
 # Don't forget to add your pipeline to the ITEM_PIPELINES setting
@@ -13,190 +10,152 @@ from StatsUtils import *
 from scrapy.exceptions import DropItem
 
 
-def formatDate(date):
-    if date == "N/A":
-        return "1900-01-01", "1900-01-01"
-    if '-' in date:
-        first = re.search('.*(?= -) ', date).group().strip()
-        second = re.search('(?<=- ).*', date).group().strip()
-        return formatHelper1(first), formatHelper1(second)
-    return formatHelper1(date), formatHelper1(date)
-
-
-def formatHelper1(date):
-    print("DATE: ", date)
-    year = re.search('\d{4}', date).group()
-    day = re.search('\d+(?=,)', date).group()
-    month = re.search('[a-zA-Z]+', date).group()
-    return formatHelper2(year, month, day)
-
-def formatHelper2(year, month, day):
-    months = {
-    'Jan': '01',
-    'Feb': '02',
-    'Mar': '03',
-    'Apr': '04',
-    'May': '05',
-    'Jun': '06',
-    'Jul': '07',
-    'Aug': '08',
-    'Sep': '09',
-    'Oct': '10',
-    'Nov': '11',
-    'Dec': '12',
-    }
-    return year + "-" + months[month] + "-" + day
 
 
 
-
-
-class Clean_name(object):
-
-    def process_item(self, item, spider):
-        if '-' in item['name_string']:
-            item['name_full'] = re.search('(?<=- ).+?$', item['name_string']).group()
-            item['name_short'] = re.search('.+?(?= \-)', item['name_string']).group()
-        else:
-            item['name_full'] = re.search('.+?(?=\()', item['name_string']).group()
-            item['name_short'] = re.search('(?<=\().+?(?=\))', item['name_string']).group()
+class Clean_name(object): 
+	def process_item(self, item, spider):
+        if item['name_short'] == 'N/A':
+            item['name_short'] = 0;
+        if item['name_long'] == 'N/A':
+            item['name_long'] = 0;
         return item
 
-class Clean_range_day(object):
-
-    def process_item(self, item, spider):
-        if not item['range_day'] or item['range_day'] == 'N/A':
-            dropStock(item['name_short'])
-            raise DropItem("Illegal format %s" % item)
-        item['range_day_low'] = re.search('[\d.]+?(?=\s)', item['range_day']).group()
-        item['range_day_high'] = re.search('(?<=\s)[\d.]+', item['range_day']).group()
+class Clean_price(object):
+	def process_item(self, item, spider):
+        if item['price_close'] < 0 || item['price_close'] == null:
+        	item['price_close'] == 0;
+        if item['price_open'] < 0 || item['price_open'] == null:
+        	item['price_open'] == 0;
         return item
-
-class Clean_range_52w(object):
+class Clean_range_day_low(object):
 
     def process_item(self, item, spider):
-
-        if(item['range_52w'] == None or item['range_52w'] == 'N/A'):
-            dropStock(item['name_short'])
-            raise DropItem("Illegal format %s" % item)
-        item['range_52w_low'] = re.search('[\d.]+?(?=\s)', item['range_52w']).group()
-        item['range_52w_high'] = re.search('(?<=\s)[\d.]+', item['range_52w']).group()
+        if item['range_day_low'] == 'N/A':
+            item['range_day_low'] = 0;
         return item
 
 
-class Clean_market_cap(object):
+class Clean_beta(object):
+	def process_item(self, item, spider):
+        if item['beta'] == 'N/A' || item['beta'] < 0:
+            item['beta'] = 0;
+        return  item
 
-    def convertValue(capital):
-        value = 0
-        if (capital.endswith("B")):
-            value = int(float(capital[:-1])*1000000000)
-        else:
-            value = int(float(capital[:-1])*100000)
-        return value
+
+class Clean_range_day_high(object):
 
     def process_item(self, item, spider):
-        if item['market_cap'] == "N/A":
-            item['market_cap'] = "-1"
-        else:
-            item['market_cap'] = str(Clean_market_cap.convertValue(item['market_cap']))
+        if item['range_day_low'] == 'N/A':
+            item['range_day_low'] = 0;
+        return  item
+class CLean_range_52w_high(object):
 
+    def process_item(self, item, spider):
+        if item['range_52w_high'] == 'N/A' || item['range_52w_high'] < 0:
+            item['range_52w_high'] = 0;
         return item
 
-
-
-class Clean_earnings_date(object):
+class CLean_range_52w_low(object):
 
     def process_item(self, item, spider):
-        final = ""
-        if item['earnings_date_begin'] is None and item['earnings_date_end'] is None:
-            final = "N/A"
-        elif item['earnings_date_begin'] is None:
-            final = item['earnings_date_end']
-        elif item['earnings_date_end'] is None:
-            final = item['earnings_date_begin']
-        else:
-            final = item['earnings_date_begin'] + " - " + item['earnings_date_end']
+        if item['range_52w_low'] == 'N/A' || item['range_52w_low'] < 0:
+            item['range_52w_low'] = 0;
+        return item
 
-        item['earnings_date'] = final
-        if "%" in item['earnings_date']:
-            dropStock(item['name_short'])
-            raise DropItem("Corrupted earnings_date %s" % item)
+class CLean_volume(object):
 
-        item['earnings_date_begin'], item['earnings_date_end'] = formatDate(item['earnings_date'])
+    def process_item(self, item, spider):
+        if item['volume'] == 'N/A' || item['volume'] < 0:
+            item['volume'] = 0;
+        return item
+
+class CLean_volume(object):
+
+    def process_item(self, item, spider):
+        if item['volume'] == 'N/A' || item['volume'] < 0:
+            item['volume'] = 0;
+        return item
+
+class CLean_volume_avg(object):
+
+    def process_item(self, item, spider):
+        if item['volume_avg'] == 'N/A' || item['volume_avg'] < 0:
+            item['volume_avg'] = 0;
+        return item
+
+class CLean_market_cap(object):
+
+    def process_item(self, item, spider):
+        if item['market_cap'] == 'N/A' || item['market_cap'] < 0:
+            item['market_cap'] = 0;
+        return item
+class CLean_beta(object):
+
+    def process_item(self, item, spider):
+        if item['beta'] == 'N/A' || item['beta'] < 0:
+            item['beta'] = 0;
+        return item
+class CLean_pe_ratio(object):
+
+    def process_item(self, item, spider):
+        if item['pe_ratio'] == 'N/A' || item['pe_ratio'] < 0:
+            item['pe_ratio'] = 0;
+        return item
+
+class CLean_eps(object):
+
+    def process_item(self, item, spider):
+        if item['eps'] == 'N/A' || item['eps'] < 0:
+            item['eps'] = 0;
         return item
 
 class Clean_dividend(object):
-
-    def process_item(self, item, spider):
-        if 'N/A' in item['dividend_String']:
-            item['dividend'] = '-1'
-            item['dividend_yield'] = '-1'
-        else:
-            item['dividend'] = re.search('.*(?=\s)', item['dividend_String']).group()
-            item['dividend_yield'] = str(round(float(str(re.search('(?<=\().*(?=\%)', item['dividend_String']).group())) / 100, 4))
-
+	def process_item(self, item, spider):
+        if item['dividend'] == 'N/A' || item['dividend'] < 0:
+            item['dividend'] = 0;
         return item
 
 
-class Clean_ex_dividend_date(object):
+
+class CLean_target_est_1Y(object):
+
     def process_item(self, item, spider):
-        if item['ex_dividend_date']  == "N/A":
-            item['ex_dividend_date']  = "1900-01-01"
+        if item['target_est_1Y'] == 'N/A' || item['target_est_1Y'] < 0:
+            item['target_est_1Y'] = 0;
         return item
 
-class Clean_target_est_1Y(object):
-    def process_item(self, item, spider):
-        if item['target_est_1Y'] == None:
-            item['target_est_1Y'] = "-1"
 
-        item['target_est_1Y'].replace(",", "")
-        if item['target_est_1Y'] == "N/A":
-            item['target_est_1Y'] = "-1"
+
+class CLean_earnings_date_begin(object):
+
+    def process_item(self, item, spider):
+        if item['earnings_date_begin'] == 'N/A':
+            item['earnings_date_begin'] = '1900-01-01';
+        return item
+class CLean_earnings_date_end(object):
+
+    def process_item(self, item, spider):
+        if item['earnings_date_end'] == 'N/A':
+            item['earnings_date_end'] = '1900-01-01';
         return item
 
-class Clean_eps(object):
+class CLean_dividend_yield(object):
+
     def process_item(self, item, spider):
-        if item['eps'] == "N/A":
-            item['eps'] = "-1"
+        if item['dividend_yield'] == 'N/A':
+            item['dividend_yield'] = 0;
         return item
 
-class Clean_pe_ratio(object):
-    def process_item(self, item, spider):
-        if item['pe_ratio'] == None:
-            item['pe_ratio'] = "-1"
+class CLean_ex_dividend_date(object):
 
-        item['pe_ratio'] = item['pe_ratio'].replace(",", "")
-        if item["pe_ratio"] == "N/A":
-            item["pe_ratio"] = "-1"
+    def process_item(self, item, spider):
+        if item['ex_dividend_date'] == 'N/A':
+            item['ex_dividend_date'] = 0;
         return item
 
-class Clean_volume(object):
-    def process_item(self, item, spider):
-        if item['volume'] == None:
-            item['volume'] = "-1"
 
-        item['volume'] = item['volume'].replace(",", "")
 
-        if item["volume"] == "N/A":
-            item["volume"] = "-1"
-        return item
-
-class Clean_volume_avg(object):
-    def process_item(self, item, spider):
-        if item['volume_avg'] == None:
-            item['volume_avg'] = "-1"
-
-        item['volume_avg'] = item['volume_avg'].replace(",", "")
-
-        if item["volume_avg"] == "N/A":
-            item["volume_avg"] = "-1"
-        return item
-
-class Clean_beta(object):
-    def process_item(self, item, spider):
-        if item['beta'] == "N/A":
-            item['beta'] = "-1"
-        return item
 
 class RequestDB(object):
     # This funtion process the Stock data and compile a request to data base.
@@ -233,3 +192,4 @@ class RequestDB(object):
 
         print(payload)
         r = requests.post('http://127.0.0.1/summary', headers=headers, json=payload)
+
