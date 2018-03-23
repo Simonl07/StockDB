@@ -32,7 +32,7 @@ def execute(HOST):
     ProfileSpider.start_urls = url_generator(stocks)
     ProfileSpider.crawl_id = crawl_id
     ProfileSpider.symbol2id = symbol2id
-    process = CrawlerProcess({'ITEM_PIPELINES':{'crawler.pipelines.Clean_name': 297,'crawler.pipelines.RequestDB': 300},'USER_AGENT': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_2) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/64.0.3282.186 Safari/537.36', 'CONCURRENT_REQUESTS': 1, 'DOWNLOAD_DELAY':1})
+    process = CrawlerProcess({'ITEM_PIPELINES':{'crawler.pipelines.Clean_name': 297,'crawler.pipelines.RequestDB': 300},'USER_AGENT': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_2) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/64.0.3282.186 Safari/537.36', 'CONCURRENT_REQUESTS': 5, 'DOWNLOAD_DELAY':2})
     process.crawl(ProfileSpider)
     process.start()
 

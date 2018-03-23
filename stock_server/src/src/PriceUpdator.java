@@ -96,12 +96,14 @@ public class PriceUpdator
 		if(System.currentTimeMillis() - this.last_cache > 10000){
 			cached_stocks = PriceUpdator.getStocks_helper(hibernateSession);
 			this.last_cache = System.currentTimeMillis();
+			System.out.println("!\n!\n!\n!\n!\n!\n!\n!\n!\n!\n!\n!\n!\n!\n");
 		}
 	}
 
 
 	public Double getUpdateRate()
 	{
+		
 		System.out.println(updateHistory.size());
 		int count = updateHistory.sizeAfter(10);
 		updateHistory.chopAfter(10);
@@ -114,7 +116,12 @@ public class PriceUpdator
 		return 0.0;//TODO
 	}
 	
-	public static List<Stock> getStocks(Session hibernateSession){
+	public List<Stock> getStocks(Session hibernateSession){
+		if(System.currentTimeMillis() - this.last_cache > 10000){
+			cached_stocks = PriceUpdator.getStocks_helper(hibernateSession);
+			this.last_cache = System.currentTimeMillis();
+			System.out.println("!\n!\n!\n!\n!\n!\n!\n!\n!\n!\n!\n!\n!\n!\n");
+		}
 		return cached_stocks;
 	}
 	

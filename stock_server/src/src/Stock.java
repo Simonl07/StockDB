@@ -10,12 +10,14 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.SequenceGenerator;
 
 @Entity
+@SequenceGenerator(name="stock_seq", sequenceName="stock_private_sequence")
 public class Stock
 {
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator="stock_seq")
 	private int id;
 	private String NAME_FULL;
 	private String SYMBOL;
@@ -48,6 +50,7 @@ public class Stock
 	}
 
 	public Stock(String name_full, String symbol)
+	
 	{
 		this.SYMBOL = symbol;
 		this.NAME_FULL = name_full;

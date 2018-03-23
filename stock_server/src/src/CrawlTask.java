@@ -1,5 +1,7 @@
  package src;
 
+
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -7,47 +9,56 @@ import java.util.Map;
 
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.SequenceGenerator;
+import javax.persistence.Transient;
 
 import org.hibernate.Session;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 @Entity
+@SequenceGenerator(name="crawltask_seq", sequenceName="crawltask_private_sequence")
 public class CrawlTask
 {
 	@Id
-	@GeneratedValue
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator="crawltask_seq")
 	private long ID;
-	private final long TIMESTAMP;
-	private final int SIZE;
+	private long TIMESTAMP;
+	private int SIZE;
 	
-	@ElementCollection
-	private final List<String> SYMBOL_LIST;
+	@Transient
+	private List<String> SYMBOL_LIST;
 	
-	@ElementCollection
-	private final Map<String, Integer> CRAWLER_MAP;
-	private final String TYPE;
+	@ElementCollection(fetch=FetchType.EAGER)
+	private Map<String, Integer> CRAWLER_MAP;
+	private String TYPE;
 
 	private int crawled_count;
-	private long end_time;
+	private LocalDateTime end_time;
 	private float success_rate;
 	private int status;
 	@ElementCollection
 	private List<Integer> invalid_stocks;
+	private int invalid_count;
 
 	
-	
+	public CrawlTask(){
+		
+	}
 	
 	public CrawlTask(List<String> stock_list, String type)
 	{
+		this.invalid_count = 0;
 		this.TYPE = type;
 		this.TIMESTAMP = System.currentTimeMillis();
 		this.SIZE = stock_list.size();
 		this.SYMBOL_LIST = stock_list;
 		this.status = 0;
-		this.end_time = -1;
+		this.end_time = null;
 		this.invalid_stocks = new ArrayList<Integer>();
 		this.CRAWLER_MAP = new HashMap<String, Integer>();
 		this.success_rate = 1;
@@ -72,6 +83,7 @@ public class CrawlTask
 	public void reportInvalid(Session hibernateSession, int stock)
 	{
 		this.invalid_stocks.add(stock);
+		this.invalid_count++;
 		this.success_rate = ((float)this.SIZE - this.invalid_stocks.size())/(float)this.SIZE;
 		System.out.println("Success rate decreased to " + this.success_rate);
 		removeStock(hibernateSession, stock);
@@ -121,7 +133,8 @@ public class CrawlTask
 	public void archive(Session hibernateSession)
 	{
 		assert hibernateSession.getTransaction().isActive();
-		hibernateSession.save(this);
+		this.setStatus(2);
+		this.setEnd_time(end_time);
 	}
 
 	public static void removeStock(Session hibernateSession, int id)
@@ -174,7 +187,7 @@ public class CrawlTask
 	/**
 	 * @return the end_time
 	 */
-	public long getEnd_time() {
+	public LocalDateTime getEnd_time() {
 		return end_time;
 	}
 
@@ -206,7 +219,7 @@ public class CrawlTask
 	/**
 	 * @param end_time the end_time to set
 	 */
-	public void setEnd_time(long end_time) {
+	public void setEnd_time(LocalDateTime end_time) {
 		this.end_time = end_time;
 	}
 
@@ -227,7 +240,7 @@ public class CrawlTask
 	}
 	
 	public int getInvalidCount(){
-		return this.invalid_stocks.size();
+		return this.invalid_count;
 	}
 	
 	

@@ -5,7 +5,7 @@
 <hibernate-configuration>
     <session-factory name="Hibernate">
         <property name="hibernate.connection.driver_class">com.mysql.jdbc.Driver</property>
-        <property name="hibernate.connection.url">jdbc:mysql://goldnano.cx9varjsh2av.us-west-1.rds.amazonaws.com/hibernate</property>
+        <property name="hibernate.connection.url">jdbc:mysql://goldnano.cx9varjsh2av.us-west-1.rds.amazonaws.com/record</property>
         <property name="hibernate.connection.username">root</property>
         <property name="hibernate.connection.password">12345678</property>
         <property name="hibernate.dialect">org.hibernate.dialect.MySQL5Dialect</property>
@@ -13,9 +13,6 @@
         <property name="show_sql">true</property>
         <property name="connection.pool_size">100</property>
         
-        <mapping class="src.Stock"/>
-        <mapping class="src.Symbol"/>
-        <mapping class="src.CrawlTask"/>
         <mapping class="src.Record"/>
     </session-factory>
 </hibernate-configuration>
