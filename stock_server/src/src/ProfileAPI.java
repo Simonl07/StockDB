@@ -66,7 +66,7 @@ public class ProfileAPI extends HttpServlet{
 			query += " and ";
 		}
 		if(request.getParameter("keyword") != null){
-			query += "description like %" + request.getParameter("keyword") + "%";
+			query += "description like '%" + request.getParameter("keyword") + "%'";
 			query += " and ";
 		}
 		
