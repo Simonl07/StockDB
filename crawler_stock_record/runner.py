@@ -23,20 +23,28 @@ Spider1.start_urls = url_generator(stock_lst)
 
 
 process = CrawlerProcess({'ITEM_PIPELINES': {
-   'crawler.pipelines.Clean_name': 287,
-   'crawler.pipelines.Clean_range_day': 288,
-   'crawler.pipelines.Clean_range_52w': 289,
-   'crawler.pipelines.Clean_market_cap': 290,
-   'crawler.pipelines.Clean_earnings_date': 291,
-   'crawler.pipelines.Clean_dividend': 292,
-   'crawler.pipelines.Clean_ex_dividend_date': 293,
-   'crawler.pipelines.Clean_target_est_1Y': 294,
-   'crawler.pipelines.Clean_eps': 295,
-   'crawler.pipelines.Clean_pe_ratio': 296,
-   'crawler.pipelines.Clean_volume': 297,
-   'crawler.pipelines.Clean_volume_avg': 298,
-   'crawler.pipelines.Clean_beta': 299,
-   'crawler.pipelines.RequestDB': 300,
+
+   'crawler.pipelines.Clean_name': 286,
+   'crawler.pipelines.Clean_price': 287,
+   'crawler.pipelines.Clean_range_day_low': 288,
+   'crawler.pipelines.Clean_range_day_high': 289,
+   'crawler.pipelines.Clean_beta': 290,
+   'crawler.pipelines.CLean_range_52w_high': 291,
+   'crawler.pipelines.CLean_range_52w_low': 292,
+   'crawler.pipelines.CLean_volume': 293,
+   'crawler.pipelines.CLean_volume_avg': 294,
+   'crawler.pipelines.CLean_market_cap': 295,
+   'crawler.pipelines.CLean_beta': 296,
+   'crawler.pipelines.CLean_pe_ratio': 297,
+   'crawler.pipelines.CLean_eps': 298,
+   'crawler.pipelines.Clean_dividend': 299,
+   'crawler.pipelines.CLean_target_est_1Y': 300,
+   'crawler.pipelines.CLean_earnings_date_begin': 301,
+   'crawler.pipelines.CLean_earnings_date_end': 302,
+   'crawler.pipelines.CLean_dividend_yield': 303,
+   'crawler.pipelines.CLean_ex_dividend_date': 304,
+   'crawler.pipelines.RequestDB': 305,
+   
 }})
 
 url = 'http://127.0.0.1/update'
