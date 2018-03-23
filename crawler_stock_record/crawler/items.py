@@ -15,15 +15,13 @@ class Stock(scrapy.Item):
 
 
     '''Summary Page'''
-    name_string = scrapy.Field()
-    name_full = scrapy.Field()
+
     name_short = scrapy.Field()
+    name_long = scrapy.Field()
     price_close = scrapy.Field()
     price_open = scrapy.Field()
-    range_day = scrapy.Field()
     range_day_high = scrapy.Field()
     range_day_low = scrapy.Field()
-    range_52w = scrapy.Field()
     range_52w_high = scrapy.Field()
     range_52w_low = scrapy.Field()
     volume = scrapy.Field()
@@ -31,17 +29,22 @@ class Stock(scrapy.Item):
     market_cap = scrapy.Field()
     beta = scrapy.Field()
     pe_ratio = scrapy.Field()
-    eps = scrapy.Field()
-    earnings_date = scrapy.Field()
-    earnings_date_begin = scrapy.Field()
-    earnings_date_end = scrapy.Field()
-    dividend_String = scrapy.Field()
+    eps = scrapy.Field()   
     dividend = scrapy.Field()
-    dividend_yield = scrapy.Field()
-    ex_dividend_date = scrapy.Field()
+    
     target_est_1Y = scrapy.Field()
 
+
+
+    dividend_yield = scrapy.Field()
+    ex_dividend_date = scrapy.Field()
+
+
+    earnings_date_begin = scrapy.Field()
+    earnings_date_end = scrapy.Field()
     '''Statistics'''
 
 
-    '''Analysis Page'''
+    '''Analysts Page'''
+
+
