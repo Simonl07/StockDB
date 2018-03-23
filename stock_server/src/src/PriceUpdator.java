@@ -1,5 +1,6 @@
 package src;
 
+import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -113,7 +114,14 @@ public class PriceUpdator
 
 	public Double getAverageLatency()
 	{
-		return 0.0;//TODO
+		LocalDateTime curr = LocalDateTime.now();
+		double total = 0;
+		for(Stock s: cached_stocks){
+			total += Duration.between(s.getLast_update(), curr).getSeconds();
+		}
+		
+		
+		return total/cached_stocks.size();
 	}
 	
 	public List<Stock> getStocks(Session hibernateSession){

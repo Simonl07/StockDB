@@ -186,7 +186,7 @@ class PriceSpider4(scrapy.Spider):
 
         self.crawler.stats.inc_value('spiders_crawled')
 
-        if random.random() < 0.02:
+        if random.random() < 0.03:
             url = self.HOST + '/update'
             url += '?task_id=' + str(self.crawl_id)
             url += '&crawler_id=' + str(self.crawler_id)

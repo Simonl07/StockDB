@@ -280,7 +280,9 @@ public class Stock
 		json.put("sector", this.sector);
 		json.put("industry", this.industry);
 		json.put("employee", this.employee);
-		json.put("description", this.description);
+		JSONObject description = new JSONObject();
+		description.put("raw", this.description);
+		json.put("description", description);
 		json.put("address1", this.address1);
 		
 		JSONArray price = new JSONArray();
