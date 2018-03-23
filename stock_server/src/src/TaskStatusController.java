@@ -22,7 +22,7 @@ public class TaskStatusController
 	public TaskStatusController(Session hibernateSession){
 		this();
 		@SuppressWarnings("unchecked")
-		Query<CrawlTask> query = hibernateSession.createQuery("from CrawlTask");
+		Query<CrawlTask> query = hibernateSession.createQuery("from CrawlTask WHERE status!=2");
 		List<CrawlTask> tasks = query.list();
 		for(CrawlTask c: tasks){
 			this.crawlTaskMap.put(c.getID(), c);

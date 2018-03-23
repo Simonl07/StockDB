@@ -32,7 +32,6 @@ public class TestServer
 
 		ServletHandler handler = new ServletHandler();
 		
-		
 		Session hibernateSession = sessionFactory.openSession();
 		hibernateSession.beginTransaction();
 		
