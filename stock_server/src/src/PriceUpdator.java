@@ -124,8 +124,9 @@ public class PriceUpdator
 				cnt++;
 			}
 		}
-		
-		
+		if(cnt == 0){
+			return 0.0;
+		}
 		return total/cnt;
 	}
 	
