@@ -116,12 +116,17 @@ public class PriceUpdator
 	{
 		LocalDateTime curr = LocalDateTime.now();
 		double total = 0;
+		int cnt = 0;
 		for(Stock s: cached_stocks){
-			total += Duration.between(s.getLast_update(), curr).getSeconds();
+			if(s.getLast_update() != null)
+			{
+				total += Duration.between(s.getLast_update(), curr).getSeconds();
+				cnt++;
+			}
 		}
 		
 		
-		return total/cached_stocks.size();
+		return total/cnt;
 	}
 	
 	public List<Stock> getStocks(Session hibernateSession){
