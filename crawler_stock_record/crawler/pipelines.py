@@ -131,7 +131,6 @@ class CLean_target_est_1Y(object):
 
 
 class CLean_earnings_date_begin(object):
-
     def process_item(self, item, spider):
         if item['earnings_date_begin'] == 'N/A':
             item['earnings_date_begin'] = '1900-01-01'

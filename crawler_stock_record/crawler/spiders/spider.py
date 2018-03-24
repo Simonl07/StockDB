@@ -95,17 +95,50 @@ class Spider1(scrapy.Spider):
         if 'exDividendDate' not in summaryDetail.keys():
             item['ex_dividend_date'] = '1970-01-01'
         else:
-            item['ex_dividend_date'] = summaryDetail['exDividendDate'].get('raw', '1970-01-01')
+            item['ex_dividend_date'] = summaryDetail['exDividendDate'].get('fmt', '1970-01-01')
+
+
+        if 'quoteType' not in stores.keys():
+            return
 
         item['name_short'] = stores['quoteType']['shortName']
         item['name_long'] = stores['quoteType']['longName']
-        item['price_close'] = stores['price'].get('regularMarketPrice', -1)['raw']
-        item['price_open'] = stores['price'].get('postMarketPrice', -1)['raw']
 
-        item['eps'] = stores['defaultKeyStatistics']['trailingEps']['raw']
-        item['earnings_date_begin'] = stores['calendarEvents']['earnings']['earningsDate'][0].get('fmt', '1970-01-01')
-        item['earnings_date_end'] = stores['calendarEvents']['earnings']['earningsDate'][1].get('fmt', '1970-01-01')
+        if 'price' not in stores.keys():
+            return
 
-        item['target_est_1Y'] = stores['financialData']['targetMeanPrice']['raw']
+        if 'regularMarketPrice' not in stores['price'].keys():
+            item['price_open'] = -1
+        else:
+            item['price_open'] = stores['price']['regularMarketPrice'].get('raw', -1)
+
+        if 'postMarketPrice' not in stores['price'].keys():
+            item['price_close'] = -1
+        else:
+            item['price_close'] = stores['price']['postMarketPrice'].get('raw', -1)
+
+        if 'defaultKeyStatistics' in stores.keys() and 'trailingEps' in stores['defaultKeyStatistics'].keys():
+            item['eps'] = stores['defaultKeyStatistics']['trailingEps'].get('raw', -1)
+        else:
+            item['eps'] = -1
+
+        if 'calendarEvents' in stores.keys() and 'earnings' in stores['calendarEvents'].keys() and 'earningsDate' in stores['calendarEvents']['earnings'].keys():
+            if len(stores['calendarEvents']['earnings']['earningsDate']) == 2:
+                item['earnings_date_begin'] = stores['calendarEvents']['earnings']['earningsDate'][0].get('fmt', '1970-01-01')
+                item['earnings_date_end'] = stores['calendarEvents']['earnings']['earningsDate'][1].get('fmt', '1970-01-01')
+            elif len(stores['calendarEvents']['earnings']['earningsDate']) == 1:
+                item['earnings_date_begin'] = stores['calendarEvents']['earnings']['earningsDate'][0].get('fmt', '1970-01-01')
+                item['earnings_date_end'] = stores['calendarEvents']['earnings']['earningsDate'][0].get('fmt', '1970-01-01')
+            else:
+                item['earnings_date_begin'] = '1970-01-01'
+                item['earnings_date_end'] = '1970-01-01'
+        else:
+            item['earnings_date_begin'] = '1970-01-01'
+            item['earnings_date_end'] = '1970-01-01'
+
+        if 'financialData' in stores.keys() and 'targetMeanPrice' in stores['financialData'].keys():
+            item['target_est_1Y'] = stores['financialData']['targetMeanPrice'].get('raw', -1)
+        else:
+            item['target_est_1Y'] = -1
 
         yield item

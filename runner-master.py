@@ -4,8 +4,8 @@ import random
 import json
 import subprocess
 import requests
-import stock_crawler_price
-from stock_crawler_price import *
+import crawler_stock_price
+from crawler_stock_price import *
 
 
 
@@ -17,8 +17,7 @@ while True:
     response = requests.get('http://' + HOST + '/go')
     j = json.loads(response.text)
     if j['go'] == 1:
-        p = subprocess.Popen(['python', 'stock_crawler_price/runner.py'] + [HOST])
-        time.sleep(INTERVAL_MIN * 60)
+        p = subprocess.Popen(['python', 'crawler_stock_price/runner.py'] + [HOST])
+        time.sleep(5)
     else:
-        print("Waiting go signal from server")
-        time.sleep(INTERVAL_MIN * 60)
+        time.sleep(5)
