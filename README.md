@@ -1,4 +1,4 @@
-# Backend Server [![Build Status](https://travis-ci.org/Simonl07/stock-db.svg?branch=master)](https://travis-ci.org/Simonl07/stock-db)
+# Backend Server [![Build Status](https://travis-ci.org/Simonl07/cascade.svg?branch=master)](https://travis-ci.org/Simonl07/cascade.svg?branch=master)
 
 ### Resonsibilities:
 * Insert crawler data into database
